@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ibrahim Khallouq | Portfolio Ingénieur en Énergétique et Énergies Renouvelables</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- GSAP for animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <!-- Three.js for 3D Background -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <style>
+        :root {
+            --bg-color: #030712;
+            --surface-color: rgba(255, 255, 255, 0.02);
+            --border-color: rgba(255, 255, 255, 0.05);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #0ea5e9; /* Light blue */
+            --accent-glow: rgba(14, 165, 233, 0.5);
+            --accent-secondary: #10b981; /* Emerald/Green for renewables */
+            --font-main: 'Outfit', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Smooth scrolling */
+        html { scroll-behavior: smooth; }
+
+        /* Typography */
+        h1, h2, h3, h4 { line-height: 1.2; font-weight: 600; }
+        h2 { font-size: 2.5rem; margin-bottom: 2rem; color: var(--text-main); }
+        h2 span { color: var(--accent); }
+        p { color: var(--text-muted); font-size: 1.1rem; }
+
+        /* Utility Classes */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 10; }
+        .glass-card {
+            background: var(--surface-color);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px -10px var(--accent-glow);
+            border-color: rgba(14, 165, 233, 0.3);
+        }
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px var(--accent-glow);
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+        .tag {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            background: rgba(14, 165, 233, 0.1);
+            color: var(--accent);
+            font-size: 0.9rem;
+            margin: 0.2rem;
+            border: 1px solid rgba(14, 165, 233, 0.2);
+        }
+
+        /* Navbar */
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 100;
+            padding: 1.5rem 0;
+            background: rgba(3, 7, 18, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+        }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+        .logo { font-size: 1.5rem; font-weight: 800; color: white; text-decoration: none; letter-spacing: 1px;}
+        .logo span { color: var(--accent); }
+        .nav-links { display: flex; gap: 2rem; }
+        .nav-links a { color: var(--text-muted); text-decoration: none; font-weight: 600; transition: color 0.3s; }
+        .nav-links a:hover { color: var(--accent); }
+
+        /* Sections */
+        section { padding: 8rem 0; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
+
+        /* Hero Section */
+        #hero { position: relative; height: 100vh; padding: 0; display: flex; align-items: center; overflow: hidden; }
+        #canvas-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+        .hero-content { position: relative; z-index: 10; text-align: left; max-width: 800px; }
+        .hero-title { font-size: 4.5rem; margin-bottom: 1rem; background: linear-gradient(to right, #fff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero-subtitle { font-size: 1.5rem; color: var(--accent-secondary); margin-bottom: 2rem; font-weight: 400; letter-spacing: 1px;}
+        
+        /* About */
+        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+        .about-stats { display: flex; gap: 2rem; margin-top: 2rem; }
+        .stat-box { padding: 1.5rem; background: var(--surface-color); border-radius: 12px; border: 1px solid var(--border-color); }
+        .stat-box h3 { font-size: 2rem; color: var(--accent); margin-bottom: 0.5rem; }
+
+        /* Tech Stack */
+        .tech-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .tech-card h3 { margin-bottom: 1rem; color: white; display: flex; align-items: center; gap: 0.5rem; }
+        .tech-card .icon { color: var(--accent); font-size: 1.5rem; }
+        
+        /* Projects */
+        .project-grid { display: grid; grid-template-columns: 1fr; gap: 3rem; }
+        .project-card { display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; align-items: center; padding: 3rem; position: relative; }
+        .project-info h3 { font-size: 1.8rem; margin-bottom: 1rem; color: white; }
+        .project-meta { color: var(--accent-secondary); font-weight: 600; margin-bottom: 1rem; }
+        .project-tools { margin-top: 1.5rem; }
+        .project-num { font-size: 4rem; font-weight: 800; color: rgba(255,255,255,0.05); position: absolute; top: -10px; right: 20px; }
+
+        /* Experience & Formation */
+        .timeline { position: relative; max-width: 800px; margin: 0 auto; }
+        .timeline::before { content: ''; position: absolute; left: 50%; transform: translateX(-50%); width: 2px; height: 100%; background: var(--border-color); }
+        .timeline-item { width: 50%; padding: 2rem; position: relative; }
+        .timeline-item:nth-child(odd) { left: 0; text-align: right; padding-right: 3rem; }
+        .timeline-item:nth-child(even) { left: 50%; padding-left: 3rem; }
+        .timeline-dot { position: absolute; top: 2.5rem; width: 20px; height: 20px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 10px var(--accent-glow); }
+        .timeline-item:nth-child(odd) .timeline-dot { right: -10px; }
+        .timeline-item:nth-child(even) .timeline-dot { left: -10px; }
+        .timeline-date { color: var(--accent-secondary); font-weight: 600; margin-bottom: 0.5rem; }
+
+        /* Contact */
+        #contact { text-align: center; }
+        .contact-box { max-width: 600px; margin: 0 auto; }
+        .contact-links { display: flex; justify-content: center; flex-wrap: wrap; gap: 1.5rem; margin-top: 3rem; }
+        .contact-links a { color: white; font-size: 1.2rem; text-decoration: none; padding: 1rem 2rem; border: 1px solid var(--border-color); border-radius: 50px; transition: all 0.3s; }
+        .contact-links a:hover { background: var(--surface-color); border-color: var(--accent); color: var(--accent); }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            section { padding: 5rem 0; }
+            #hero { padding: 0; }
+            .hero-title { font-size: 2.5rem; }
+            .hero-subtitle { font-size: 1.2rem; }
+            .hero-content .btn { display: block; width: 100%; margin-left: 0 !important; margin-bottom: 1rem; text-align: center; }
+            .about-grid, .project-card { grid-template-columns: 1fr; gap: 2rem; }
+            .project-card { padding: 1.5rem; }
+            .project-num { font-size: 3rem; position: static; display: block; margin-bottom: 0.5rem; }
+            .timeline::before { left: 0; }
+            .timeline-item { width: 100%; left: 0 !important; text-align: left !important; padding-left: 2rem !important; padding-right: 0 !important; padding-bottom: 2rem; }
+            .timeline-item .timeline-dot { left: -10px !important; right: auto !important; }
+            .nav-container { flex-direction: column; gap: 0.5rem; }
+            .nav-links { display: flex; width: 100%; overflow-x: auto; padding-bottom: 0.5rem; justify-content: flex-start; gap: 1.5rem; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+            .nav-links::-webkit-scrollbar { display: none; }
+            .about-stats { flex-direction: column; gap: 1rem; }
+            .contact-links a { width: 100%; text-align: center; }
+            h2 { font-size: 2rem; }
+            .container { padding: 0 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">IK<span>.</span></a>
+            <div class="nav-links">
+                <a href="#about">À Propos</a>
+                <a href="#formation">Formation</a>
+                <a href="#skills">Compétences</a>
+                <a href="#projects">Projets</a>
+                <a href="#experience">Expérience</a>
+                <a href="#contact">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero">
+        <div id="canvas-container"></div>
+        <div class="container hero-content">
+            <h2 class="gsap-hero">Bonjour, je suis</h2>
+            <h1 class="hero-title gsap-hero">Ibrahim Khallouq</h1>
+            <p class="hero-subtitle gsap-hero">Ingénieur en Énergétique et Énergies Renouvelables</p>
+            <p class="gsap-hero" style="max-width: 500px; margin-bottom: 2rem;"><strong style="color: var(--accent);">Expertise en ingénierie énergétique :</strong> études technico-économiques, conception, dimensionnement, mise en œuvre et utilisation d'outils numériques appliqués aux énergies renouvelables, à l'efficacité énergétique ainsi qu'aux systèmes thermiques et électriques.</p>
+            <div class="gsap-hero">
+                <a href="#projects" class="btn">Explorer les Projets</a>
+                <a href="#contact" class="btn" style="background: transparent; border: 1px solid var(--accent); margin-left: 1rem; box-shadow: none;">Me Contacter</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <div class="container">
+            <h2>À Propos de <span>Moi</span></h2>
+            <div class="about-grid">
+                <div class="about-text gsap-fade-up">
+                    <p style="margin-bottom: 1rem;">Je suis un ingénieur en énergie spécialisé dans <strong style="color: var(--accent);">la conception, le dimensionnement et l'optimisation des systèmes énergétiques</strong>. Mes compétences couvrent les énergies renouvelables et conventionnelles, les réseaux électriques, le stockage d'énergie ainsi que les solutions d'efficacité énergétique.</p>
+                    <p style="margin-bottom: 1rem;">J'interviens sur l'ensemble du cycle d'un projet, depuis l'analyse des besoins et les études technico-économiques jusqu'à la modélisation, la simulation, le dimensionnement et la validation des performances. J'utilise des outils d'ingénierie pour concevoir des solutions fiables, optimiser leur fonctionnement et accompagner leur mise en œuvre dans des contextes industriels ou tertiaires.</p>
+                    <div class="about-stats">
+                        <div class="stat-box">
+                            <h3>3+</h3>
+                            <p>Langues (AR, FR, EN)</p>
+                        </div>
+                        <div class="stat-box">
+                            <h3>8+</h3>
+                            <p>Projets d'Ingénierie Réalisés</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image glass-card gsap-fade-up">
+                    <h3 style="margin-bottom: 1rem; color: white;">Compétences Fondamentales</h3>
+                    <ul style="list-style: none; color: var(--text-muted); display: grid; gap: 0.8rem;">
+                        <li>Thermodynamique & Transferts Thermiques</li>
+                        <li>Électrotechnique & Systèmes Électriques (HT/MT/BT)</li>
+                        <li>Énergies Renouvelables (Solaire, Éolien, CSP, Hybride)</li>
+                        <li>Efficacité Énergétique & Audit (RTCM)</li>
+                        <li>Mécanique des Fluides (CFD)</li>
+                        <li>Stockage d'Énergie (BESS, Thermique, H2 Vert)</li>
+                        <li>Smart Grids & Micro-réseaux (EMS/BMS)</li>
+                        <li>Automatisme & IoT Énergétique</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Formation Section -->
+    <section id="formation">
+        <div class="container">
+            <h2 style="text-align: center;">Formation <span>Académique</span></h2>
+            
+            <div class="timeline">
+                
+                <div class="timeline-item gsap-fade-up">
+                    <div class="timeline-dot"></div>
+                    <div class="glass-card">
+                        <div class="timeline-date">2021 – 2026</div>
+                        <h3 style="color: white; margin-bottom: 0.5rem;">Diplôme d'Ingénieur en Énergétique & Énergies Renouvelables</h3>
+                        <p style="color: var(--accent); margin-bottom: 1rem;">Université Internationale de Rabat (UIR)</p>
+                        <p>Modules clés : Thermodynamique, Audit Énergétique, Électronique Embarquée, Smart Grids, Mécanique des Fluides (CFD), Maintenance Industrielle.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item gsap-fade-up">
+                    <div class="timeline-dot"></div>
+                    <div class="glass-card">
+                        <div class="timeline-date">Avant 2021</div>
+                        <h3 style="color: white; margin-bottom: 0.5rem;">Baccalauréat en Sciences et Technologies Électriques (STE)</h3>
+                        <p style="color: var(--accent); margin-bottom: 1rem;">Lycée Technique</p>
+                        <p>Modules clés : Sciences de l'Ingénieur (Acquisition, Traitement, Communication, Alimentation, Distribution, Conversion).</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills">
+        <div class="container">
+            <h2>Maîtrise <span>Technique</span></h2>
+            <p style="margin-bottom: 3rem; text-align: center; max-width: 600px; margin-inline: auto;">Une pile technique complète reliant l'ingénierie pure et les solutions numériques.</p>
+            
+            <div class="tech-grid">
+                <div class="glass-card tech-card gsap-fade-up">
+                    <h3>Ingénierie de Base</h3>
+                    <p style="margin-bottom: 1rem;">Logiciels avancés de simulation et de conception pour les systèmes énergétiques.</p>
+                    <div>
+                        <span class="tag">DesignBuilder</span>
+                        <span class="tag">Ansys Fluent (CFD)</span>
+                        <span class="tag">HOMER Pro</span>
+                        <span class="tag">PVSyst</span>
+                        <span class="tag">TRNSYS</span>
+                        <span class="tag">AutoCAD</span>
+                        <span class="tag">Caneco BT</span>
+                        <span class="tag">PowerFactory</span>
+                    </div>
+                </div>
+                
+                <div class="glass-card tech-card gsap-fade-up">
+                    <h3>Programmation & Données</h3>
+                    <p style="margin-bottom: 1rem;">Développement d'outils et traitement de données pour la gestion intelligente de l'énergie.</p>
+                    <div>
+                        <span class="tag">Python (Avancé)</span>
+                        <span class="tag">Pandas / NumPy</span>
+                        <span class="tag">Streamlit</span>
+                        <span class="tag">MATLAB / Simulink</span>
+                        <span class="tag">Machine Learning</span>
+                    </div>
+                </div>
+                
+                <div class="glass-card tech-card gsap-fade-up">
+                    <h3>Matériel & IoT</h3>
+                    <p style="margin-bottom: 1rem;">Relier le monde physique et numérique pour l'automatisation énergétique.</p>
+                    <div>
+                        <span class="tag">Arduino R4</span>
+                        <span class="tag">ESP32 / IoT</span>
+                        <span class="tag">Capteurs</span>
+                        <span class="tag">Actionneurs & Logique PID</span>
+                        <span class="tag">Proteus</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects">
+        <div class="container">
+            <h2>Projets <span>Phare</span></h2>
+            
+            <div class="project-grid">
+                
+                <!-- Project 1 -->
+                <div class="glass-card project-card gsap-slide-in">
+                    <div class="project-info" style="grid-column: 1 / -1;">
+                        <span class="project-num">01</span>
+                        <div class="project-meta">Infrastructure à Grande Échelle</div>
+                        <h3>Centrale PV 30 MWc + BESS 5 MWh (Djibouti) & Deux Centrales 580 kWc</h3>
+                        <p>Réalisation d'études de faisabilité complètes et technico-économiques pour des projets solaires à grande échelle au niveau national et international (avec Novec). Fourniture de simulations détaillées, de conceptions électriques incluant des schémas unifilaires (SLD) et des plans d'implantation couvrant tout le cycle de vie du projet, du dimensionnement à l'intégration au réseau.</p>
+                        <div class="project-tools">
+                            <span class="tag">PVSyst</span>
+                            <span class="tag">HOMER Pro</span>
+                            <span class="tag">Caneco BT</span>
+                            <span class="tag">PowerFactory</span>
+                            <span class="tag">AutoCAD</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="glass-card project-card gsap-slide-in">
+                    <div class="project-info" style="grid-column: 1 / -1;">
+                        <span class="project-num">02</span>
+                        <div class="project-meta">Simulation Avancée</div>
+                        <h3>Centrale PV 67 MW + BESS (Modélisation EMS/BMS)</h3>
+                        <p>Étude complète de dimensionnement et technico-économique d'une centrale photovoltaïque de 67 MW couplée à un stockage d'énergie par batterie. Conception et modélisation de la logique du système de gestion de l'énergie (EMS) et du système de gestion de la batterie (BMS) pour simuler le contrôle en temps réel et la stabilité du réseau.</p>
+                        <div class="project-tools">
+                            <span class="tag">PVSyst</span>
+                            <span class="tag">MATLAB</span>
+                            <span class="tag">Simulink</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="glass-card project-card gsap-slide-in">
+                    <div class="project-info" style="grid-column: 1 / -1;">
+                        <span class="project-num">03</span>
+                        <div class="project-meta">Outil Numérique Énergétique</div>
+                        <h3>Application Web Solaire Technico-Économique pour le Marché Marocain</h3>
+                        <p>Développement d'une application web avancée (Python/Streamlit) intégrant une base de données d'équipements réels du marché marocain. Elle effectue l'analyse des ombrages, le dimensionnement automatique et intègre un moteur financier simulant les prêts bancaires, le ROI et le délai d'amortissement selon les tarifs locaux, avec génération automatique de rapports PDF.</p>
+                        <div class="project-tools">
+                            <span class="tag">Python</span>
+                            <span class="tag">Streamlit</span>
+                            <span class="tag">Analyse de Données</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 4 & 5 Grid -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; grid-column: 1 / -1;">
+                    <div class="glass-card gsap-slide-in" style="position: relative; overflow: hidden;">
+                        <span class="project-num" style="font-size: 3rem;">04</span>
+                        <h3 style="color: white; margin-bottom: 1rem;">Maison Bioclimatique Intelligente & Stockage Thermique</h3>
+                        <p style="margin-bottom: 1.5rem;">Modélisation d'une maison à haute efficacité (DesignBuilder) avec un stockage thermique intersaisonnier innovant à base de sable. Réalisation d'un prototype matériel (Arduino R4 et logique PID) pour le contrôle climatique automatisé.</p>
+                        <div class="project-tools">
+                            <span class="tag">DesignBuilder</span>
+                            <span class="tag">Arduino</span>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-card gsap-slide-in" style="position: relative; overflow: hidden;">
+                        <span class="project-num" style="font-size: 3rem;">05</span>
+                        <h3 style="color: white; margin-bottom: 1rem;">HydroTwin (Power-to-X)</h3>
+                        <p style="margin-bottom: 1.5rem;">MModélisation de la chaîne Power-to-X (PV → Électrolyseur PEM → Stockage LOHC) à l'aide de modèles numériques développés en Python. Optimisation du LCOH à partir des données d'irradiation solaire marocaines et des contraintes du réseau électrique.</p>
+                        <div class="project-tools">
+                            <span class="tag">Python</span>
+                            <span class="tag">Modélisation Physique</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience">
+        <div class="container">
+            <h2 style="text-align: center;">Expérience <span>Professionnelle</span></h2>
+            
+            <div class="timeline">
+                
+                <div class="timeline-item gsap-fade-up">
+                    <div class="timeline-dot"></div>
+                    <div class="glass-card">
+                        <div class="timeline-date">2026 (4 Mois)</div>
+                        <h3 style="color: white; margin-bottom: 0.5rem;">Ingénieur Projet PV & BESS</h3>
+                        <p style="color: var(--accent); margin-bottom: 1rem;">Novec — Ingénieurs Conseils</p>
+                        <p>Réalisation d'études de faisabilité et technico-économiques complètes pour des projets à grande échelle à Djibouti et Dakhla. Gestion de la conception de bout en bout, création de SLD et simulations.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item gsap-fade-up">
+                    <div class="timeline-dot"></div>
+                    <div class="glass-card">
+                        <div class="timeline-date">Août 2023</div>
+                        <h3 style="color: white; margin-bottom: 0.5rem;">Stage : Maintenance et Opérations</h3>
+                        <p style="color: var(--accent); margin-bottom: 1rem;">Centrale CSP Noor I (Ouarzazate)</p>
+                        <p>Analyse des défaillances des systèmes d'énergie solaire concentrée (CSP), réduisant le temps de diagnostic de 15 %. Interprétation de schémas P&ID et électriques complexes.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item gsap-fade-up">
+                    <div class="timeline-dot"></div>
+                    <div class="glass-card">
+                        <div class="timeline-date">Août 2022</div>
+                        <h3 style="color: white; margin-bottom: 0.5rem;">Stage : Ingénierie Solaire</h3>
+                        <p style="color: var(--accent); margin-bottom: 1rem;">Bureau d'Études Solaire</p>
+                        <p>Supervision de l'installation et de la mise en service de systèmes de pompage solaire. Suivi des performances des onduleurs et des panneaux photovoltaïques.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item gsap-fade-up">
+                    <div class="timeline-dot"></div>
+                    <div class="glass-card">
+                        <div class="timeline-date">Juillet 2021</div>
+                        <h3 style="color: white; margin-bottom: 0.5rem;">Stage : Optimisation des Processus</h3>
+                        <p style="color: var(--accent); margin-bottom: 1rem;">Menara Holding (Marrakech)</p>
+                        <p>Audit des équipements de production thermiques et mécaniques, identifiant un potentiel de gain d'efficacité de 5 % dans le processus thermique par l'analyse de données.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" style="min-height: 60vh;">
+        <div class="container contact-box glass-card gsap-fade-up">
+            <h2>Me <span>Contacter</span></h2>
+            <p>Basé à Rabat, Maroc. Ouvert à des opportunités passionnantes en ingénierie énergétique (études, conception, terrain) et optimisation numérique.</p>
+            
+            <div class="contact-links">
+                <a href="mailto:khallouk.ibrahim@uir.ac.ma">Email</a>
+                <a href="https://www.linkedin.com/in/ibrahim-khallouq-aa8aa220a/" target="_blank">LinkedIn</a>
+                <a href="https://github.com/ibra-create" target="_blank">GitHub</a>
+                <a href="tel:+212650931850" target="_blank">+212 650 93 18 50</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3D and Animation Scripts -->
+    <script>
+        // Register GSAP ScrollTrigger
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Hero Animations
+        gsap.from(".gsap-hero", {
+            y: 50,
+            opacity: 0,
+            duration: 1,
+            stagger: 0.2,
+            ease: "power3.out",
+            delay: 0.5
+        });
+
+        // Scroll Animations for sections
+        gsap.utils.toArray('.gsap-fade-up').forEach(element => {
+            gsap.from(element, {
+                scrollTrigger: {
+                    trigger: element,
+                    start: "top 85%",
+                },
+                y: 50,
+                opacity: 0,
+                duration: 0.8,
+                ease: "power3.out"
+            });
+        });
+
+        gsap.utils.toArray('.gsap-slide-in').forEach((element, i) => {
+            gsap.from(element, {
+                scrollTrigger: {
+                    trigger: element,
+                    start: "top 80%",
+                },
+                x: i % 2 === 0 ? -50 : 50,
+                opacity: 0,
+                duration: 1,
+                ease: "power3.out"
+            });
+        });
+
+        // Three.js Interactive Background
+        const initThreeJS = () => {
+            const container = document.getElementById('canvas-container');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            container.appendChild(renderer.domElement);
+
+            // Create particles (Energy grid vibe)
+            const particlesGeometry = new THREE.BufferGeometry();
+            const particlesCount = 1500;
+            const posArray = new Float32Array(particlesCount * 3);
+
+            for(let i = 0; i < particlesCount * 3; i++) {
+                posArray[i] = (Math.random() - 0.5) * 10;
+            }
+
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+            const material = new THREE.PointsMaterial({
+                size: 0.005,
+                color: 0x0ea5e9,
+                transparent: true,
+                opacity: 0.8,
+                blending: THREE.AdditiveBlending
+            });
+
+            const particlesMesh = new THREE.Points(particlesGeometry, material);
+            scene.add(particlesMesh);
+
+            camera.position.z = 3;
+
+            // Mouse interaction
+            let mouseX = 0;
+            let mouseY = 0;
+            let targetX = 0;
+            let targetY = 0;
+
+            const windowHalfX = window.innerWidth / 2;
+            const windowHalfY = window.innerHeight / 2;
+
+            document.addEventListener('mousemove', (event) => {
+                mouseX = (event.clientX - windowHalfX);
+                mouseY = (event.clientY - windowHalfY);
+            });
+
+            // Animation Loop
+            const clock = new THREE.Clock();
+
+            const animate = () => {
+                requestAnimationFrame(animate);
+                const elapsedTime = clock.getElapsedTime();
+
+                targetX = mouseX * 0.001;
+                targetY = mouseY * 0.001;
+
+                particlesMesh.rotation.y += 0.05 * (targetX - particlesMesh.rotation.y);
+                particlesMesh.rotation.x += 0.05 * (targetY - particlesMesh.rotation.x);
+                particlesMesh.rotation.z += 0.001; // slow continuous rotation
+
+                // Slight wave effect
+                const positions = particlesGeometry.attributes.position.array;
+                for(let i = 0; i < particlesCount; i++) {
+                    const i3 = i * 3;
+                    const x = positions[i3];
+                    const z = positions[i3 + 2];
+                    // Make some particles pulse
+                    if (i % 10 === 0) {
+                        positions[i3 + 1] += Math.sin(elapsedTime + x) * 0.001;
+                    }
+                }
+                particlesGeometry.attributes.position.needsUpdate = true;
+
+                renderer.render(scene, camera);
+            };
+
+            animate();
+
+            // Resize handler
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        };
+
+        // Initialize 3D when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initThreeJS);
+    </script>
+</body>
+</html>

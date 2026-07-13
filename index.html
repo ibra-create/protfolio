@@ -4,286 +4,823 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ibrahim Khallouq | Portfolio Ingénieur en Énergétique et Énergies Renouvelables</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <!-- GSAP for animations -->
+    <meta name="description" content="Portfolio d'ingénierie énergétique — conception, dimensionnement et optimisation de systèmes solaires, BESS, hydrogène vert et smart grids.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <!-- Three.js for 3D Background -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
     <style>
+        /* ============================================================
+           CSS VARIABLES — DESIGN SYSTEM
+           ============================================================ */
         :root {
-            --bg-color: #030712;
-            --surface-color: rgba(255, 255, 255, 0.02);
-            --border-color: rgba(255, 255, 255, 0.05);
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --accent: #0ea5e9; /* Light blue */
-            --accent-glow: rgba(14, 165, 233, 0.5);
-            --accent-secondary: #10b981; /* Emerald/Green for renewables */
-            --font-main: 'Outfit', sans-serif;
+            --bg: #050510;
+            --bg-elevated: #0a0a1a;
+            --surface: rgba(255, 255, 255, 0.025);
+            --surface-hover: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.06);
+            --border-hover: rgba(255, 255, 255, 0.12);
+            --text: #f0f0f5;
+            --text-muted: #7a7a99;
+            --text-dim: #4a4a66;
+
+            --accent: #6366f1;       /* Indigo */
+            --accent-glow: rgba(99, 102, 241, 0.3);
+            --green: #34d399;        /* Emerald */
+            --green-glow: rgba(52, 211, 153, 0.3);
+            --cyan: #22d3ee;
+            --purple: #a855f7;
+            --amber: #f59e0b;
+
+            --font: 'Inter', -apple-system, system-ui, sans-serif;
+            --font-display: 'Space Grotesk', 'Inter', sans-serif;
+
+            --radius: 16px;
+            --radius-sm: 10px;
+            --radius-xs: 6px;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: var(--font-main);
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            overflow-x: hidden;
-            line-height: 1.6;
-        }
-
-        /* Smooth scrolling */
+        /* ============================================================
+           RESET & BASE
+           ============================================================ */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.7;
+        }
 
-        /* Typography */
-        h1, h2, h3, h4 { line-height: 1.2; font-weight: 600; }
-        h2 { font-size: 2.5rem; margin-bottom: 2rem; color: var(--text-main); }
-        h2 span { color: var(--accent); }
-        p { color: var(--text-muted); font-size: 1.1rem; }
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: #222; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+        ::selection { background: var(--accent); color: #fff; }
 
-        /* Utility Classes */
+        /* ============================================================
+           UTILITIES
+           ============================================================ */
         .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 10; }
-        .glass-card {
-            background: var(--surface-color);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2rem;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        .section-label {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 6px 16px; border-radius: 9999px;
+            background: rgba(99, 102, 241, 0.08);
+            border: 1px solid rgba(99, 102, 241, 0.18);
+            color: var(--accent); font-size: 0.72rem;
+            font-weight: 700; text-transform: uppercase;
+            letter-spacing: 2.5px; margin-bottom: 1.2rem;
         }
-        .glass-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px -10px var(--accent-glow);
-            border-color: rgba(14, 165, 233, 0.3);
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 4.5vw, 3rem);
+            font-weight: 700; line-height: 1.15;
+            margin-bottom: 1rem;
         }
-        .btn {
-            display: inline-block;
-            padding: 1rem 2rem;
-            border-radius: 50px;
-            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
-            color: white;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px var(--accent-glow);
-            border: none;
-            cursor: pointer;
+        .section-subtitle {
+            color: var(--text-muted);
+            font-size: 1.05rem; max-width: 550px;
+            margin-bottom: 3.5rem;
         }
-        .btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        .gradient-text {
+            background: linear-gradient(135deg, var(--accent), var(--purple), var(--green));
+            -webkit-background-clip: text; background-clip: text;
+            color: transparent; -webkit-text-fill-color: transparent;
         }
         .tag {
             display: inline-block;
-            padding: 0.4rem 1rem;
-            border-radius: 50px;
-            background: rgba(14, 165, 233, 0.1);
+            padding: 4px 12px; border-radius: 6px;
+            background: rgba(99, 102, 241, 0.08);
+            border: 1px solid rgba(99, 102, 241, 0.15);
             color: var(--accent);
-            font-size: 0.9rem;
-            margin: 0.2rem;
-            border: 1px solid rgba(14, 165, 233, 0.2);
+            font-size: 0.78rem; font-weight: 600;
+            margin: 3px;
+            transition: all 0.3s;
         }
+        .tag:hover { background: rgba(99, 102, 241, 0.15); border-color: rgba(99, 102, 241, 0.3); }
 
-        /* Navbar */
+        /* ============================================================
+           NAVBAR
+           ============================================================ */
         nav {
-            position: fixed; top: 0; width: 100%; z-index: 100;
-            padding: 1.5rem 0;
-            background: rgba(3, 7, 18, 0.8);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border-color);
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            padding: 0 0;
+            background: hsla(240, 60%, 3%, 0.6);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-bottom: 1px solid var(--border);
         }
-        .nav-container { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
-        .logo { font-size: 1.5rem; font-weight: 800; color: white; text-decoration: none; letter-spacing: 1px;}
-        .logo span { color: var(--accent); }
-        .nav-links { display: flex; gap: 2rem; }
-        .nav-links a { color: var(--text-muted); text-decoration: none; font-weight: 600; transition: color 0.3s; }
-        .nav-links a:hover { color: var(--accent); }
+        .nav-inner {
+            max-width: 1200px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 1rem 2rem;
+        }
+        .logo {
+            font-family: var(--font-display);
+            font-size: 1.2rem; font-weight: 700;
+            color: var(--text); text-decoration: none;
+            letter-spacing: 0.5px;
+        }
+        .logo .dot { color: var(--accent); }
+        .nav-links { display: flex; gap: 0.3rem; }
+        .nav-links a {
+            padding: 7px 14px; border-radius: 8px;
+            color: var(--text-muted); text-decoration: none;
+            font-size: 0.82rem; font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .nav-links a:hover { color: var(--text); background: var(--surface); }
+        .nav-cta {
+            padding: 8px 20px !important; border-radius: 9999px !important;
+            background: var(--accent) !important; color: #fff !important;
+            font-weight: 600 !important;
+            transition: all 0.3s !important;
+        }
+        .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 20px var(--accent-glow); background: #5558e6 !important; }
 
-        /* Sections */
-        section { padding: 8rem 0; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
+        /* ============================================================
+           HERO SECTION
+           ============================================================ */
+        #hero {
+            position: relative; min-height: 100vh;
+            display: flex; align-items: center;
+            overflow: hidden; padding: 0;
+        }
+        #shader-canvas {
+            position: absolute; inset: 0;
+            z-index: 1; pointer-events: none;
+        }
+        .hero-gradient {
+            position: absolute; inset: 0; z-index: 2;
+            background:
+                radial-gradient(ellipse 80% 60% at 20% 50%, rgba(99, 102, 241, 0.12), transparent),
+                radial-gradient(ellipse 60% 50% at 80% 30%, rgba(168, 85, 247, 0.08), transparent),
+                radial-gradient(ellipse 50% 40% at 50% 90%, rgba(52, 211, 153, 0.06), transparent);
+            pointer-events: none;
+        }
+        .hero-content {
+            position: relative; z-index: 10;
+            max-width: 700px; text-align: left;
+        }
 
-        /* Hero Section */
-        #hero { position: relative; height: 100vh; padding: 0; display: flex; align-items: center; overflow: hidden; }
-        #canvas-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
-        .hero-content { position: relative; z-index: 10; text-align: left; max-width: 800px; }
-        .hero-title { font-size: 4.5rem; margin-bottom: 1rem; background: linear-gradient(to right, #fff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .hero-subtitle { font-size: 1.5rem; color: var(--accent-secondary); margin-bottom: 2rem; font-weight: 400; letter-spacing: 1px;}
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 8vw, 5rem);
+            font-weight: 800; line-height: 1.05;
+            letter-spacing: -0.03em;
+            margin-bottom: 1.5rem;
+        }
+        .hero-title .line-2 { color: var(--text-muted); font-weight: 400; }
+        .hero-description {
+            color: var(--text-muted); font-size: 1.1rem;
+            max-width: 520px; margin-bottom: 2.5rem; line-height: 1.8;
+        }
+        .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .btn-primary {
+            display: inline-flex; align-items: center; gap: 10px;
+            padding: 14px 28px; border-radius: 12px;
+            background: var(--accent); color: #fff;
+            text-decoration: none; font-weight: 600; font-size: 0.95rem;
+            border: none; cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px var(--accent-glow);
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4); background: #5558e6; }
+        .btn-secondary {
+            display: inline-flex; align-items: center; gap: 10px;
+            padding: 14px 28px; border-radius: 12px;
+            background: transparent; color: var(--text);
+            text-decoration: none; font-weight: 600; font-size: 0.95rem;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover { border-color: var(--border-hover); background: var(--surface); transform: translateY(-2px); }
+
+
+
+        /* ============================================================
+           PROJECTS SECTION — SHOWCASE
+           ============================================================ */
+        #projects { padding: 7rem 0 5rem; }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto;
+            gap: 1.5rem;
+        }
+
+        /* === PROJECT CARD === */
+        /* Base Color Variable for Cards */
+        .project-card[data-color="indigo"] { --card: #6366f1; }
+        .project-card[data-color="green"] { --card: #34d399; }
+        .project-card[data-color="purple"] { --card: #a855f7; }
+        .project-card[data-color="cyan"] { --card: #22d3ee; }
+        .project-card[data-color="amber"] { --card: #f59e0b; }
+
+        .project-card {
+            position: relative; overflow: hidden;
+            background: linear-gradient(150deg, rgba(255, 255, 255, 0.057), rgba(255, 255, 255, 0.014));
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            display: flex; flex-direction: column;
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            text-decoration: none; color: inherit;
+            cursor: pointer;
+            min-height: 280px;
+        }
         
-        /* About */
-        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
-        .about-stats { display: flex; gap: 2rem; margin-top: 2rem; }
-        .stat-box { padding: 1.5rem; background: var(--surface-color); border-radius: 12px; border: 1px solid var(--border-color); }
-        .stat-box h3 { font-size: 2rem; color: var(--accent); margin-bottom: 0.5rem; }
-
-        /* Tech Stack */
-        .tech-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
-        .tech-card h3 { margin-bottom: 1rem; color: white; display: flex; align-items: center; gap: 0.5rem; }
-        .tech-card .icon { color: var(--accent); font-size: 1.5rem; }
+        .project-card:hover {
+            border-color: var(--card);
+            transform: translateY(-8px);
+            box-shadow: 0 28px 75px -35px var(--card);
+        }
         
-        /* Projects */
-        .project-grid { display: grid; grid-template-columns: 1fr; gap: 3rem; }
-        .project-card { display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; align-items: center; padding: 3rem; position: relative; }
-        .project-info h3 { font-size: 1.8rem; margin-bottom: 1rem; color: white; }
-        .project-meta { color: var(--accent-secondary); font-weight: 600; margin-bottom: 1rem; }
-        .project-tools { margin-top: 1.5rem; }
-        .project-num { font-size: 4rem; font-weight: 800; color: rgba(255,255,255,0.05); position: absolute; top: -10px; right: 20px; }
+        .project-card .card-bg-glow {
+            position: absolute; top: -80px; right: -80px;
+            width: 250px; height: 250px;
+            border-radius: 50%;
+            filter: blur(100px);
+            background: var(--card);
+            opacity: 0.08;
+            pointer-events: none;
+        }
 
-        /* Experience & Formation */
-        .timeline { position: relative; max-width: 800px; margin: 0 auto; }
-        .timeline::before { content: ''; position: absolute; left: 50%; transform: translateX(-50%); width: 2px; height: 100%; background: var(--border-color); }
-        .timeline-item { width: 50%; padding: 2rem; position: relative; }
-        .timeline-item:nth-child(odd) { left: 0; text-align: right; padding-right: 3rem; }
-        .timeline-item:nth-child(even) { left: 50%; padding-left: 3rem; }
-        .timeline-dot { position: absolute; top: 2.5rem; width: 20px; height: 20px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 10px var(--accent-glow); }
-        .timeline-item:nth-child(odd) .timeline-dot { right: -10px; }
-        .timeline-item:nth-child(even) .timeline-dot { left: -10px; }
-        .timeline-date { color: var(--accent-secondary); font-weight: 600; margin-bottom: 0.5rem; }
+        .card-num {
+            font-family: var(--font-display);
+            font-size: 3.5rem; font-weight: 800;
+            color: rgba(255, 255, 255, 0.03);
+            position: absolute; top: 1rem; right: 1.5rem;
+            line-height: 1;
+        }
+        .card-category {
+            font-size: 0.72rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 2px;
+            margin-bottom: 1rem;
+            color: var(--card);
+        }
 
-        /* Contact */
-        #contact { text-align: center; }
-        .contact-box { max-width: 600px; margin: 0 auto; }
-        .contact-links { display: flex; justify-content: center; flex-wrap: wrap; gap: 1.5rem; margin-top: 3rem; }
-        .contact-links a { color: white; font-size: 1.2rem; text-decoration: none; padding: 1rem 2rem; border: 1px solid var(--border-color); border-radius: 50px; transition: all 0.3s; }
-        .contact-links a:hover { background: var(--surface-color); border-color: var(--accent); color: var(--accent); }
+        .card-title {
+            font-family: var(--font-display);
+            font-size: 1.35rem; font-weight: 700;
+            color: var(--text); margin-bottom: 0.8rem;
+            line-height: 1.3;
+        }
+        .card-desc {
+            color: var(--text-muted); font-size: 0.9rem;
+            line-height: 1.7; flex: 1;
+            margin-bottom: 1.5rem;
+        }
+        .card-footer {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-top: auto;
+        }
+        .card-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+        .card-explore {
+            display: inline-flex; align-items: center; gap: 6px;
+            color: var(--text-muted); font-size: 0.85rem; font-weight: 600;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        .card-explore .arrow-icon {
+            width: 20px; height: 20px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+            font-size: 0.7rem;
+        }
+        .project-card:hover .card-explore { color: var(--card); }
+        .project-card:hover .card-explore .arrow-icon { 
+            background: color-mix(in srgb, var(--card) 15%, transparent); 
+            border-color: color-mix(in srgb, var(--card) 30%, transparent); 
+            color: var(--card);
+        }
 
-        /* Responsive */
+        /* Big featured card */
+        .project-card.featured { grid-column: 1 / -1; }
+
+        /* ============================================================
+           ABOUT SECTION
+           ============================================================ */
+        #about { padding: 7rem 0; }
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 4rem; align-items: start;
+        }
+        .about-text p { color: var(--text-muted); margin-bottom: 1.2rem; font-size: 1rem; }
+        .about-text strong { color: var(--text); }
+        .stats-row {
+            display: flex; gap: 1.5rem; margin-top: 2rem;
+        }
+        .stat-card {
+            flex: 1; padding: 1.5rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            transition: all 0.3s;
+        }
+        .stat-card:hover { border-color: var(--border-hover); transform: translateY(-3px); }
+        .stat-card .stat-val {
+            font-family: var(--font-display);
+            font-size: 2rem; font-weight: 700;
+            color: var(--accent);
+        }
+        .stat-card .stat-label { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.3rem; }
+
+        .competences-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2.5rem;
+        }
+        .competences-card h3 {
+            font-family: var(--font-display);
+            font-size: 1.15rem; font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+        .competence-item {
+            display: flex; align-items: center; gap: 12px;
+            padding: 0.7rem 0;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-muted); font-size: 0.92rem;
+        }
+        .competence-item:last-child { border-bottom: none; }
+        .competence-dot {
+            width: 6px; height: 6px; border-radius: 50%;
+            background: var(--accent); flex-shrink: 0;
+        }
+
+        /* ============================================================
+           FORMATION & EXPERIENCE
+           ============================================================ */
+        .timeline-section { padding: 7rem 0; }
+        .dual-timeline {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;
+        }
+        .timeline-col h3 {
+            font-family: var(--font-display);
+            font-size: 1.3rem; font-weight: 700;
+            margin-bottom: 2rem;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .timeline-col h3 i { color: var(--accent); }
+        .tl-item {
+            position: relative;
+            padding: 0 0 2rem 2rem;
+            border-left: 2px solid var(--border);
+        }
+        .tl-item:last-child { padding-bottom: 0; }
+        .tl-dot {
+            position: absolute; left: -7px; top: 4px;
+            width: 12px; height: 12px;
+            border-radius: 50%; background: var(--accent);
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+        .tl-date {
+            font-size: 0.78rem; font-weight: 700;
+            color: var(--green); text-transform: uppercase;
+            letter-spacing: 1.5px; margin-bottom: 0.4rem;
+        }
+        .tl-title {
+            font-family: var(--font-display);
+            font-size: 1.05rem; font-weight: 700;
+            color: var(--text); margin-bottom: 0.3rem;
+        }
+        .tl-org { color: var(--accent); font-size: 0.88rem; font-weight: 600; margin-bottom: 0.5rem; }
+        .tl-desc { color: var(--text-muted); font-size: 0.88rem; line-height: 1.7; }
+
+        /* ============================================================
+           SKILLS SECTION
+           ============================================================ */
+        #skills { padding: 7rem 0; }
+        .skills-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+        .skill-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            transition: all 0.4s;
+        }
+        .skill-card:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 50px -15px rgba(99, 102, 241, 0.1);
+        }
+        .skill-card h3 {
+            font-family: var(--font-display);
+            font-size: 1.1rem; font-weight: 700;
+            margin-bottom: 0.8rem;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .skill-card h3 i { color: var(--accent); font-size: 1.2rem; }
+        .skill-card p { color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1rem; }
+        .skill-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+
+        /* ============================================================
+           CONTACT SECTION
+           ============================================================ */
+        #contact { padding: 7rem 0 5rem; text-align: center; }
+        .contact-inner {
+            max-width: 600px; margin: 0 auto;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 4rem 3rem;
+        }
+        .contact-inner h2 {
+            font-family: var(--font-display);
+            font-size: 2rem; font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        .contact-inner p { color: var(--text-muted); margin-bottom: 2.5rem; font-size: 1rem; }
+        .contact-grid {
+            display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;
+        }
+        .contact-link {
+            position: relative;
+            display: flex; align-items: center;
+            height: 60px; max-width: 60px;
+            border-radius: 30px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            text-decoration: none;
+            overflow: hidden;
+            transition: max-width 0.5s cubic-bezier(0.22, 1, 0.36, 1), background 0.3s, border-color 0.3s;
+        }
+        .contact-link-icon {
+            min-width: 60px; height: 60px;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--text); font-size: 1.3rem;
+            transition: color 0.3s;
+        }
+        .contact-link-text {
+            font-weight: 600; white-space: nowrap; color: #fff;
+            opacity: 0; transform: translateX(-15px);
+            transition: opacity 0.3s ease 0.1s, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.05s;
+            padding-right: 25px;
+        }
+        .contact-link:hover {
+            max-width: 250px;
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            border-color: transparent;
+        }
+        .contact-link:hover .contact-link-icon {
+            color: #fff;
+        }
+        .contact-link:hover .contact-link-text {
+            opacity: 1; transform: translateX(0);
+        }
+
+        /* ============================================================
+           FOOTER
+           ============================================================ */
+        footer {
+            padding: 2.5rem;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            color: var(--text-dim);
+            font-size: 0.82rem;
+        }
+
+        /* ============================================================
+           RESPONSIVE
+           ============================================================ */
+        @media (max-width: 1024px) {
+            .projects-grid { grid-template-columns: 1fr 1fr; }
+            .dual-timeline { grid-template-columns: 1fr; gap: 3rem; }
+            .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+        }
         @media (max-width: 768px) {
-            section { padding: 5rem 0; }
-            #hero { padding: 0; }
-            .hero-title { font-size: 2.5rem; }
-            .hero-subtitle { font-size: 1.2rem; }
-            .hero-content .btn { display: block; width: 100%; margin-left: 0 !important; margin-bottom: 1rem; text-align: center; }
-            .about-grid, .project-card { grid-template-columns: 1fr; gap: 2rem; }
-            .project-card { padding: 1.5rem; }
-            .project-num { font-size: 3rem; position: static; display: block; margin-bottom: 0.5rem; }
-            .timeline::before { left: 0; }
-            .timeline-item { width: 100%; left: 0 !important; text-align: left !important; padding-left: 2rem !important; padding-right: 0 !important; padding-bottom: 2rem; }
-            .timeline-item .timeline-dot { left: -10px !important; right: auto !important; }
-            .nav-container { flex-direction: column; gap: 0.5rem; }
-            .nav-links { display: flex; width: 100%; overflow-x: auto; padding-bottom: 0.5rem; justify-content: flex-start; gap: 1.5rem; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
-            .nav-links::-webkit-scrollbar { display: none; }
-            .about-stats { flex-direction: column; gap: 1rem; }
-            .contact-links a { width: 100%; text-align: center; }
-            h2 { font-size: 2rem; }
-            .container { padding: 0 1.5rem; }
+            .projects-grid { grid-template-columns: 1fr; }
+            .project-card.featured { grid-column: 1; }
+            .skills-grid { grid-template-columns: 1fr; }
+            .nav-links { display: none; }
+            .hero-title { font-size: clamp(2.2rem, 7vw, 3.5rem); }
+            .hero-ctas { flex-direction: column; }
+            .btn-primary, .btn-secondary { width: 100%; justify-content: center; }
+            .stats-row { flex-direction: column; }
+            .container { padding: 0 1.2rem; }
+        }
+        .shiny {
+            background: linear-gradient(
+                100deg,
+                #FFB648 0%,
+                #FFB648 35%,
+                #ffffff 50%,
+                #5EC8FF 65%,
+                #5EC8FF 100%
+            );
+            background-size: 220% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+            animation: shine 5s linear infinite;
+            display: inline-block;
+        }
+
+        @keyframes shine {
+            0%   { background-position: 220% 0; }
+            100% { background-position: -220% 0; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .shiny { animation: none; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Navigation -->
+    <!-- ═══════════════════ NAVBAR ═══════════════════ -->
     <nav>
-        <div class="nav-container">
-            <a href="#" class="logo">IK<span>.</span></a>
+        <div class="nav-inner">
+            <a href="#" class="logo">IK<span class="dot">.</span></a>
             <div class="nav-links">
-                <a href="#about">À Propos</a>
-                <a href="#formation">Formation</a>
-                <a href="#skills">Compétences</a>
                 <a href="#projects">Projets</a>
-                <a href="#experience">Expérience</a>
-                <a href="#contact">Contact</a>
+                <a href="#about">À Propos</a>
+                <a href="#timeline">Parcours</a>
+                <a href="#skills">Compétences</a>
+                <a href="#contact" class="nav-cta">Contact</a>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
+    
     <section id="hero">
-        <div id="canvas-container"></div>
+        <canvas id="shader-canvas"></canvas>
+        <div class="hero-gradient"></div>
         <div class="container hero-content">
-            <h2 class="gsap-hero">Bonjour, je suis</h2>
-            <h1 class="hero-title gsap-hero">Ibrahim Khallouq</h1>
-            <p class="hero-subtitle gsap-hero">Ingénieur en Énergétique et Énergies Renouvelables</p>
-            <p class="gsap-hero" style="max-width: 500px; margin-bottom: 2rem;"><strong style="color: var(--accent);">Expertise en ingénierie énergétique :</strong> études technico-économiques, conception, dimensionnement, mise en œuvre et utilisation d'outils numériques appliqués aux énergies renouvelables, à l'efficacité énergétique ainsi qu'aux systèmes thermiques et électriques.</p>
-            <div class="gsap-hero">
-                <a href="#projects" class="btn">Explorer les Projets</a>
-                <a href="#contact" class="btn" style="background: transparent; border: 1px solid var(--accent); margin-left: 1rem; box-shadow: none;">Me Contacter</a>
+
+            <h1 class="hero-title gsap-hero">
+                <span class="shiny">Ibrahim Khallouq</span><br>
+                <span class="line-2" style="color:var(--text) ;">Ingénieur en Énergétique</span>
+            </h1>
+            <p class="hero-description gsap-hero">
+                <strong style="color: var(--green);">Expertise en ingénierie énergétique :</strong> <span style="color: white;">études technico-économiques, conception, dimensionnement, mise en œuvre et utilisation d'outils numériques appliqués aux énergies renouvelables, à l'efficacité énergétique ainsi qu'aux systèmes thermiques et électriques.</span>
+            </p>
+            <div class="hero-ctas gsap-hero">
+                <a href="#projects" class="btn-primary">
+                    <i class="ph-bold ph-squares-four"></i> Explorer les Projets
+                </a>
+                <a href="#contact" class="btn-secondary">
+                    <i class="ph-bold ph-envelope-simple"></i> <span class="shiny">Me Contacter</span>
+                </a>
             </div>
         </div>
+
     </section>
 
-    <!-- About Section -->
+    
     <section id="about">
         <div class="container">
-            <h2>À Propos de <span>Moi</span></h2>
+            <div class="section-label gsap-fade-up"><i class="ph-bold ph-user"></i> À Propos</div>
+            <h2 class="section-title gsap-fade-up">Qui <span class="gradient-text">suis-je</span></h2>
+
             <div class="about-grid">
                 <div class="about-text gsap-fade-up">
-                    <p style="margin-bottom: 1rem;">Je suis un ingénieur en énergie spécialisé dans <strong style="color: var(--accent);">la conception, le dimensionnement et l'optimisation des systèmes énergétiques</strong>. Mes compétences couvrent les énergies renouvelables et conventionnelles, les réseaux électriques, le stockage d'énergie ainsi que les solutions d'efficacité énergétique.</p>
-                    <p style="margin-bottom: 1rem;">J'interviens sur l'ensemble du cycle d'un projet, depuis l'analyse des besoins et les études technico-économiques jusqu'à la modélisation, la simulation, le dimensionnement et la validation des performances. J'utilise des outils d'ingénierie pour concevoir des solutions fiables, optimiser leur fonctionnement et accompagner leur mise en œuvre dans des contextes industriels ou tertiaires.</p>
-                    <div class="about-stats">
-                        <div class="stat-box">
-                            <h3>3+</h3>
-                            <p>Langues (AR, FR, EN)</p>
+                    <p>Ingénieur en énergie spécialisé dans <strong>la conception, le dimensionnement et l'optimisation des systèmes énergétiques</strong>, avec une expertise en <strong>énergies renouvelables, réseaux électriques, stockage d'énergie et efficacité énergétique</strong>. Maîtrise des <strong>études technico-économiques, de la modélisation, de la simulation et de la validation des performances</strong> pour développer des solutions énergétiques fiables et optimisées.</p>
+
+                    <div class="stats-row">
+                        <div class="stat-card">
+                            <div class="stat-val">8+</div>
+                            <div class="stat-label">Projets Réalisés</div>
                         </div>
-                        <div class="stat-box">
-                            <h3>8+</h3>
-                            <p>Projets d'Ingénierie Réalisés</p>
+                        <div class="stat-card">
+                            <div class="stat-val">3</div>
+                            <div class="stat-label">Langues (AR, FR, EN)</div>
                         </div>
                     </div>
                 </div>
-                <div class="about-image glass-card gsap-fade-up">
-                    <h3 style="margin-bottom: 1rem; color: white;">Compétences Fondamentales</h3>
-                    <ul style="list-style: none; color: var(--text-muted); display: grid; gap: 0.8rem;">
-                        <li>Thermodynamique & Transferts Thermiques</li>
-                        <li>Électrotechnique & Systèmes Électriques (HT/MT/BT)</li>
-                        <li>Énergies Renouvelables (Solaire, Éolien, CSP, Hybride)</li>
-                        <li>Efficacité Énergétique & Audit (RTCM)</li>
-                        <li>Mécanique des Fluides (CFD)</li>
-                        <li>Stockage d'Énergie (BESS, Thermique, H2 Vert)</li>
-                        <li>Smart Grids & Micro-réseaux (EMS/BMS)</li>
-                        <li>Automatisme & IoT Énergétique</li>
-                    </ul>
+
+                <div class="competences-card gsap-fade-up">
+                    <h3><i class="ph-bold ph-gear-six" style="color: var(--accent);"></i> Compétences Fondamentales</h3>
+                    <div class="competence-item"><span class="competence-dot"></span> Thermodynamique & Transferts Thermiques</div>
+                    <div class="competence-item"><span class="competence-dot"></span> Électrotechnique & Systèmes Électriques (HT/MT/BT)</div>
+                    <div class="competence-item"><span class="competence-dot"></span> Énergies Renouvelables (Solaire, Éolien, CSP, Hybride)</div>
+                    <div class="competence-item"><span class="competence-dot"></span> Efficacité Énergétique & Audit (RTCM)</div>
+                    <div class="competence-item"><span class="competence-dot"></span> Mécanique des Fluides (CFD)</div>
+                    <div class="competence-item"><span class="competence-dot"></span> Stockage d'Énergie (BESS, Thermique, H₂ Vert)</div>
+                    <div class="competence-item"><span class="competence-dot"></span> Smart Grids & Micro-réseaux (EMS/BMS)</div>
+                    <div class="competence-item"><span class="competence-dot"></span> Automatisme & IoT Énergétique</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Formation Section -->
-    <section id="formation">
+    <!-- ═══════════════════ PROJECTS ═══════════════════ -->
+    <section id="projects">
         <div class="container">
-            <h2 style="text-align: center;">Formation <span>Académique</span></h2>
-            
-            <div class="timeline">
-                
-                <div class="timeline-item gsap-fade-up">
-                    <div class="timeline-dot"></div>
-                    <div class="glass-card">
-                        <div class="timeline-date">2021 – 2026</div>
-                        <h3 style="color: white; margin-bottom: 0.5rem;">Diplôme d'Ingénieur en Énergétique & Énergies Renouvelables</h3>
-                        <p style="color: var(--accent); margin-bottom: 1rem;">Université Internationale de Rabat (UIR)</p>
-                        <p>Modules clés : Thermodynamique, Audit Énergétique, Électronique Embarquée, Smart Grids, Mécanique des Fluides (CFD), Maintenance Industrielle.</p>
-                    </div>
-                </div>
+            <div class="section-label gsap-fade-up"><i class="ph-bold ph-lightning"></i> Projets Réalisés</div>
+            <h2 class="section-title gsap-fade-up"><span class="gradient-text">Projets</span></h2>
+            <p class="section-subtitle gsap-fade-up">Explorez mes projets d'ingénierie énergétique, allant du dimensionnement solaire à grande échelle à la modélisation d'hydrogène vert.</p>
 
-                <div class="timeline-item gsap-fade-up">
-                    <div class="timeline-dot"></div>
-                    <div class="glass-card">
-                        <div class="timeline-date">Avant 2021</div>
-                        <h3 style="color: white; margin-bottom: 0.5rem;">Baccalauréat en Sciences et Technologies Électriques (STE)</h3>
-                        <p style="color: var(--accent); margin-bottom: 1rem;">Lycée Technique</p>
-                        <p>Modules clés : Sciences de l'Ingénieur (Acquisition, Traitement, Communication, Alimentation, Distribution, Conversion).</p>
+            <div class="projects-grid">
+
+                <!-- Project 1 — FEATURED -->
+                <a href="solar-project.html" class="project-card featured gsap-fade-up" data-color="indigo">
+                    <div class="card-bg-glow"></div>
+                    <span class="card-num">01</span>
+                    <div class="card-category">Infrastructure à Grande Échelle</div>
+                    <div class="card-title">Étude Des Installations Solaires Avec Stockage D'énergie (Deux Centrales 580 kWc)</div>
+                    <p class="card-desc">Réalisation d'études de faisabilité complètes et technico-économiques pour des projets solaires à grande échelle au niveau national et international (avec Novec). Fourniture de simulations détaillées, de conceptions électriques incluant des schémas unifilaires (SLD) et des plans d'implantation couvrant tout le cycle de vie du projet, du dimensionnement à l'intégration au réseau.</p>
+                    <div class="card-footer">
+                        <div class="card-tags">
+                            <span class="tag">PVSyst</span>
+                            <span class="tag">HOMER Pro</span>
+                            <span class="tag">Caneco BT</span>
+                            <span class="tag">PowerFactory</span>
+                            <span class="tag">AutoCAD</span>
+                        </div>
+                        <span class="card-explore">Explorer <span class="arrow-icon">→</span></span>
                     </div>
-                </div>
+                </a>
+
+                <!-- Project 2 -->
+                <a href="solar-bess-67mw.html" class="project-card gsap-fade-up" data-color="green">
+                    <div class="card-bg-glow"></div>
+                    <span class="card-num">02</span>
+                    <div class="card-category">Simulation Avancée</div>
+                    <div class="card-title">Centrale PV 67 MW + BESS (Modélisation EMS/BMS)</div>
+                    <p class="card-desc">Étude complète de dimensionnement et technico-économique d'une centrale photovoltaïque de 67 MW couplée à un stockage d'énergie par batterie. Conception et modélisation de la logique du système de gestion de l'énergie (EMS) et du système de gestion de la batterie (BMS) pour simuler le contrôle en temps réel et la stabilité du réseau.</p>
+                    <div class="card-footer">
+                        <div class="card-tags">
+                            <span class="tag">PVSyst</span>
+                            <span class="tag">HOMER Pro</span>
+                            <span class="tag">PowerFactory</span>
+                            <span class="tag">MATLAB & simulink</span>
+                        </div>
+                        <span class="card-explore">Explorer <span class="arrow-icon">→</span></span>
+                    </div>
+                </a>
+
+                <!-- Project 3 -->
+                <a href="ibwatts.html" class="project-card gsap-fade-up" data-color="cyan">
+                    <div class="card-bg-glow"></div>
+                    <span class="card-num">03</span>
+                    <div class="card-category">Outil Numérique</div>
+                    <div class="card-title">Application Web Solaire Technico-Économique pour le Marché Marocain</div>
+                    <p class="card-desc">Développement d'une application web avancée (Python/Streamlit) intégrant une base de données d'équipements réels du marché marocain. Elle effectue l'analyse des ombrages, le dimensionnement automatique et intègre un moteur financier simulant les prêts bancaires, le ROI et le délai d'amortissement selon les tarifs locaux, avec génération automatique de rapports PDF.</p>
+                    <div class="card-footer">
+                        <div class="card-tags">
+                            <span class="tag">Python</span>
+                            <span class="tag">Streamlit</span>
+                            <span class="tag">Data Analysis</span>
+                        </div>
+                        <span class="card-explore">Explorer <span class="arrow-icon">→</span></span>
+                    </div>
+                </a>
+
+                <!-- Project 4 -->
+                <a href="smart_house.html" class="project-card gsap-fade-up" data-color="amber">
+                    <div class="card-bg-glow"></div>
+                    <span class="card-num">04</span>
+                    <div class="card-category">Éco-Conception</div>
+                    <div class="card-title">Maison Bioclimatique Intelligente</div>
+                    <p class="card-desc">Modélisation d'une maison à haute efficacité énergétique (DesignBuilder) axée sur l'optimisation du confort thermique. Réalisation d'un prototype matériel d'électronique embarquée (Arduino R4 et logique PID) pour le contrôle climatique automatisé et la gestion intelligente du système.</p>
+                    <div class="card-footer">
+                        <div class="card-tags">
+                            <span class="tag">DesignBuilder</span>
+                            <span class="tag">Arduino</span>
+                            <span class="tag">PID</span>
+                        </div>
+                        <span class="card-explore">Explorer <span class="arrow-icon">→</span></span>
+                    </div>
+                </a>
+
+                <!-- Project 5 -->
+                <a href="hydrotwin.html" class="project-card gsap-fade-up" data-color="green">
+                    <div class="card-bg-glow"></div>
+                    <span class="card-num">05</span>
+                    <div class="card-category">Power-to-X</div>
+                    <div class="card-title">HydroTwin (Power-to-X)</div>
+                    <p class="card-desc">Modélisation de la chaîne Power-to-X (PV → Électrolyseur PEM → Stockage LOHC) à l'aide de modèles numériques développés en Python. Optimisation du LCOH à partir des données d'irradiation solaire marocaines et des contraintes du réseau électrique.</p>
+                    <div class="card-footer">
+                        <div class="card-tags">
+                            <span class="tag">Python</span>
+                            <span class="tag">NumPy</span>
+                            <span class="tag">NSGA-II</span>
+                            <span class="tag">Streamlit</span>
+                            <span class="tag">Data Analysis</span>
+                        </div>
+                        <span class="card-explore">Explorer <span class="arrow-icon">→</span></span>
+                    </div>
+                </a>
+
+                <!-- Project 6 -->
+                <a href="ai-prediction.html" class="project-card gsap-fade-up" data-color="purple">
+                    <div class="card-bg-glow"></div>
+                    <span class="card-num">06</span>
+                    <div class="card-category">Intelligence Artificielle</div>
+                    <div class="card-title">Système de Prédiction Énergétique par IA</div>
+                    <p class="card-desc">Développement d'un prédicteur utilisant la température, l'humidité et la date pour prévoir la consommation énergétique. Ce modèle est intégré à une plateforme permettant d'importer des données, de cibler des périodes spécifiques et d'effectuer des simulations « What-If ». Résultat : Précision de prédiction de <strong>92 %</strong>.</p>
+                    <div class="card-footer">
+                        <div class="card-tags">
+                            <span class="tag">Python</span>
+                            <span class="tag">Machine Learning</span>
+                        </div>
+                        <span class="card-explore">Explorer <span class="arrow-icon">→</span></span>
+                    </div>
+                </a>
 
             </div>
         </div>
     </section>
 
-    <!-- Skills Section -->
+    <!-- ═══════════════════ FORMATION & EXPERIENCE ═══════════════════ -->
+    <section id="timeline" class="timeline-section">
+        <div class="container">
+            <div class="section-label gsap-fade-up"><i class="ph-bold ph-path"></i> Parcours</div>
+            <h2 class="section-title gsap-fade-up">Formation & <span class="gradient-text">Expérience</span></h2>
+            <p class="section-subtitle gsap-fade-up">Mon parcours académique et mes expériences professionnelles en ingénierie énergétique.</p>
+
+            <div class="dual-timeline">
+                <!-- Formation -->
+                <div class="timeline-col gsap-fade-up">
+                    <h3><i class="ph-bold ph-graduation-cap"></i> Formation</h3>
+
+                    <div class="tl-item">
+                        <div class="tl-dot"></div>
+                        <div class="tl-date">2021 – 2026</div>
+                        <div class="tl-title">Diplôme d'Ingénieur en Énergétique & Énergies Renouvelables</div>
+                        <div class="tl-org">Université Internationale de Rabat (UIR)</div>
+                        <div class="tl-desc">Thermodynamique, Audit Énergétique, Électronique Embarquée, Smart Grids, CFD, Maintenance Industrielle.</div>
+                    </div>
+
+                    <div class="tl-item">
+                        <div class="tl-dot"></div>
+                        <div class="tl-date">Avant 2021</div>
+                        <div class="tl-title">Baccalauréat en Sciences & Technologies Électriques (STE)</div>
+                        <div class="tl-org">Lycée Technique</div>
+                        <div class="tl-desc">Sciences de l'Ingénieur : Acquisition, Traitement, Communication, Alimentation, Distribution, Conversion.</div>
+                    </div>
+                </div>
+
+                <!-- Experience -->
+                <div class="timeline-col gsap-fade-up">
+                    <h3><i class="ph-bold ph-briefcase"></i> Expérience</h3>
+
+                    <div class="tl-item">
+                        <div class="tl-dot"></div>
+                        <div class="tl-date">2026 (4 mois)</div>
+                        <div class="tl-title">Ingénieur Projet PV & BESS</div>
+                        <div class="tl-org">Novec — Ingénieurs Conseils</div>
+                        <div class="tl-desc">Réalisation d'études de faisabilité et technico-économiques complètes pour des projets à grande échelle à Djibouti et Dakhla. Gestion de la conception de bout en bout, création et simulations et intégration.</div>
+                    </div>
+
+                    <div class="tl-item">
+                        <div class="tl-dot"></div>
+                        <div class="tl-date">Août 2023</div>
+                        <div class="tl-title">Stage : Maintenance & Opérations</div>
+                        <div class="tl-org">Centrale CSP Noor I (Ouarzazate)</div>
+                        <div class="tl-desc">Analyse des défaillances des systèmes d'énergie solaire concentrée (CSP), réduisant le temps de diagnostic de 15 %. Interprétation de schémas P&ID et électriques complexes.</div>
+                    </div>
+
+                    <div class="tl-item">
+                        <div class="tl-dot"></div>
+                        <div class="tl-date">Août 2022</div>
+                        <div class="tl-title">Stage : Ingénierie Solaire</div>
+                        <div class="tl-org">Bureau d'Études Solaire</div>
+                        <div class="tl-desc">Supervision de l'installation et de la mise en service de systèmes de pompage solaire. Suivi des performances des onduleurs et des panneaux photovoltaïques.</div>
+                    </div>
+
+                    <div class="tl-item">
+                        <div class="tl-dot"></div>
+                        <div class="tl-date">Juillet 2021</div>
+                        <div class="tl-title">Stage : Optimisation des Processus</div>
+                        <div class="tl-org">Menara Holding (Marrakech)</div>
+                        <div class="tl-desc">Audit des équipements de production thermiques et mécaniques, identifiant un potentiel de gain d'efficacité de 5 % dans le processus thermique par l'analyse de données.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════ SKILLS ═══════════════════ -->
     <section id="skills">
         <div class="container">
-            <h2>Maîtrise <span>Technique</span></h2>
-            <p style="margin-bottom: 3rem; text-align: center; max-width: 600px; margin-inline: auto;">Une pile technique complète reliant l'ingénierie pure et les solutions numériques.</p>
-            
-            <div class="tech-grid">
-                <div class="glass-card tech-card gsap-fade-up">
-                    <h3>Ingénierie de Base</h3>
-                    <p style="margin-bottom: 1rem;">Logiciels avancés de simulation et de conception pour les systèmes énergétiques.</p>
-                    <div>
+            <div class="section-label gsap-fade-up"><i class="ph-bold ph-wrench"></i> Stack Technique</div>
+            <h2 class="section-title gsap-fade-up">Maîtrise <span class="gradient-text">Technique</span></h2>
+            <p class="section-subtitle gsap-fade-up">Une pile technique complète reliant l'ingénierie pure et les solutions numériques.</p>
+
+            <div class="skills-grid">
+                <div class="skill-card gsap-fade-up">
+                    <h3><i class="ph-bold ph-sun-dim"></i> Ingénierie de Base</h3>
+                    <p>Logiciels de simulation et conception pour systèmes énergétiques.</p>
+                    <div class="skill-tags">
                         <span class="tag">DesignBuilder</span>
-                        <span class="tag">Ansys Fluent (CFD)</span>
+                        <span class="tag">Ansys Fluent</span>
                         <span class="tag">HOMER Pro</span>
                         <span class="tag">PVSyst</span>
                         <span class="tag">TRNSYS</span>
@@ -292,11 +829,11 @@
                         <span class="tag">PowerFactory</span>
                     </div>
                 </div>
-                
-                <div class="glass-card tech-card gsap-fade-up">
-                    <h3>Programmation & Données</h3>
-                    <p style="margin-bottom: 1rem;">Développement d'outils et traitement de données pour la gestion intelligente de l'énergie.</p>
-                    <div>
+
+                <div class="skill-card gsap-fade-up">
+                    <h3><i class="ph-bold ph-code"></i> Programmation & Données</h3>
+                    <p>Développement d'outils et traitement de données pour la gestion intelligente.</p>
+                    <div class="skill-tags">
                         <span class="tag">Python (Avancé)</span>
                         <span class="tag">Pandas / NumPy</span>
                         <span class="tag">Streamlit</span>
@@ -304,15 +841,15 @@
                         <span class="tag">Machine Learning</span>
                     </div>
                 </div>
-                
-                <div class="glass-card tech-card gsap-fade-up">
-                    <h3>Matériel & IoT</h3>
-                    <p style="margin-bottom: 1rem;">Relier le monde physique et numérique pour l'automatisation énergétique.</p>
-                    <div>
+
+                <div class="skill-card gsap-fade-up">
+                    <h3><i class="ph-bold ph-cpu"></i> Matériel & IoT</h3>
+                    <p>Relier le monde physique et numérique pour l'automatisation énergétique.</p>
+                    <div class="skill-tags">
                         <span class="tag">Arduino R4</span>
                         <span class="tag">ESP32 / IoT</span>
                         <span class="tag">Capteurs</span>
-                        <span class="tag">Actionneurs & Logique PID</span>
+                        <span class="tag">PID Control</span>
                         <span class="tag">Proteus</span>
                     </div>
                 </div>
@@ -320,286 +857,196 @@
         </div>
     </section>
 
-    <!-- Projects Section -->
-    <section id="projects">
+    <!-- ═══════════════════ CONTACT ═══════════════════ -->
+    <section id="contact">
         <div class="container">
-            <h2>Projets <span>Phare</span></h2>
-            
-            <div class="project-grid">
-                
-                <!-- Project 1 -->
-                <div class="glass-card project-card gsap-slide-in">
-                    <div class="project-info" style="grid-column: 1 / -1;">
-                        <span class="project-num">01</span>
-                        <div class="project-meta">Infrastructure à Grande Échelle</div>
-                        <h3>Centrale PV 30 MWc + BESS 5 MWh (Djibouti) & Deux Centrales 580 kWc</h3>
-                        <p>Réalisation d'études de faisabilité complètes et technico-économiques pour des projets solaires à grande échelle au niveau national et international (avec Novec). Fourniture de simulations détaillées, de conceptions électriques incluant des schémas unifilaires (SLD) et des plans d'implantation couvrant tout le cycle de vie du projet, du dimensionnement à l'intégration au réseau.</p>
-                        <div class="project-tools">
-                            <span class="tag">PVSyst</span>
-                            <span class="tag">HOMER Pro</span>
-                            <span class="tag">Caneco BT</span>
-                            <span class="tag">PowerFactory</span>
-                            <span class="tag">AutoCAD</span>
-                        </div>
-                    </div>
-                </div>
+            <div class="contact-inner gsap-fade-up">
+                <div class="section-label" style="justify-content: center;"><i class="ph-bold ph-chat-dots"></i> Contact</div>
+                <h2>Me <span class="shiny">contacter</span></h2>
+                <p>Basé à Rabat, Maroc. Ouvert à des opportunités passionnantes en ingénierie énergétique et optimisation numérique.</p>
 
-                <!-- Project 2 -->
-                <div class="glass-card project-card gsap-slide-in">
-                    <div class="project-info" style="grid-column: 1 / -1;">
-                        <span class="project-num">02</span>
-                        <div class="project-meta">Simulation Avancée</div>
-                        <h3>Centrale PV 67 MW + BESS (Modélisation EMS/BMS)</h3>
-                        <p>Étude complète de dimensionnement et technico-économique d'une centrale photovoltaïque de 67 MW couplée à un stockage d'énergie par batterie. Conception et modélisation de la logique du système de gestion de l'énergie (EMS) et du système de gestion de la batterie (BMS) pour simuler le contrôle en temps réel et la stabilité du réseau.</p>
-                        <div class="project-tools">
-                            <span class="tag">PVSyst</span>
-                            <span class="tag">MATLAB</span>
-                            <span class="tag">Simulink</span>
-                        </div>
-                    </div>
+                <div class="contact-grid">
+                    <a href="mailto:khallouk.ibrahim@uir.ac.ma" class="contact-link">
+                        <div class="contact-link-icon"><i class="ph-bold ph-envelope-simple"></i></div>
+                        <div class="contact-link-text">Email</div>
+                    </a>
+                    <a href="https://www.linkedin.com/in/ibrahim-khallouq-aa8aa220a/" target="_blank" class="contact-link">
+                        <div class="contact-link-icon"><i class="ph-bold ph-linkedin-logo"></i></div>
+                        <div class="contact-link-text">LinkedIn</div>
+                    </a>
+                    <a href="https://github.com/ibra-create" target="_blank" class="contact-link">
+                        <div class="contact-link-icon"><i class="ph-bold ph-github-logo"></i></div>
+                        <div class="contact-link-text">GitHub</div>
+                    </a>
+                    <a href="tel:+212650931850" class="contact-link">
+                        <div class="contact-link-icon"><i class="ph-bold ph-phone"></i></div>
+                        <div class="contact-link-text">+212 650 93 18 50</div>
+                    </a>
                 </div>
-
-                <!-- Project 3 -->
-                <div class="glass-card project-card gsap-slide-in">
-                    <div class="project-info" style="grid-column: 1 / -1;">
-                        <span class="project-num">03</span>
-                        <div class="project-meta">Outil Numérique Énergétique</div>
-                        <h3>Application Web Solaire Technico-Économique pour le Marché Marocain</h3>
-                        <p>Développement d'une application web avancée (Python/Streamlit) intégrant une base de données d'équipements réels du marché marocain. Elle effectue l'analyse des ombrages, le dimensionnement automatique et intègre un moteur financier simulant les prêts bancaires, le ROI et le délai d'amortissement selon les tarifs locaux, avec génération automatique de rapports PDF.</p>
-                        <div class="project-tools">
-                            <span class="tag">Python</span>
-                            <span class="tag">Streamlit</span>
-                            <span class="tag">Analyse de Données</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Project 4 & 5 Grid -->
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; grid-column: 1 / -1;">
-                    <div class="glass-card gsap-slide-in" style="position: relative; overflow: hidden;">
-                        <span class="project-num" style="font-size: 3rem;">04</span>
-                        <h3 style="color: white; margin-bottom: 1rem;">Maison Bioclimatique Intelligente & Stockage Thermique</h3>
-                        <p style="margin-bottom: 1.5rem;">Modélisation d'une maison à haute efficacité (DesignBuilder) avec un stockage thermique intersaisonnier innovant à base de sable. Réalisation d'un prototype matériel (Arduino R4 et logique PID) pour le contrôle climatique automatisé.</p>
-                        <div class="project-tools">
-                            <span class="tag">DesignBuilder</span>
-                            <span class="tag">Arduino</span>
-                        </div>
-                    </div>
-                    
-                    <div class="glass-card gsap-slide-in" style="position: relative; overflow: hidden;">
-                        <span class="project-num" style="font-size: 3rem;">05</span>
-                        <h3 style="color: white; margin-bottom: 1rem;">HydroTwin (Power-to-X)</h3>
-                        <p style="margin-bottom: 1.5rem;">MModélisation de la chaîne Power-to-X (PV → Électrolyseur PEM → Stockage LOHC) à l'aide de modèles numériques développés en Python. Optimisation du LCOH à partir des données d'irradiation solaire marocaines et des contraintes du réseau électrique.</p>
-                        <div class="project-tools">
-                            <span class="tag">Python</span>
-                            <span class="tag">Modélisation Physique</span>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
     </section>
 
-    <!-- Experience Section -->
-    <section id="experience">
-        <div class="container">
-            <h2 style="text-align: center;">Expérience <span>Professionnelle</span></h2>
-            
-            <div class="timeline">
-                
-                <div class="timeline-item gsap-fade-up">
-                    <div class="timeline-dot"></div>
-                    <div class="glass-card">
-                        <div class="timeline-date">2026 (4 Mois)</div>
-                        <h3 style="color: white; margin-bottom: 0.5rem;">Ingénieur Projet PV & BESS</h3>
-                        <p style="color: var(--accent); margin-bottom: 1rem;">Novec — Ingénieurs Conseils</p>
-                        <p>Réalisation d'études de faisabilité et technico-économiques complètes pour des projets à grande échelle à Djibouti et Dakhla. Gestion de la conception de bout en bout, création de SLD et simulations.</p>
-                    </div>
-                </div>
+    <!-- ═══════════════════ FOOTER ═══════════════════ -->
+    <footer>
+        <p>© 2026 Ibrahim Khallouq — Ingénieur en Énergétique et Énergies Renouvelables</p>
+    </footer>
 
-                <div class="timeline-item gsap-fade-up">
-                    <div class="timeline-dot"></div>
-                    <div class="glass-card">
-                        <div class="timeline-date">Août 2023</div>
-                        <h3 style="color: white; margin-bottom: 0.5rem;">Stage : Maintenance et Opérations</h3>
-                        <p style="color: var(--accent); margin-bottom: 1rem;">Centrale CSP Noor I (Ouarzazate)</p>
-                        <p>Analyse des défaillances des systèmes d'énergie solaire concentrée (CSP), réduisant le temps de diagnostic de 15 %. Interprétation de schémas P&ID et électriques complexes.</p>
-                    </div>
-                </div>
-                
-                <div class="timeline-item gsap-fade-up">
-                    <div class="timeline-dot"></div>
-                    <div class="glass-card">
-                        <div class="timeline-date">Août 2022</div>
-                        <h3 style="color: white; margin-bottom: 0.5rem;">Stage : Ingénierie Solaire</h3>
-                        <p style="color: var(--accent); margin-bottom: 1rem;">Bureau d'Études Solaire</p>
-                        <p>Supervision de l'installation et de la mise en service de systèmes de pompage solaire. Suivi des performances des onduleurs et des panneaux photovoltaïques.</p>
-                    </div>
-                </div>
-
-                <div class="timeline-item gsap-fade-up">
-                    <div class="timeline-dot"></div>
-                    <div class="glass-card">
-                        <div class="timeline-date">Juillet 2021</div>
-                        <h3 style="color: white; margin-bottom: 0.5rem;">Stage : Optimisation des Processus</h3>
-                        <p style="color: var(--accent); margin-bottom: 1rem;">Menara Holding (Marrakech)</p>
-                        <p>Audit des équipements de production thermiques et mécaniques, identifiant un potentiel de gain d'efficacité de 5 % dans le processus thermique par l'analyse de données.</p>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" style="min-height: 60vh;">
-        <div class="container contact-box glass-card gsap-fade-up">
-            <h2>Me <span>Contacter</span></h2>
-            <p>Basé à Rabat, Maroc. Ouvert à des opportunités passionnantes en ingénierie énergétique (études, conception, terrain) et optimisation numérique.</p>
-            
-            <div class="contact-links">
-                <a href="mailto:khallouk.ibrahim@uir.ac.ma">Email</a>
-                <a href="https://www.linkedin.com/in/ibrahim-khallouq-aa8aa220a/" target="_blank">LinkedIn</a>
-                <a href="https://github.com/ibra-create" target="_blank">GitHub</a>
-                <a href="tel:+212650931850" target="_blank">+212 650 93 18 50</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- 3D and Animation Scripts -->
+    <!-- ═══════════════════ SCRIPTS ═══════════════════ -->
     <script>
-        // Register GSAP ScrollTrigger
+        // ── GSAP ──
         gsap.registerPlugin(ScrollTrigger);
 
-        // Hero Animations
+        // Hero staggered entrance
         gsap.from(".gsap-hero", {
-            y: 50,
-            opacity: 0,
-            duration: 1,
-            stagger: 0.2,
-            ease: "power3.out",
-            delay: 0.5
+            y: 40, opacity: 0,
+            duration: 1, stagger: 0.18,
+            ease: "power3.out", delay: 0.4
         });
 
-        // Scroll Animations for sections
-        gsap.utils.toArray('.gsap-fade-up').forEach(element => {
-            gsap.from(element, {
-                scrollTrigger: {
-                    trigger: element,
-                    start: "top 85%",
-                },
-                y: 50,
-                opacity: 0,
-                duration: 0.8,
-                ease: "power3.out"
+        // Fade-up on scroll
+        gsap.utils.toArray('.gsap-fade-up').forEach(el => {
+            gsap.from(el, {
+                scrollTrigger: { trigger: el, start: "top 88%" },
+                y: 40, opacity: 0,
+                duration: 0.8, ease: "power3.out"
             });
         });
 
-        gsap.utils.toArray('.gsap-slide-in').forEach((element, i) => {
-            gsap.from(element, {
-                scrollTrigger: {
-                    trigger: element,
-                    start: "top 80%",
-                },
-                x: i % 2 === 0 ? -50 : 50,
-                opacity: 0,
-                duration: 1,
-                ease: "power3.out"
-            });
-        });
+        // ── Fluid Shader Background ──
+        document.addEventListener("DOMContentLoaded", () => {
+            const canvas = document.getElementById('shader-canvas');
+            if (!canvas) return;
 
-        // Three.js Interactive Background
-        const initThreeJS = () => {
-            const container = document.getElementById('canvas-container');
-            const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-            
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(window.devicePixelRatio);
-            container.appendChild(renderer.domElement);
+            const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+            if (!gl) return;
 
-            // Create particles (Energy grid vibe)
-            const particlesGeometry = new THREE.BufferGeometry();
-            const particlesCount = 1500;
-            const posArray = new Float32Array(particlesCount * 3);
+            const vertexShaderSource = `
+                attribute vec2 a_position;
+                void main() {
+                    gl_Position = vec4(a_position, 0.0, 1.0);
+                }
+            `;
 
-            for(let i = 0; i < particlesCount * 3; i++) {
-                posArray[i] = (Math.random() - 0.5) * 10;
+            const fragmentShaderSource = `
+                precision highp float;
+                uniform vec2 u_resolution;
+                uniform float u_time;
+
+                void main() {
+                    vec2 uv = (gl_FragCoord.xy - 0.5 * u_resolution.xy) / u_resolution.y;
+                    float t = u_time * 0.4;
+
+                    vec3 color = mix(vec3(0.08, 0.02, 0.15), vec3(0.02, 0.0, 0.05), abs(uv.y));
+                    vec3 linesColor = vec3(0.0);
+                    
+                    for (int i = 0; i < 7; i++) {
+                        float fi = float(i);
+                        float timeOffset = t * (0.8 + fi * 0.15);
+                        float freq = 1.2 + fi * 0.3;
+                        float amp = 0.12 + fi * 0.02;
+                        
+                        float y = sin(uv.x * freq + timeOffset) * amp;
+                        y += sin(uv.x * (freq * 0.5) - timeOffset * 1.2) * (amp * 1.2);
+                        
+                        float dist = abs(uv.y - y);
+                        float baseGlow = 0.0015;
+                        float intensity = baseGlow / (dist + 0.001);
+                        intensity += exp(-dist * 25.0) * 0.1;
+                        
+                        vec3 waveColor = mix(
+                            vec3(0.3, 0.0, 0.8),
+                            vec3(0.9, 0.2, 1.0),
+                            sin(fi * 1.3 + uv.x * 2.0) * 0.5 + 0.5
+                        );
+                        
+                        linesColor += waveColor * intensity;
+                    }
+                    
+                    for (int j = 0; j < 5; j++) {
+                        float fj = float(j);
+                        float px = (fract(t * 0.1 + fj * 0.4) - 0.5) * 4.0;
+                        float py = sin(px * 1.5 + t) * 0.2 + sin(px * 0.5 - t) * 0.2;
+                        py += (fract(fj * 8.13) - 0.5) * 0.4;
+                        float pDist = length(uv - vec2(px, py));
+                        linesColor += vec3(1.0, 0.8, 1.0) * (0.002 / (pDist + 0.001));
+                    }
+
+                    color += linesColor;
+                    color *= smoothstep(1.5, 0.0, dot(uv, uv) * 0.2);
+                    gl_FragColor = vec4(color, 1.0);
+                }
+            `;
+
+            function compileShader(type, source) {
+                const shader = gl.createShader(type);
+                gl.shaderSource(shader, source);
+                gl.compileShader(shader);
+                return shader;
             }
 
-            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            const program = gl.createProgram();
+            gl.attachShader(program, compileShader(gl.VERTEX_SHADER, vertexShaderSource));
+            gl.attachShader(program, compileShader(gl.FRAGMENT_SHADER, fragmentShaderSource));
+            gl.linkProgram(program);
+            gl.useProgram(program);
 
-            const material = new THREE.PointsMaterial({
-                size: 0.005,
-                color: 0x0ea5e9,
-                transparent: true,
-                opacity: 0.8,
-                blending: THREE.AdditiveBlending
+            const positions = new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]);
+            const positionBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+            gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
+
+            const positionLocation = gl.getAttribLocation(program, 'a_position');
+            gl.enableVertexAttribArray(positionLocation);
+            gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+            const timeLocation = gl.getUniformLocation(program, 'u_time');
+            const resolutionLocation = gl.getUniformLocation(program, 'u_resolution');
+
+            function resizeCanvas() {
+                const dpr = window.devicePixelRatio || 1;
+                // Only use the parent container's size if it's the hero, but window is fine here since hero is 100vh
+                canvas.width = window.innerWidth * dpr;
+                canvas.height = window.innerHeight * dpr;
+                canvas.style.width = `${window.innerWidth}px`;
+                canvas.style.height = `${window.innerHeight}px`;
+                gl.viewport(0, 0, canvas.width, canvas.height);
+                gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
+            }
+
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+
+            const startTime = performance.now();
+            function render(currentTime) {
+                gl.uniform1f(timeLocation, (currentTime - startTime) / 1000.0);
+                gl.drawArrays(gl.TRIANGLES, 0, 6);
+                requestAnimationFrame(render);
+            }
+            requestAnimationFrame(render);
+        });
+    </script>
+
+    <!-- Scroll Restoration Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Restore scroll position if it exists
+            const savedScrollPos = sessionStorage.getItem('portfolioScrollPos');
+            if (savedScrollPos) {
+                // Wait briefly for layout and GSAP to initialize before jumping
+                setTimeout(() => {
+                    window.scrollTo({ top: parseInt(savedScrollPos, 10), behavior: 'instant' });
+                }, 100);
+            }
+
+            // Save scroll position when clicking any project link
+            const projectCards = document.querySelectorAll('.project-card');
+            projectCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    sessionStorage.setItem('portfolioScrollPos', window.scrollY);
+                });
             });
-
-            const particlesMesh = new THREE.Points(particlesGeometry, material);
-            scene.add(particlesMesh);
-
-            camera.position.z = 3;
-
-            // Mouse interaction
-            let mouseX = 0;
-            let mouseY = 0;
-            let targetX = 0;
-            let targetY = 0;
-
-            const windowHalfX = window.innerWidth / 2;
-            const windowHalfY = window.innerHeight / 2;
-
-            document.addEventListener('mousemove', (event) => {
-                mouseX = (event.clientX - windowHalfX);
-                mouseY = (event.clientY - windowHalfY);
-            });
-
-            // Animation Loop
-            const clock = new THREE.Clock();
-
-            const animate = () => {
-                requestAnimationFrame(animate);
-                const elapsedTime = clock.getElapsedTime();
-
-                targetX = mouseX * 0.001;
-                targetY = mouseY * 0.001;
-
-                particlesMesh.rotation.y += 0.05 * (targetX - particlesMesh.rotation.y);
-                particlesMesh.rotation.x += 0.05 * (targetY - particlesMesh.rotation.x);
-                particlesMesh.rotation.z += 0.001; // slow continuous rotation
-
-                // Slight wave effect
-                const positions = particlesGeometry.attributes.position.array;
-                for(let i = 0; i < particlesCount; i++) {
-                    const i3 = i * 3;
-                    const x = positions[i3];
-                    const z = positions[i3 + 2];
-                    // Make some particles pulse
-                    if (i % 10 === 0) {
-                        positions[i3 + 1] += Math.sin(elapsedTime + x) * 0.001;
-                    }
-                }
-                particlesGeometry.attributes.position.needsUpdate = true;
-
-                renderer.render(scene, camera);
-            };
-
-            animate();
-
-            // Resize handler
-            window.addEventListener('resize', () => {
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(window.innerWidth, window.innerHeight);
-            });
-        };
-
-        // Initialize 3D when DOM is loaded
-        document.addEventListener('DOMContentLoaded', initThreeJS);
+        });
     </script>
 </body>
 </html>

@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Système de Prédiction Énergétique par IA | Ibrahim Khallouq</title>
+    <meta name="description" content="Projet de prédiction de la consommation énergétique par Intelligence Artificielle - Précision de 92%">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.163.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.163.0/examples/jsm/"
+        }
+    }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Outfit', sans-serif; overflow-x: hidden; }
+        #canvas-container {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10;
+        }
+        .hero-bg {
+            background: linear-gradient(180deg, #cecbcb 0%, #cecbcb 50%, #9a9a9a 68%, #bebebe 100%);
+        }
+        .hero-text {
+            color: #000;
+            opacity: 0.1;
+            letter-spacing: -0.05em;
+            font-size: clamp(4rem, 15vw, 14rem);
+            line-height: 1;
+            transform: translateY(40px);
+            font-weight: 900;
+            white-space: nowrap;
+            user-select: none;
+            pointer-events: none;
+        }
+        .nav-pill {
+            padding: 0.625rem 1.75rem;
+            border-radius: 9999px;
+            background: #fff;
+            color: #000;
+            font-size: 0.875rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 14px rgba(255,255,255,0.15);
+            position: relative;
+            overflow: hidden;
+        }
+        .nav-pill::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; width: 100%; height: 3px;
+            background: #000;
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+            transform-origin: left;
+        }
+        .nav-pill:hover { background: #e4e4e7; }
+        .nav-pill:hover::after { transform: scaleX(1); }
+
+        .cta-btn {
+            padding: 0.625rem 1.75rem;
+            border-radius: 9999px;
+            background: #00ffc6;
+            color: #000;
+            font-size: 0.875rem;
+            font-weight: 900;
+            border: none;
+            cursor: pointer;
+            transition: background 0.25s ease;
+            box-shadow: 0 0 20px rgba(0,255,198,0.4);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+        .cta-btn:hover { background: #00e5b2; }
+
+        .dotted-line {
+            width: 100%;
+            margin-top: 1.5rem;
+            border-bottom: 2px dotted rgba(255,255,255,0.3);
+            transition: opacity 0.3s ease;
+        }
+
+        /* Robot logo in center of nav */
+        .robot-logo {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 48px; width: 64px;
+            cursor: pointer;
+        }
+        .robot-logo .side-bar {
+            position: absolute;
+            width: 6px; height: 16px;
+            background: #d4d4d8;
+            transition: transform 0.3s ease;
+        }
+        .robot-logo .side-bar.left { left: 8px; border-radius: 4px 0 0 4px; }
+        .robot-logo .side-bar.right { right: 8px; border-radius: 0 4px 4px 0; }
+        .robot-logo:hover .side-bar.left { transform: translateX(-4px); }
+        .robot-logo:hover .side-bar.right { transform: translateX(4px); }
+        .robot-logo .screen {
+            z-index: 1;
+            width: 40px; height: 40px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(12px);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+        .robot-logo:hover .screen {
+            background: rgba(255,255,255,0.2);
+            box-shadow: 0 4px 25px rgba(255,255,255,0.15);
+        }
+        .robot-logo .screen-inner {
+            width: 70%; height: 60%;
+            background: #0a0a0a;
+            border-radius: 6px;
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.8);
+        }
+        .robot-logo .eye-bar {
+            width: 6px; height: 12px;
+            background: #00ffc6;
+            border-radius: 2px;
+            box-shadow: 0 0 8px #00ffc6;
+            transition: transform 0.2s ease;
+        }
+        .robot-logo:hover .eye-bar { transform: scaleY(0.2); }
+
+        @media (max-width: 1024px) {
+            .nav-left, .nav-right { justify-content: center; }
+            .robot-logo-wrap { display: none; }
+        }
+    </style>
+</head>
+<body class="bg-zinc-50 text-zinc-900 font-sans overflow-x-hidden selection:bg-[#00ffc6] selection:text-black">
+  <main class="relative w-full">
+    <!-- HERO SECTION -->
+    <section class="hero-bg relative w-full h-screen min-h-[600px] overflow-hidden">
+
+    <!-- Background text -->
+    <div class="absolute inset-0 flex items-center justify-center overflow-hidden" style="z-index: 0;">
+        <h1 class="hero-text">AIPREDICTION</h1>
+    </div>
+
+    <!-- Three.js Canvas -->
+    <div id="canvas-container"></div>
+
+    <!-- UI Overlay -->
+    <div class="absolute inset-0 z-20 pointer-events-none flex flex-col">
+
+        <!-- Navbar -->
+        <nav class="w-full pt-8 px-8 pointer-events-none" style="z-index: 50;">
+            <div class="w-full max-w-[1400px] mx-auto flex flex-col pointer-events-auto">
+                <div class="flex flex-col lg:flex-row items-center justify-between relative gap-4 lg:gap-0">
+
+                    <!-- Left nav links -->
+                    <div class="nav-left flex flex-wrap justify-center lg:justify-start items-center gap-2 sm:gap-3 z-20">
+                        <a href="index.html" class="nav-pill">Retour au Portfolio</a>
+                        <a href="#architecture" class="nav-pill">Architecture</a>
+                        <a href="#modeles" class="nav-pill">Modèles</a>
+                        <a href="#resultats" class="nav-pill">Résultats</a>
+                    </div>
+
+                    <!-- Center robot logo -->
+                    <div class="robot-logo-wrap hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+                        <div class="robot-logo">
+                            <div class="side-bar left"></div>
+                            <div class="side-bar right"></div>
+                            <div class="screen">
+                                <div class="screen-inner">
+                                    <div class="eye-bar"></div>
+                                    <div class="eye-bar"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+
+                </div>
+                <div class="dotted-line" id="nav-line"></div>
+            </div>
+        </nav>
+
+        <!-- Bottom info panel -->
+        <div class="mt-auto w-full max-w-[1400px] mx-auto px-8 pb-12 flex justify-between items-end pointer-events-auto">
+            <div></div>
+        </div>
+    </div>
+    </section>
+
+    <!-- CONTENT SECTIONS -->
+    <section id="architecture" class="py-24 px-8 max-w-[1200px] mx-auto">
+        <h2 class="text-4xl md:text-5xl font-black mb-12 tracking-tight">Architecture du Projet</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <div>
+                <h3 class="text-2xl font-bold mb-4 flex items-center gap-2"><i class="ph-bold ph-stack"></i> Stack Technique</h3>
+                <p class="text-zinc-600 mb-6 leading-relaxed">
+                    Plateforme analytique développée en <strong>Python</strong>. L'interface interactive est propulsée par <strong>Streamlit</strong>, offrant une expérience utilisateur fluide pour l'exploration de données énergétiques massives.
+                </p>
+                <div class="flex flex-wrap gap-2 mb-8">
+                    <span class="px-3 py-1 bg-zinc-200 rounded-full text-sm font-semibold">Python</span>
+                    <span class="px-3 py-1 bg-zinc-200 rounded-full text-sm font-semibold">Streamlit</span>
+                    <span class="px-3 py-1 bg-zinc-200 rounded-full text-sm font-semibold">Pandas & Numpy</span>
+                    <span class="px-3 py-1 bg-zinc-200 rounded-full text-sm font-semibold">Plotly</span>
+                </div>
+            </div>
+            <div class="bg-white p-8 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-zinc-100 hover:border-[#00ffc6] transition-colors duration-300">
+                <h3 class="text-xl font-bold mb-4"><i class="ph-bold ph-cpu"></i> Moteurs Analytiques Avancés</h3>
+                <ul class="space-y-4">
+                    <li class="flex items-start gap-3">
+                        <div class="mt-1 w-6 h-6 rounded-full bg-[#00ffc6]/20 text-[#00c296] flex items-center justify-center shrink-0"><i class="ph-bold ph-check"></i></div>
+                        <div><strong class="block">Analyse NILM</strong>Désagrégation de la consommation par appareil (modèle statistique).</div>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <div class="mt-1 w-6 h-6 rounded-full bg-[#00ffc6]/20 text-[#00c296] flex items-center justify-center shrink-0"><i class="ph-bold ph-check"></i></div>
+                        <div><strong class="block">Simulations What-If</strong>Impact de l'intégration solaire, stockage batterie et efficacité HVAC.</div>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <div class="mt-1 w-6 h-6 rounded-full bg-[#00ffc6]/20 text-[#00c296] flex items-center justify-center shrink-0"><i class="ph-bold ph-check"></i></div>
+                        <div><strong class="block">Recommandations IA</strong>Génération automatique de stratégies d'optimisation énergétique.</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="modeles" class="py-24 bg-zinc-100">
+        <div class="max-w-[1200px] mx-auto px-8">
+            <h2 class="text-4xl md:text-5xl font-black mb-12 tracking-tight">Modélisation Prédictive</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="col-span-1 lg:col-span-2 bg-white p-8 md:p-10 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:border-[#00ffc6] border border-transparent transition-colors duration-300">
+                    <h3 class="text-2xl font-bold mb-4 flex items-center gap-2"><i class="ph-bold ph-brain"></i> Algorithme XGBoost</h3>
+                    <p class="text-zinc-600 mb-6 leading-relaxed">
+                        Le cœur prédictif utilise un régresseur <strong>XGBoost</strong>, sélectionné pour ses performances supérieures face aux approches de Régression Linéaire, Random Forest et MLP. Le modèle capture efficacement les non-linéarités complexes de la consommation.
+                    </p>
+                    <h4 class="font-bold mb-3">Features injectées :</h4>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1.5 bg-zinc-100 border border-zinc-200 rounded-lg text-sm">Température</span>
+                        <span class="px-3 py-1.5 bg-zinc-100 border border-zinc-200 rounded-lg text-sm">Humidité</span>
+                        <span class="px-3 py-1.5 bg-zinc-100 border border-zinc-200 rounded-lg text-sm">Irradiation Solaire</span>
+                        <span class="px-3 py-1.5 bg-zinc-100 border border-zinc-200 rounded-lg text-sm">Vitesse du vent</span>
+                        <span class="px-3 py-1.5 bg-zinc-100 border border-zinc-200 rounded-lg text-sm">Heure & Date</span>
+                        <span class="px-3 py-1.5 bg-zinc-100 border border-zinc-200 rounded-lg text-sm">Jours Fériés</span>
+                    </div>
+                </div>
+                <div class="col-span-1 bg-[#0a0a0a] text-white p-8 md:p-10 rounded-3xl relative overflow-hidden group">
+                    <div class="absolute -right-10 -top-10 w-40 h-40 bg-[#00ffc6] blur-[80px] opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
+                    <h3 class="text-xl font-bold mb-4 flex items-center gap-2"><i class="ph-bold ph-magnifying-glass"></i> Explicabilité</h3>
+                    <p class="text-zinc-400 text-sm leading-relaxed mb-6">
+                        Intégration de <strong>SHAP</strong> (SHapley Additive exPlanations) pour interpréter les décisions du modèle et comprendre l'impact exact de chaque variable météorologique sur la prédiction finale.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DATA & PREDICTION PLATFORM -->
+    <section id="plateforme" class="py-24 px-8 max-w-[1200px] mx-auto">
+        <h2 class="text-4xl md:text-5xl font-black mb-12 tracking-tight">Plateforme Data & Prédiction</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
+            <div>
+                <h3 class="text-2xl font-bold mb-4 flex items-center gap-2"><i class="ph-bold ph-database"></i> Import & Exploration des Données</h3>
+                <p class="text-zinc-600 mb-6 leading-relaxed">
+                    La plateforme permet d’importer des données énergétiques depuis plusieurs sources : fichiers <strong>CSV</strong>, classeurs <strong>Excel</strong> ou bases de données <strong>SQL</strong>. L’utilisateur peut contrôler les données dans un tableau interactif avant de lancer l’analyse.
+                </p>
+                <div class="flex flex-wrap gap-2 mb-8">
+                    <span class="px-3 py-1 bg-zinc-200 rounded-full text-sm font-semibold">CSV</span>
+                    <span class="px-3 py-1 bg-zinc-200 rounded-full text-sm font-semibold">Excel</span>
+                    <span class="px-3 py-1 bg-zinc-200 rounded-full text-sm font-semibold">SQL</span>
+                    <span class="px-3 py-1 bg-zinc-200 rounded-full text-sm font-semibold">Table Interactive</span>
+                </div>
+            </div>
+            <div class="bg-white p-8 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-zinc-100 hover:border-[#00ffc6] transition-colors duration-300">
+                <h3 class="text-xl font-bold mb-4"><i class="ph-bold ph-chart-bar"></i> Visualisation Dynamique</h3>
+                <p class="text-zinc-600 leading-relaxed mb-6">
+                    Un moteur graphique permet de sélectionner plusieurs types de visualisations et d’explorer les tendances, les pointes de charge, les corrélations et les profils temporels de consommation.
+                </p>
+                <div class="flex flex-wrap gap-2">
+                    <span class="px-3 py-1.5 bg-zinc-100 border border-zinc-200 rounded-lg text-sm">Courbes</span>
+                    <span class="px-3 py-1.5 bg-zinc-100 border border-zinc-200 rounded-lg text-sm">Barres</span>
+                    <span class="px-3 py-1.5 bg-zinc-100 border border-zinc-200 rounded-lg text-sm">Aires</span>
+                    <span class="px-3 py-1.5 bg-zinc-100 border border-zinc-200 rounded-lg text-sm">Nuages de points</span>
+                    <span class="px-3 py-1.5 bg-zinc-100 border border-zinc-200 rounded-lg text-sm">Heatmaps</span>
+                    <span class="px-3 py-1.5 bg-zinc-100 border border-zinc-200 rounded-lg text-sm">Visualisations 3D</span>
+                </div>
+            </div>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="col-span-1 lg:col-span-2 bg-white p-8 md:p-10 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:border-[#00ffc6] border border-transparent transition-colors duration-300">
+                <h3 class="text-2xl font-bold mb-4 flex items-center gap-2"><i class="ph-bold ph-calendar-check"></i> Prédiction à la Demande</h3>
+                <p class="text-zinc-600 mb-6 leading-relaxed">
+                    L’utilisateur peut générer une prévision de consommation pour un instant précis en définissant la <strong>date</strong>, l’<strong>heure</strong>, la <strong>température</strong>, l’<strong>humidité</strong> et les autres variables disponibles. Le modèle transforme ces paramètres en une estimation directement exploitable.
+                </p>
+                <div class="flex flex-wrap gap-2">
+                    <span class="px-3 py-1.5 bg-zinc-100 border border-zinc-200 rounded-lg text-sm">Date précise</span>
+                    <span class="px-3 py-1.5 bg-zinc-100 border border-zinc-200 rounded-lg text-sm">Heure</span>
+                    <span class="px-3 py-1.5 bg-zinc-100 border border-zinc-200 rounded-lg text-sm">Température</span>
+                    <span class="px-3 py-1.5 bg-zinc-100 border border-zinc-200 rounded-lg text-sm">Humidité</span>
+                    <span class="px-3 py-1.5 bg-zinc-100 border border-zinc-200 rounded-lg text-sm">Variables météo</span>
+                </div>
+            </div>
+            <div class="col-span-1 bg-[#0a0a0a] text-white p-8 md:p-10 rounded-3xl relative overflow-hidden group">
+                <div class="absolute -right-10 -top-10 w-40 h-40 bg-[#00ffc6] blur-[80px] opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
+                <h3 class="text-xl font-bold mb-4 flex items-center gap-2"><i class="ph-bold ph-sun"></i> Simulation What-If Solaire</h3>
+                <p class="text-zinc-400 text-sm leading-relaxed mb-6">
+                    Un scénario comparatif permet de tester l’ajout d’une production photovoltaïque et d’évaluer son effet potentiel sur la demande nette prédite, les pointes de consommation et l’énergie soutirée du réseau.
+                </p>
+                <p class="text-[#00ffc6] text-sm font-bold">Consommation de référence → Scénario solaire → Impact estimé</p>
+            </div>
+        </div>
+    </section>
+    <section id="resultats" class="py-24 px-8 max-w-[1200px] mx-auto">
+        <h2 class="text-4xl md:text-5xl font-black mb-12 tracking-tight">Résultats & Impact</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="p-8 rounded-3xl bg-white border border-zinc-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:border-[#00ffc6] hover:shadow-[0_8px_30px_rgba(0,255,198,0.15)] transition-all duration-300 relative overflow-hidden">
+                <div class="text-[#00c296] mb-4"><i class="ph-fill ph-target text-5xl"></i></div>
+                <h3 class="text-5xl font-black mb-2">92%</h3>
+                <p class="font-bold text-lg mb-2">Précision de Prédiction</p>
+                <p class="text-zinc-500 text-sm">Précision atteinte par le modèle XGBoost sur l'ensemble de test, prouvant la robustesse des features extraites.</p>
+            </div>
+            <div class="p-8 rounded-3xl bg-white border border-zinc-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:border-[#00ffc6] hover:shadow-[0_8px_30px_rgba(0,255,198,0.15)] transition-all duration-300">
+                <div class="text-[#00c296] mb-4"><i class="ph-fill ph-chart-line-up text-5xl"></i></div>
+                <h3 class="text-2xl font-black mb-2 mt-4">Dashboard Interactif</h3>
+                <p class="text-zinc-500 text-sm">Visualisation 3D, matrices de corrélation et heatmaps hebdomadaires pour une exploration profonde des patterns de consommation.</p>
+            </div>
+            <div class="p-8 rounded-3xl bg-white border border-zinc-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:border-[#00ffc6] hover:shadow-[0_8px_30px_rgba(0,255,198,0.15)] transition-all duration-300">
+                <div class="text-[#00c296] mb-4"><i class="ph-fill ph-file-pdf text-5xl"></i></div>
+                <h3 class="text-2xl font-black mb-2 mt-4">Reporting Automatisé</h3>
+                <p class="text-zinc-500 text-sm">Génération automatique de rapports d'analyse complets aux formats HTML et Word (via python-docx) prêts pour les décideurs.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="py-12 border-t border-zinc-200 text-center bg-white relative z-20">
+        <p class="text-zinc-500 font-medium text-sm">© 2026 Ibrahim Khallouq. Tous droits réservés.</p>
+    </footer>
+
+    <script type="module">
+        import * as THREE from 'three';
+
+        // ─── SETUP ───────────────────────────────────────────
+        const container = document.getElementById('canvas-container');
+
+        const scene = new THREE.Scene();
+
+        const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 100);
+        camera.position.set(0, 0.2, 6);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.0;
+        renderer.outputColorSpace = THREE.SRGBColorSpace;
+        container.appendChild(renderer.domElement);
+
+        // ─── LIGHTING (studio-like) ─────────────────────────
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        scene.add(ambientLight);
+
+        // Key light
+        const keyLight = new THREE.DirectionalLight(0xffffff, 1.8);
+        keyLight.position.set(2, 4, 5);
+        keyLight.castShadow = true;
+        keyLight.shadow.mapSize.width = 2048;
+        keyLight.shadow.mapSize.height = 2048;
+        keyLight.shadow.bias = -0.0005;
+        keyLight.shadow.camera.left = -2;
+        keyLight.shadow.camera.right = 2;
+        keyLight.shadow.camera.top = 2;
+        keyLight.shadow.camera.bottom = -2;
+        keyLight.shadow.camera.near = 0.1;
+        keyLight.shadow.camera.far = 20;
+        scene.add(keyLight);
+
+        // Fill light
+        const fillLight = new THREE.DirectionalLight(0xc8e6ff, 0.6);
+        fillLight.position.set(-3, 2, 3);
+        scene.add(fillLight);
+
+        // Rim light from behind
+        const rimLight = new THREE.DirectionalLight(0x00ffc6, 0.8);
+        rimLight.position.set(0, 3, -4);
+        scene.add(rimLight);
+
+        // Bottom bounce
+        const bounceLight = new THREE.DirectionalLight(0xffeedd, 0.3);
+        bounceLight.position.set(0, -2, 3);
+        scene.add(bounceLight);
+
+        // ─── SHADOW PLANE (circular gradient via canvas texture) ─
+        const shadowSize = 512;
+        const shadowCanvas = document.createElement('canvas');
+        shadowCanvas.width = shadowSize;
+        shadowCanvas.height = shadowSize;
+        const shadowCtx = shadowCanvas.getContext('2d');
+        const gradient = shadowCtx.createRadialGradient(
+            shadowSize/2, shadowSize/2, 0,
+            shadowSize/2, shadowSize/2, shadowSize/2
+        );
+        gradient.addColorStop(0, 'rgba(0,0,0,0.45)');
+        gradient.addColorStop(0.5, 'rgba(0,0,0,0.15)');
+        gradient.addColorStop(1, 'rgba(0,0,0,0)');
+        shadowCtx.fillStyle = gradient;
+        shadowCtx.fillRect(0, 0, shadowSize, shadowSize);
+        const shadowTex = new THREE.CanvasTexture(shadowCanvas);
+
+        const shadowPlane = new THREE.Mesh(
+            new THREE.PlaneGeometry(3, 3),
+            new THREE.MeshBasicMaterial({
+                map: shadowTex,
+                transparent: true,
+                depthWrite: false,
+                opacity: 0.85
+            })
+        );
+        shadowPlane.rotation.x = -Math.PI / 2;
+        shadowPlane.position.y = -0.79;
+        scene.add(shadowPlane);
+
+        // ─── PROCEDURAL TEXTURES ─────────────────────────────
+        function generateTextures() {
+            const size = 512;
+            const canvasC = document.createElement('canvas');
+            const canvasB = document.createElement('canvas');
+            canvasC.width = canvasB.width = size;
+            canvasC.height = canvasB.height = size;
+            const ctxC = canvasC.getContext('2d');
+            const ctxB = canvasB.getContext('2d');
+
+            ctxC.fillStyle = '#e0e0e0';
+            ctxC.fillRect(0, 0, size, size);
+            ctxB.fillStyle = '#808080';
+            ctxB.fillRect(0, 0, size, size);
+
+            for (let i = 0; i < 10000; i++) {
+                const x = Math.random() * size;
+                const y = Math.random() * size;
+                const r = 0.5 + Math.random() * 1.5;
+                const isDark = Math.random() > 0.15;
+
+                ctxC.beginPath();
+                ctxC.arc(x, y, r, 0, Math.PI * 2);
+                ctxC.fillStyle = isDark ? '#333333' : '#e8e8e8';
+                ctxC.fill();
+
+                ctxB.beginPath();
+                ctxB.arc(x, y, r, 0, Math.PI * 2);
+                ctxB.fillStyle = isDark ? '#000000' : '#ffffff';
+                ctxB.fill();
+            }
+
+            const texC = new THREE.CanvasTexture(canvasC);
+            const texB = new THREE.CanvasTexture(canvasB);
+            [texC, texB].forEach(t => {
+                t.wrapS = t.wrapT = THREE.RepeatWrapping;
+                t.repeat.set(6, 3);
+                t.needsUpdate = true;
+            });
+            return { colorMap: texC, bumpMap: texB };
+        }
+
+        const textures = generateTextures();
+
+        // ─── ROBOT GROUP ─────────────────────────────────────
+        const robotGroup = new THREE.Group();
+        let aspect = window.innerWidth / window.innerHeight;
+        function computeScale() {
+            const vFov = (40 * Math.PI) / 180;
+            const viewportWidth = 2 * Math.tan(vFov / 2) * 6 * aspect;
+            return Math.min(1.1, viewportWidth / 3.5);
+        }
+        let scaleFactor = computeScale();
+        robotGroup.scale.setScalar(scaleFactor);
+        robotGroup.position.set(0, -0.3, 0);
+        scene.add(robotGroup);
+
+        // Body group (moves left/right & rotates)
+        const bodyGroup = new THREE.Group();
+        robotGroup.add(bodyGroup);
+
+        // Head group (looks around independently)
+        const headGroup = new THREE.Group();
+        headGroup.position.set(0, 0.60, 0);
+        bodyGroup.add(headGroup);
+
+        // ─── MATERIALS ───────────────────────────────────────
+        const chassisMat = new THREE.MeshStandardMaterial({
+            color: 0xc4c4c4,
+            map: textures.colorMap,
+            bumpMap: textures.bumpMap,
+            bumpScale: 0.005,
+            roughness: 0.55,
+            metalness: 0.15,
+        });
+
+        const headInnerMat = new THREE.MeshStandardMaterial({
+            color: 0x111111,
+            roughness: 0.3,
+            metalness: 0.1,
+        });
+
+        // ─── BODY ────────────────────────────────────────────
+        const bodyMesh = new THREE.Mesh(
+            new THREE.SphereGeometry(0.43, 64, 64, 0, Math.PI * 2, Math.PI * 0.15, Math.PI * 0.85),
+            chassisMat
+        );
+        bodyMesh.castShadow = true;
+        bodyMesh.receiveShadow = true;
+        bodyGroup.add(bodyMesh);
+
+        // Bevel ring
+        const bevelMesh = new THREE.Mesh(
+            new THREE.TorusGeometry(0.235, 0.025, 32, 64),
+            chassisMat
+        );
+        bevelMesh.position.set(0, 0.340, 0);
+        bevelMesh.rotation.x = Math.PI / 2;
+        bevelMesh.castShadow = true;
+        bodyGroup.add(bevelMesh);
+
+        // Neck
+        const nP = { baseR: 0.215, baseH: -0.050, midR: 0.280, midH: 0.020, lipBottomR: 0.295, lipBottomH: 0.045, lipTopR: 0.270, lipTopH: 0.055, innerR: 0.100, innerDropH: 0.000 };
+        const neckPoints = [
+            new THREE.Vector2(nP.innerR, nP.baseH),
+            new THREE.Vector2(nP.baseR, nP.baseH),
+            new THREE.Vector2(nP.midR, nP.midH),
+            new THREE.Vector2(nP.lipBottomR, nP.lipBottomH),
+            new THREE.Vector2(nP.lipTopR, nP.lipTopH),
+            new THREE.Vector2(nP.innerR, nP.lipTopH),
+            new THREE.Vector2(nP.innerR, nP.lipTopH - nP.innerDropH)
+        ];
+        const neckMesh = new THREE.Mesh(
+            new THREE.LatheGeometry(neckPoints, 64),
+            chassisMat
+        );
+        neckMesh.position.y = 0.38;
+        neckMesh.castShadow = true;
+        bodyGroup.add(neckMesh);
+
+        // ─── HEAD ────────────────────────────────────────────
+        // Inner dark sphere
+        const headInner = new THREE.Mesh(
+            new THREE.SphereGeometry(0.28, 64, 64),
+            headInnerMat
+        );
+        headInner.castShadow = true;
+        headGroup.add(headInner);
+
+        // Glass capsule (fresnel glow)
+        const glassMat = new THREE.ShaderMaterial({
+            uniforms: {
+                color: { value: new THREE.Color('#00ffc6') },
+                power: { value: 3.8 },
+                intensity: { value: 1.2 }
+            },
+            vertexShader: `
+                varying vec3 vNormal;
+                varying vec3 vViewPosition;
+                void main() {
+                    vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+                    vViewPosition = -mvPosition.xyz;
+                    vNormal = normalize(normalMatrix * normal);
+                    gl_Position = projectionMatrix * mvPosition;
+                }
+            `,
+            fragmentShader: `
+                uniform vec3 color;
+                uniform float power;
+                uniform float intensity;
+                varying vec3 vNormal;
+                varying vec3 vViewPosition;
+                void main() {
+                    vec3 normal = normalize(vNormal);
+                    vec3 viewDir = normalize(vViewPosition);
+                    float fresnel = 1.0 - max(dot(viewDir, normal), 0.0);
+                    fresnel = pow(fresnel, power);
+                    gl_FragColor = vec4(color, fresnel * intensity);
+                }
+            `,
+            transparent: true,
+            blending: THREE.AdditiveBlending,
+            depthWrite: false
+        });
+        const glassMesh = new THREE.Mesh(
+            new THREE.SphereGeometry(0.30, 64, 64),
+            glassMat
+        );
+        headGroup.add(glassMesh);
+
+        // ─── EARS ────────────────────────────────────────────
+        const earBaseMat = new THREE.MeshStandardMaterial({ color: 0xf0f0f0, roughness: 0.4, metalness: 0.1 });
+        const earRingMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.25, metalness: 0.15 });
+        const earCenterMat = new THREE.MeshStandardMaterial({ color: 0xcccccc, roughness: 0.6 });
+        const antennaBaseMat = new THREE.MeshStandardMaterial({ color: 0x999999, roughness: 0.4, metalness: 0.5 });
+        const antennaStickMat = new THREE.MeshStandardMaterial({ color: 0xd0d0d0, roughness: 0.4, metalness: 0.2 });
+        const antennaTipMat = new THREE.MeshStandardMaterial({ color: 0xff3366, roughness: 0.2, emissive: 0xff3366, emissiveIntensity: 0.5 });
+
+        function createEar(isLeft) {
+            const dir = isLeft ? -1 : 1;
+            const earG = new THREE.Group();
+            earG.scale.setScalar(1.3);
+
+            const base = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.025, 32), earBaseMat);
+            base.rotation.z = Math.PI / 2;
+            base.castShadow = true;
+            earG.add(base);
+
+            const ring = new THREE.Mesh(new THREE.TorusGeometry(0.032, 0.008, 16, 32), earRingMat);
+            ring.position.x = dir * 0.012;
+            ring.rotation.z = Math.PI / 2;
+            ring.castShadow = true;
+            earG.add(ring);
+
+            const center = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.005, 32), earCenterMat);
+            center.position.x = dir * 0.012;
+            center.rotation.z = Math.PI / 2;
+            earG.add(center);
+
+            // Antenna
+            const antennaG = new THREE.Group();
+            antennaG.position.set(dir * 0.015, 0.035, 0);
+            antennaG.rotation.x = -0.4;
+            earG.add(antennaG);
+
+            const aBase = new THREE.Mesh(new THREE.CylinderGeometry(0.006, 0.008, 0.02, 16), antennaBaseMat);
+            aBase.position.y = 0.01;
+            aBase.castShadow = true;
+            antennaG.add(aBase);
+
+            const aStick = new THREE.Mesh(new THREE.CylinderGeometry(0.003, 0.003, 0.1, 8), antennaStickMat);
+            aStick.position.y = 0.06;
+            aStick.castShadow = true;
+            antennaG.add(aStick);
+
+            const aTip = new THREE.Mesh(new THREE.SphereGeometry(0.006, 16, 16), antennaTipMat);
+            aTip.position.y = 0.11;
+            aTip.castShadow = true;
+            antennaG.add(aTip);
+
+            return earG;
+        }
+
+        const leftEar = createEar(true);
+        leftEar.position.set(-0.29, 0, 0);
+        headGroup.add(leftEar);
+
+        const rightEar = createEar(false);
+        rightEar.position.set(0.29, 0, 0);
+        headGroup.add(rightEar);
+
+        // ─── EYES ────────────────────────────────────────────
+        let isLoved = false;
+
+        // Heart curve
+        class HeartCurve extends THREE.Curve {
+            getPoint(t, opt = new THREE.Vector3()) {
+                t *= Math.PI * 2;
+                const x = 16 * Math.pow(Math.sin(t), 3);
+                const y = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t);
+                return opt.set(x * 0.002, (y + 6) * 0.002, 0);
+            }
+        }
+        const heartCurve = new HeartCurve();
+
+        // Eye shape paths (rounded bracket shape)
+        const ew = 0.025, eh = 0.035, er = 0.02, eg = 0.005;
+
+        function makeEyeTopPath() {
+            const path = new THREE.CurvePath();
+            path.add(new THREE.LineCurve3(new THREE.Vector3(-ew, eg, 0), new THREE.Vector3(-ew, eh-er, 0)));
+            path.add(new THREE.QuadraticBezierCurve3(
+                new THREE.Vector3(-ew, eh-er, 0), new THREE.Vector3(-ew, eh, 0), new THREE.Vector3(-ew+er, eh, 0)
+            ));
+            path.add(new THREE.LineCurve3(new THREE.Vector3(-ew+er, eh, 0), new THREE.Vector3(ew-er, eh, 0)));
+            path.add(new THREE.QuadraticBezierCurve3(
+                new THREE.Vector3(ew-er, eh, 0), new THREE.Vector3(ew, eh, 0), new THREE.Vector3(ew, eh-er, 0)
+            ));
+            path.add(new THREE.LineCurve3(new THREE.Vector3(ew, eh-er, 0), new THREE.Vector3(ew, eg, 0)));
+            return path;
+        }
+
+        function makeEyeBottomPath() {
+            const path = new THREE.CurvePath();
+            path.add(new THREE.LineCurve3(new THREE.Vector3(-ew, -eg, 0), new THREE.Vector3(-ew, -(eh-er), 0)));
+            path.add(new THREE.QuadraticBezierCurve3(
+                new THREE.Vector3(-ew, -(eh-er), 0), new THREE.Vector3(-ew, -eh, 0), new THREE.Vector3(-ew+er, -eh, 0)
+            ));
+            path.add(new THREE.LineCurve3(new THREE.Vector3(-ew+er, -eh, 0), new THREE.Vector3(ew-er, -eh, 0)));
+            path.add(new THREE.QuadraticBezierCurve3(
+                new THREE.Vector3(ew-er, -eh, 0), new THREE.Vector3(ew, -eh, 0), new THREE.Vector3(ew, -(eh-er), 0)
+            ));
+            path.add(new THREE.LineCurve3(new THREE.Vector3(ew, -(eh-er), 0), new THREE.Vector3(ew, -eg, 0)));
+            return path;
+        }
+
+        const topPath = makeEyeTopPath();
+        const bottomPath = makeEyeBottomPath();
+
+        // bright white-ish eyes so they pop against dark head
+        const eyeLineMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+        const heartMat = new THREE.MeshBasicMaterial({ color: 0xff3366 });
+
+        const allEyes = []; // for blinking
+
+        function createEye(pos, rot) {
+            const g = new THREE.Group();
+            g.position.set(...pos);
+            g.rotation.set(...rot);
+            g.scale.setScalar(1.1);
+
+            // Heart eye (hidden by default)
+            const heartMesh = new THREE.Mesh(
+                new THREE.TubeGeometry(heartCurve, 64, 0.004, 8, true),
+                heartMat
+            );
+            heartMesh.visible = false;
+            g.add(heartMesh);
+
+            // Normal eye bracket shapes
+            const normalG = new THREE.Group();
+            normalG.add(new THREE.Mesh(new THREE.TubeGeometry(topPath, 20, 0.004, 8, false), eyeLineMat));
+            normalG.add(new THREE.Mesh(new THREE.TubeGeometry(bottomPath, 20, 0.004, 8, false), eyeLineMat));
+            g.add(normalG);
+
+            allEyes.push({ group: g, normal: normalG, heart: heartMesh });
+            return g;
+        }
+
+        const faceGroup = new THREE.Group();
+        faceGroup.position.set(0, -0.02, 0.29);
+        headGroup.add(faceGroup);
+
+        faceGroup.add(createEye([-0.07, 0, 0], [0, -0.2, 0]));
+        faceGroup.add(createEye([0.07, 0, 0], [0, 0.2, 0]));
+
+        // ─── INTERACTION ─────────────────────────────────────
+        const pointer = { x: 0, y: 0 };
+
+        document.addEventListener('mousemove', (e) => {
+            pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
+            pointer.y = -(e.clientY / window.innerHeight) * 2 + 1;
+        });
+
+        // Touch support for mobile
+        document.addEventListener('touchmove', (e) => {
+            const touch = e.touches[0];
+            pointer.x = (touch.clientX / window.innerWidth) * 2 - 1;
+            pointer.y = -(touch.clientY / window.innerHeight) * 2 + 1;
+        }, { passive: true });
+
+        let loveTimer = null;
+        function triggerLove() {
+            isLoved = true;
+            if (loveTimer) clearTimeout(loveTimer);
+            loveTimer = setTimeout(() => { isLoved = false; }, 2000);
+        }
+        document.addEventListener('mousedown', triggerLove);
+        document.addEventListener('touchstart', triggerLove, { passive: true });
+
+        // Cursor style
+        container.style.cursor = 'pointer';
+
+        // ─── ANIMATION ───────────────────────────────────────
+        const clock = new THREE.Clock();
+
+        const cfg = {
+            moveSpeed: 0.35,
+            bodyRotSpeed: 10.0,
+            headRotSpeed: 20.0,
+            bodyTiltX: 0.0,
+            bodyTiltY: 0.95,
+            headLookX: 0.30,
+            headLookY: 1.80,
+            blinkCycle: 3.0,
+            blinkDuration: 0.15
+        };
+
+        function lerp(a, b, t) {
+            return a + (b - a) * t;
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            const dt = Math.min(clock.getDelta(), 0.1);
+            const elapsed = clock.getElapsedTime();
+
+            const tx = pointer.x;
+            const ty = pointer.y;
+
+            // Move body left/right
+            const vFov = (40 * Math.PI) / 180;
+            const viewportW = 2 * Math.tan(vFov / 2) * 6 * aspect;
+            const maxMoveX = viewportW / 3.5;
+            const targetPosX = tx * maxMoveX;
+            bodyGroup.position.x = lerp(bodyGroup.position.x, targetPosX, cfg.moveSpeed * dt * 15);
+
+            const relX = tx - (bodyGroup.position.x / 2.5);
+
+            // Body rotation
+            const bRotY = -relX * cfg.bodyTiltY;
+            const bRotX = (relX * relX * cfg.bodyTiltX) - (ty * 0.25);
+            const bRotZ = -relX * 0.15;
+            bodyGroup.rotation.y = lerp(bodyGroup.rotation.y, bRotY, cfg.bodyRotSpeed * dt);
+            bodyGroup.rotation.x = lerp(bodyGroup.rotation.x, bRotX, cfg.bodyRotSpeed * dt);
+            bodyGroup.rotation.z = lerp(bodyGroup.rotation.z, bRotZ, cfg.bodyRotSpeed * dt);
+
+            // Head rotation
+            const hRotY = relX * cfg.headLookY;
+            const hRotX = ty * cfg.headLookX;
+            headGroup.rotation.y = lerp(headGroup.rotation.y, hRotY, cfg.headRotSpeed * dt);
+            headGroup.rotation.x = lerp(headGroup.rotation.x, hRotX, cfg.headRotSpeed * dt);
+
+            // Blink
+            const blinkT = elapsed % cfg.blinkCycle;
+            let scaleY = 1;
+            if (blinkT < cfg.blinkDuration && !isLoved) {
+                const p = blinkT / cfg.blinkDuration;
+                scaleY = Math.max(0.05, 1.0 - Math.sin(p * Math.PI));
+            }
+
+            allEyes.forEach(eye => {
+                eye.normal.visible = !isLoved;
+                eye.heart.visible = isLoved;
+                eye.group.scale.set(1.1, 1.1 * scaleY, 1.1);
+            });
+
+            // Shadow follows robot horizontally
+            shadowPlane.position.x = bodyGroup.position.x * scaleFactor;
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // ─── RESIZE ──────────────────────────────────────────
+        window.addEventListener('resize', () => {
+            aspect = window.innerWidth / window.innerHeight;
+            camera.aspect = aspect;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            scaleFactor = computeScale();
+            robotGroup.scale.setScalar(scaleFactor);
+        });
+
+        // ─── SCROLL FADE NAV LINE ────────────────────────────
+        const navLine = document.getElementById('nav-line');
+        window.addEventListener('scroll', () => {
+            const scrolled = window.scrollY;
+            if(navLine) {
+                navLine.style.opacity = Math.max(0, 1 - scrolled / 50);
+            }
+        });
+
+        // ─── SMOOTH SCROLLING ────────────────────────────────
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if(targetId === '#') return;
+                const target = document.querySelector(targetId);
+                if(target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+  </main>
+</body>
+</html>

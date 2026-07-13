@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HydroTwin — Power-to-X Green Hydrogen | Ibrahim Khallouq</title>
+    <meta name="description" content="Modélisation PV-PEM-LOHC de production d'hydrogène vert. Optimisation multi-site au Maroc avec LCOH de $9.84/kg.">
+    <link href="https://api.fontshare.com/v2/css?f[]=general-sans@300,400,500,600,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        /* ============================================================
+           CSS VARIABLES
+           ============================================================ */
+        :root {
+            --background: 260 87% 3%;
+            --foreground: 40 6% 95%;
+            --hero-sub: 40 6% 82%;
+            --accent-1: #6366f1;
+            --accent-2: #a855f7;
+            --accent-3: #34d399;
+            --green: #34d399;
+            --green-dim: rgba(52, 211, 153, 0.12);
+            --green-border: rgba(52, 211, 153, 0.25);
+            --surface: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.06);
+            --card-bg: rgba(255, 255, 255, 0.02);
+        }
+
+        /* ============================================================
+           FONTS
+           ============================================================ */
+        @font-face {
+            font-family: 'Geist Sans';
+            src: url('https://cdn.jsdelivr.net/npm/geist@1.3.0/dist/fonts/geist-sans/Geist-Variable.woff2') format('woff2');
+            font-weight: 100 900;
+            font-display: swap;
+        }
+
+        /* ============================================================
+           RESET & BASE
+           ============================================================ */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Geist Sans', 'General Sans', system-ui, sans-serif;
+            background: hsl(var(--background));
+            color: hsl(var(--foreground));
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.7;
+        }
+
+        /* ============================================================
+           SCROLLBAR
+           ============================================================ */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: hsl(var(--background)); }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--green); }
+        ::selection { background: var(--accent-2); color: #fff; }
+
+        /* ============================================================
+           LIQUID GLASS UTILITY
+           ============================================================ */
+        .liquid-glass {
+            background: rgba(255, 255, 255, 0.015);
+            background-blend-mode: luminosity;
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border: none;
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        .liquid-glass::before {
+            content: "";
+            position: absolute; inset: 0;
+            border-radius: inherit;
+            padding: 1.4px;
+            background: linear-gradient(
+                180deg,
+                rgba(255, 255, 255, 0.4) 0%,
+                rgba(255, 255, 255, 0.12) 20%,
+                rgba(255, 255, 255, 0) 40%,
+                rgba(255, 255, 255, 0) 60%,
+                rgba(255, 255, 255, 0.12) 80%,
+                rgba(255, 255, 255, 0.4) 100%
+            );
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        /* ============================================================
+           NAVBAR
+           ============================================================ */
+        .navbar {
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
+            padding: 18px 32px;
+            display: flex; align-items: center; justify-content: space-between;
+            background: hsla(var(--background), 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .navbar-logo {
+            font-family: 'General Sans', sans-serif;
+            font-weight: 700; font-size: 1.15rem;
+            color: hsl(var(--foreground));
+            text-decoration: none; letter-spacing: 0.5px;
+        }
+        .navbar-logo .dot { color: var(--green); }
+        .nav-links { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+        .nav-link {
+            padding: 8px 16px; border-radius: 9999px;
+            font-size: 0.82rem; font-weight: 500;
+            color: hsla(var(--foreground), 0.7); text-decoration: none;
+            border: 1px solid transparent;
+            transition: all 0.3s ease;
+        }
+        .nav-link:hover {
+            color: var(--green);
+            border-color: var(--green-border);
+            background: var(--green-dim);
+        }
+        .navbar-divider {
+            position: fixed; top: 58px; left: 0; width: 100%; height: 1px; z-index: 999;
+            background: linear-gradient(90deg, transparent, hsla(var(--foreground), 0.15), transparent);
+        }
+
+        /* ============================================================
+           HERO
+           ============================================================ */
+        .hero {
+            position: relative; min-height: 100vh;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            overflow: hidden; text-align: center;
+            padding: 0 24px;
+        }
+        .hero-bg-img {
+            position: absolute; inset: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            filter: brightness(0.25) saturate(1.4);
+            animation: heroPan 30s ease-in-out infinite alternate;
+            transform-origin: center center;
+        }
+        @keyframes heroPan {
+            0%   { transform: scale(1.12) translateX(-1%); }
+            50%  { transform: scale(1.18) translateX(1%); }
+            100% { transform: scale(1.12) translateX(-1%) translateY(-1%); }
+        }
+
+        .blur-overlay {
+            position: absolute; top: 50%; left: 50%;
+            width: 900px; height: 500px;
+            transform: translate(-50%, -50%);
+            background: hsla(var(--background), 0.85);
+            filter: blur(80px);
+            pointer-events: none; z-index: 1;
+        }
+        .hero-scan-lines {
+            position: absolute; inset: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent, transparent 2px,
+                rgba(52, 211, 153, 0.015) 2px,
+                rgba(52, 211, 153, 0.015) 4px
+            );
+            animation: scanMove 10s linear infinite;
+            pointer-events: none; z-index: 2;
+        }
+        @keyframes scanMove {
+            0%   { background-position: 0 0; }
+            100% { background-position: 0 200px; }
+        }
+
+        .hero-content {
+            position: relative; z-index: 10;
+            max-width: 900px;
+        }
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 6px 18px; border-radius: 9999px;
+            background: var(--green-dim);
+            border: 1px solid var(--green-border);
+            color: var(--green); font-size: 0.72rem;
+            font-weight: 700; text-transform: uppercase;
+            letter-spacing: 2.5px; margin-bottom: 2rem;
+        }
+        .hero-headline {
+            font-family: 'General Sans', sans-serif;
+            font-size: clamp(3.5rem, 12vw, 11rem);
+            font-weight: 400; line-height: 1.0;
+            letter-spacing: -0.03em;
+            color: hsl(var(--foreground));
+            margin-bottom: 1.5rem;
+        }
+        .hero-headline .gradient-h2 {
+            background: linear-gradient(135deg, #34d399, #6366f1, #a855f7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            -webkit-text-fill-color: transparent;
+            font-weight: 500;
+        }
+        .hero-subtitle {
+            color: hsl(var(--hero-sub));
+            font-size: 1.15rem; line-height: 1.9;
+            max-width: 550px; margin: 0 auto 2.5rem;
+            opacity: 0.8;
+        }
+        .hero-stats {
+            display: flex; gap: 3rem; justify-content: center; flex-wrap: wrap;
+        }
+        .hero-stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem; font-weight: 700;
+            color: var(--green);
+        }
+        .hero-stat-label {
+            font-size: 0.78rem; color: hsla(var(--foreground), 0.5);
+            text-transform: uppercase; letter-spacing: 1.2px;
+            font-weight: 600;
+        }
+
+        /* ============================================================
+           TOOLS MARQUEE
+           ============================================================ */
+        .marquee-section {
+            padding: 3rem 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            background: hsla(var(--background), 0.6);
+        }
+        .marquee-container {
+            max-width: 72rem; margin: 0 auto;
+            display: flex; align-items: center; gap: 48px;
+            padding: 0 24px;
+        }
+        .marquee-label {
+            color: hsla(var(--foreground), 0.5);
+            font-size: 0.85rem; line-height: 1.5;
+            white-space: nowrap; flex-shrink: 0;
+            font-weight: 500;
+        }
+        .marquee-wrapper {
+            overflow: hidden; flex: 1;
+            mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+            -webkit-mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+        }
+        .marquee-track {
+            display: flex; gap: 56px; width: max-content;
+            animation: marquee 25s linear infinite;
+        }
+        .marquee-item {
+            display: flex; align-items: center; gap: 10px; flex-shrink: 0;
+        }
+        .marquee-icon {
+            width: 28px; height: 28px; border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.7rem; font-weight: 700;
+            color: hsl(var(--foreground));
+        }
+        .marquee-name {
+            font-size: 0.95rem; font-weight: 600;
+            color: hsl(var(--foreground)); white-space: nowrap;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* ============================================================
+           SECTIONS
+           ============================================================ */
+        .section {
+            padding: 7rem 2.5rem;
+            max-width: 1200px; margin: 0 auto;
+        }
+        .section-dark { background: rgba(255, 255, 255, 0.01); }
+
+        .section-head {
+            display: flex; align-items: center; gap: 1rem;
+            margin-bottom: 4rem;
+        }
+        .section-num {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.8rem; font-weight: 700;
+            color: var(--green); padding: 5px 12px;
+            border: 1px solid var(--green-border);
+            border-radius: 6px;
+        }
+        .section-title {
+            font-family: 'General Sans', sans-serif;
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            font-weight: 700; color: hsl(var(--foreground));
+        }
+
+        /* ============================================================
+           CARDS
+           ============================================================ */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative; overflow: hidden;
+        }
+        .card:hover {
+            border-color: var(--green-border);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 60px -20px rgba(52, 211, 153, 0.12);
+        }
+        .card-glow {
+            position: absolute; top: -60px; right: -60px;
+            width: 200px; height: 200px;
+            background: var(--green);
+            border-radius: 50%; filter: blur(100px);
+            opacity: 0; transition: opacity 0.5s;
+            pointer-events: none;
+        }
+        .card:hover .card-glow { opacity: 0.06; }
+
+        .card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem; font-weight: 700;
+            color: hsl(var(--foreground)); margin-bottom: 1rem;
+        }
+        .card p { color: hsla(var(--foreground), 0.6); font-size: 0.95rem; }
+
+        /* ============================================================
+           GRIDS
+           ============================================================ */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+
+        /* ============================================================
+           FULL IMAGE SECTIONS
+           ============================================================ */
+        .full-img-section {
+            position: relative; width: 100%;
+            height: 70vh; min-height: 400px;
+            overflow: hidden;
+        }
+        .full-img-section img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+            filter: brightness(0.65) saturate(1.1);
+            animation: parallaxFloat 20s ease-in-out infinite alternate;
+        }
+        .full-img-section:hover img { transform: scale(1.03); }
+        .full-img-overlay {
+            position: absolute; bottom: 0; left: 0;
+            width: 100%; padding: 3rem 2.5rem;
+            background: linear-gradient(transparent, hsla(var(--background), 0.95));
+            z-index: 2;
+        }
+        .full-img-overlay h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem; font-weight: 700;
+            color: hsl(var(--foreground)); margin-bottom: 0.5rem;
+        }
+        .full-img-overlay p {
+            color: hsla(var(--foreground), 0.7); font-size: 1rem;
+            max-width: 600px;
+        }
+        @keyframes parallaxFloat {
+            0%   { transform: scale(1.08) translateY(0); }
+            100% { transform: scale(1.12) translateY(-2%); }
+        }
+
+        /* ============================================================
+           TAGS
+           ============================================================ */
+        .tag {
+            display: inline-block;
+            padding: 5px 12px; border-radius: 6px;
+            background: var(--green-dim);
+            border: 1px solid rgba(52, 211, 153, 0.15);
+            color: var(--green);
+            font-size: 0.78rem; font-weight: 600;
+            margin: 3px;
+        }
+
+        /* ============================================================
+           SPEC TABLE
+           ============================================================ */
+        .spec-table { width: 100%; border-collapse: collapse; }
+        .spec-table th {
+            text-align: left; padding: 1rem;
+            font-size: 0.72rem; font-weight: 700;
+            color: var(--green); text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-bottom: 1px solid var(--green-border);
+        }
+        .spec-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.92rem;
+        }
+        .spec-table td:first-child { color: hsla(var(--foreground), 0.6); font-weight: 500; }
+        .spec-table td:nth-child(2),
+        .spec-table td:nth-child(3),
+        .spec-table td:nth-child(4),
+        .spec-table td:nth-child(5) { color: hsl(var(--foreground)); font-weight: 600; }
+
+        /* ============================================================
+           BIG STATS
+           ============================================================ */
+        .big-stat { text-align: center; padding: 3rem 2rem; }
+        .big-stat-val {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.8rem, 7vw, 4.5rem);
+            font-weight: 700; color: var(--green); line-height: 1;
+        }
+        .big-stat-label {
+            font-size: 0.95rem; color: hsla(var(--foreground), 0.5);
+            margin-top: 0.5rem; font-weight: 400;
+        }
+
+        /* ============================================================
+           WORKFLOW STEPS
+           ============================================================ */
+        .workflow-step {
+            display: flex; gap: 2rem; padding: 2rem 0;
+            border-bottom: 1px solid var(--border);
+            align-items: flex-start;
+        }
+        .workflow-step:last-child { border-bottom: none; }
+        /* Physical-model workflow hover focus only */
+        #models .workflow-step {
+            position: relative;
+            border-radius: 14px;
+            padding-left: 1.25rem;
+            padding-right: 1.25rem;
+            transition: opacity 0.35s ease, background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease, transform 0.35s ease;
+        }
+        #models > div:last-child:hover .workflow-step:not(:hover) {
+            opacity: 0.28;
+        }
+        #models .workflow-step:hover {
+            opacity: 1;
+            transform: translateX(8px);
+            background: linear-gradient(90deg, rgba(52,211,153,0.13), rgba(52,211,153,0.025));
+            border-bottom-color: rgba(52,211,153,0.55);
+            box-shadow: inset 0 0 0 1px rgba(52,211,153,0.2), 0 16px 45px -24px rgba(52,211,153,0.65);
+        }
+        #models .workflow-step .step-num {
+            transition: color 0.35s ease, text-shadow 0.35s ease, transform 0.35s ease;
+        }
+        #models .workflow-step:hover .step-num {
+            color: var(--green);
+            text-shadow: 0 0 10px rgba(52,211,153,0.9), 0 0 28px rgba(52,211,153,0.75);
+            transform: scale(1.08);
+        }
+        #models .workflow-step .step-content h4,
+        #models .workflow-step .step-content p,
+        #models .workflow-step .step-tag {
+            transition: color 0.35s ease, text-shadow 0.35s ease;
+        }
+        #models .workflow-step:hover .step-content h4 {
+            color: #fff;
+            text-shadow: 0 0 18px rgba(52,211,153,0.25);
+        }
+        #models .workflow-step:hover .step-content p { color: hsla(var(--foreground), 0.82); }
+        #models .workflow-step:hover .step-tag {
+            color: #6ee7b7;
+            text-shadow: 0 0 12px rgba(52,211,153,0.5);
+        }
+        .step-num {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem; font-weight: 700;
+            color: rgba(52, 211, 153, 0.18);
+            min-width: 60px;
+        }
+        .step-content h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem; font-weight: 700;
+            color: hsl(var(--foreground)); margin-bottom: 0.5rem;
+        }
+        .step-content p { color: hsla(var(--foreground), 0.6); font-size: 0.9rem; }
+        .step-tag {
+            display: inline-block;
+            font-size: 0.68rem; font-weight: 700;
+            color: var(--green); text-transform: uppercase;
+            letter-spacing: 1.5px; margin-top: 0.5rem;
+        }
+
+        /* ============================================================
+           EQUATION BLOCK
+           ============================================================ */
+        .equation-block {
+            background: hsla(var(--background), 0.8);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.25rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.92rem;
+            color: var(--green);
+            margin-top: 0.75rem;
+        }
+
+        /* ============================================================
+           FOOTER
+           ============================================================ */
+        footer {
+            padding: 3rem 2.5rem;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            color: hsla(var(--foreground), 0.3);
+            font-size: 0.85rem;
+        }
+
+        /* ============================================================
+           RESPONSIVE
+           ============================================================ */
+        @media (max-width: 768px) {
+            .grid-2, .grid-3 { grid-template-columns: 1fr; }
+            .hero-stats { gap: 1.5rem; }
+            .section { padding: 4rem 1.5rem; }
+            .nav-links { display: none; }
+            .full-img-section { height: 50vh; }
+            .marquee-container { flex-direction: column; gap: 16px; }
+            .marquee-label { white-space: normal; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ═══════════════════ NAVBAR ═══════════════════ -->
+    <nav class="navbar">
+        <a href="index.html" class="navbar-logo"><i class="ph-bold ph-arrow-left"></i> IK<span class="dot">.</span></a>
+        <div class="nav-links">
+            <a href="#architecture" class="nav-link">Architecture</a>
+            <a href="#models" class="nav-link">Modèles</a>
+            <a href="#results" class="nav-link">Résultats</a>
+            <a href="#multisite" class="nav-link">Multi-Site</a>
+            <a href="#roadmap" class="nav-link">Roadmap</a>
+        </div>
+    </nav>
+    <div class="navbar-divider"></div>
+
+    <!-- ═══════════════════ HERO ═══════════════════ -->
+    <section class="hero">
+        <img class="hero-bg-img" src="images/pv to hydro.png" alt="Système PV to Hydrogène">
+        <div class="blur-overlay"></div>
+        <div class="hero-scan-lines"></div>
+
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="ph-fill ph-drop"></i>
+                Power-to-X — Hydrogène Vert
+            </div>
+            <h1 class="hero-headline">
+                Hydro<span class="gradient-h2">Twin</span>
+            </h1>
+            <p class="hero-subtitle">
+                Optimiseur de production d'hydrogène vert PV-PEM-LOHC.<br>
+                Modélisation dynamique multi-physique et comparaison sur 7 sites marocains.
+            </p>
+            <div class="hero-stats">
+                <div>
+                    <div class="hero-stat-value">35.6 t/an</div>
+                    <div class="hero-stat-label">Production H₂ max.</div>
+                </div>
+                <div>
+                    <div class="hero-stat-value">$9.84</div>
+                    <div class="hero-stat-label">LCOH Optimal / kg</div>
+                </div>
+                <div>
+                    <div class="hero-stat-value">66%</div>
+                    <div class="hero-stat-label">Réduction CO₂</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════ TOOL MARQUEE ═══════════════════ -->
+    <div class="marquee-section">
+        <div class="marquee-container">
+            <div class="marquee-label">
+                Stack<br>Technique
+            </div>
+            <div class="marquee-wrapper">
+                <div class="marquee-track">
+                    <!-- First set -->
+                    <div class="marquee-item"><div class="marquee-icon liquid-glass">Py</div><span class="marquee-name">Python</span></div>
+                    <div class="marquee-item"><div class="marquee-icon liquid-glass">Np</div><span class="marquee-name">NumPy</span></div>
+                    <div class="marquee-item"><div class="marquee-icon liquid-glass">Pd</div><span class="marquee-name">Pandas</span></div>
+                    <div class="marquee-item"><div class="marquee-icon liquid-glass">Mp</div><span class="marquee-name">Matplotlib</span></div>
+                    <div class="marquee-item"><div class="marquee-icon liquid-glass">Cj</div><span class="marquee-name">Chart.js</span></div>
+                    <div class="marquee-item"><div class="marquee-icon liquid-glass">Tx</div><span class="marquee-name">LaTeX</span></div>
+                    <div class="marquee-item"><div class="marquee-icon liquid-glass">GA</div><span class="marquee-name">NSGA-II</span></div>
+                    <div class="marquee-item"><div class="marquee-icon liquid-glass">MC</div><span class="marquee-name">Monte Carlo</span></div>
+                    <!-- Duplicated set for seamless loop -->
+                    <div class="marquee-item"><div class="marquee-icon liquid-glass">Py</div><span class="marquee-name">Python</span></div>
+                    <div class="marquee-item"><div class="marquee-icon liquid-glass">Np</div><span class="marquee-name">NumPy</span></div>
+                    <div class="marquee-item"><div class="marquee-icon liquid-glass">Pd</div><span class="marquee-name">Pandas</span></div>
+                    <div class="marquee-item"><div class="marquee-icon liquid-glass">Mp</div><span class="marquee-name">Matplotlib</span></div>
+                    <div class="marquee-item"><div class="marquee-icon liquid-glass">Cj</div><span class="marquee-name">Chart.js</span></div>
+                    <div class="marquee-item"><div class="marquee-icon liquid-glass">Tx</div><span class="marquee-name">LaTeX</span></div>
+                    <div class="marquee-item"><div class="marquee-icon liquid-glass">GA</div><span class="marquee-name">NSGA-II</span></div>
+                    <div class="marquee-item"><div class="marquee-icon liquid-glass">MC</div><span class="marquee-name">Monte Carlo</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════ SYSTEM ARCHITECTURE ═══════════════════ -->
+    <div id="architecture" class="section">
+        <div class="section-head">
+            <span class="section-num">01</span>
+            <h2 class="section-title">Architecture du Système</h2>
+        </div>
+        <p style="color: hsla(var(--foreground), 0.6); max-width: 700px; margin-bottom: 3rem; font-size: 1.05rem;">
+            Une chaîne Power-to-X intégrant champ solaire, électrolyseur PEM, BESS, stockage LOHC-DBT et compression H₂ optionnelle pour l’export.
+        </p>
+
+        <div class="grid-3" style="margin-bottom: 3rem;">
+            <div class="card">
+                <div class="card-glow"></div>
+                <h3><i class="ph-bold ph-sun-dim" style="color: var(--green);"></i> PV Array 1.5 MWp</h3>
+                <p>Calcul simplifié avec irradiance dans le plan des modules, modèle NOCT et coefficient thermique (γ = -0.4%/°C).</p>
+                <div class="equation-block">
+                    P<sub>pv</sub> = P<sub>peak</sub> × (GPOA/1000) × [1 + γ·(T<sub>cell</sub> - 25)]
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-glow"></div>
+                <h3><i class="ph-bold ph-drop" style="color: var(--green);"></i> PEM Electrolyzer 1 MW</h3>
+                <p>Modèle thermodynamique complet : Nernst, Butler-Volmer (activation), Nafion 117 (ohmic), Faraday efficiency.</p>
+                <div class="equation-block">
+                    ṁ<sub>H₂</sub> = η<sub>F</sub> × (N<sub>cells</sub> · I) / (2F) × M<sub>H₂</sub>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-glow"></div>
+                <h3><i class="ph-bold ph-flask" style="color: var(--green);"></i> LOHC — DBT Storage</h3>
+                <p>Dibenzyltoluène stockant 6.2 wt% d'hydrogène (57 kg H₂/m³). Hydrogénation exothermique / Déhydrogénation endothermique.</p>
+                <div class="equation-block">
+                    ΔH ≈ −65 / +65 kJ/mol H₂
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-2">
+            <div class="card">
+                <div class="card-glow"></div>
+                <h3><i class="ph-bold ph-battery-charging" style="color: var(--green);"></i> BESS 1 MWh</h3>
+                <p>Li-ion pour lisser l'intermittence solaire. SOC limité entre 10-90%, round-trip efficiency 90%, modélisation du vieillissement calendaire et cyclique.</p>
+            </div>
+            <div class="card">
+                <div class="card-glow"></div>
+                <h3><i class="ph-bold ph-gear-six" style="color: var(--green);"></i> Compression H₂ Optionnelle</h3>
+                <p>Compression de 30 à 350 bar pour stockage gazeux ou export. La voie LOHC utilise la pression propre au réacteur.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════ HYDROTWIN IMAGE BREAK ═══════════════════ -->
+    <div class="full-img-section">
+        <img src="images/hyrdotwin.png" alt="Installation PV-PEM Hydrogène Vert">
+        <div class="full-img-overlay">
+            <h3>Station Hydrogène Vert — PV + PEM + LOHC</h3>
+            <p>Système intégré pour la production, la compression et le stockage chimique de l'hydrogène solaire.</p>
+        </div>
+    </div>
+
+    <!-- ═══════════════════ PHYSICAL MODELS ═══════════════════ -->
+    <div id="models" class="section">
+        <div class="section-head">
+            <span class="section-num">02</span>
+            <h2 class="section-title">Modèles Physiques</h2>
+        </div>
+        <p style="color: hsla(var(--foreground), 0.6); max-width: 700px; margin-bottom: 3rem; font-size: 1.05rem;">
+            Une modélisation multi-physique décrivant la conversion de l'énergie solaire, la production d'hydrogène, les flux auxiliaires et le stockage énergétique.
+        </p>
+        <div>
+            <div class="workflow-step">
+                <div class="step-num">01</div>
+                <div class="step-content">
+                    <h4>Ressource Solaire & Conversion Photovoltaïque</h4>
+                    <p>L'irradiance et la température ambiante déterminent la température des cellules, puis la puissance photovoltaïque disponible après prise en compte des pertes thermiques.</p>
+                    <span class="step-tag">Irradiance • Température Cellule • Puissance PV</span>
+                </div>
+            </div>
+            <div class="workflow-step">
+                <div class="step-num">02</div>
+                <div class="step-content">
+                    <h4>Conversion Électrochimique PEM</h4>
+                    <p>La tension de cellule combine le potentiel réversible, les surtensions d'activation et les pertes ohmiques. Le courant utile détermine ensuite le débit d'hydrogène selon la loi de Faraday.</p>
+                    <span class="step-tag">Nernst • Activation • Pertes Ohmiques • Faraday</span>
+                </div>
+            </div>
+            <div class="workflow-step">
+                <div class="step-num">03</div>
+                <div class="step-content">
+                    <h4>Équilibre Thermique de l'Électrolyseur</h4>
+                    <p>La température du stack évolue selon la chaleur générée par les pertes, l'inertie thermique, les échanges avec l'environnement et la puissance extraite par le refroidissement.</p>
+                    <span class="step-tag">Inertie Thermique • Chaleur • Refroidissement</span>
+                </div>
+            </div>
+            <div class="workflow-step">
+                <div class="step-num">04</div>
+                <div class="step-content">
+                    <h4>Stockage Batterie & Équilibre de Puissance</h4>
+                    <p>Le BESS absorbe les surplus photovoltaïques et restitue l'énergie lors des déficits, sous contraintes de puissance, de rendement et de limites d'état de charge.</p>
+                    <span class="step-tag">Charge • Décharge • SOC • Rendement</span>
+                </div>
+            </div>
+            <div class="workflow-step">
+                <div class="step-num">05</div>
+                <div class="step-content">
+                    <h4>Eau, Auxiliaires & Compression de l'Hydrogène</h4>
+                    <p>Le bilan intègre l'eau stœchiométrique, les pertes de purification, le refroidissement et l'énergie nécessaire à la compression multi-étages avec refroidissement intermédiaire.</p>
+                    <span class="step-tag">Stœchiométrie • Purification • Compression</span>
+                </div>
+            </div>
+            <div class="workflow-step">
+                <div class="step-num">06</div>
+                <div class="step-content">
+                    <h4>Stockage Chimique LOHC-DBT</h4>
+                    <p>L'hydrogénation exothermique charge le DBT en hydrogène, tandis que la déhydrogénation endothermique libère l'H₂. Le bilan suit la capacité, l'état de charge et les besoins thermiques du stockage.</p>
+                    <span class="step-tag">Hydrogénation • Déhydrogénation • Énergie Thermique</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ═══════════════════ HYDRO TANKS IMAGE BREAK ═══════════════════ -->
+    <div class="full-img-section">
+        <img src="images/hyro tanks.png" alt="Réservoirs de stockage hydrogène" style="animation-delay: -5s;">
+        <div class="full-img-overlay">
+            <h3>Stockage & Conditionnement H₂</h3>
+            <p>Stockage principal en LOHC-DBT ; compression à 350 bar réservée à la voie gazeuse optionnelle.</p>
+        </div>
+    </div>
+
+    <!-- ═══════════════════ RESULTS ═══════════════════ -->
+    <div id="results" class="section">
+        <div class="section-head">
+            <span class="section-num">03</span>
+            <h2 class="section-title">Résultats Clés - Laâyoune </h2>
+        </div>
+
+        <div class="grid-3" style="margin-bottom: 3rem;">
+            <div class="card big-stat">
+                <div class="card-glow"></div>
+                <div class="big-stat-val">$9.84</div>
+                <div class="big-stat-label">LCOH / kg H₂ (Laâyoune)</div>
+                <p style="margin-top: 1rem; font-size: 0.85rem;">Performance maximale grâce au GHI de 6.8 kWh/m²/j</p>
+            </div>
+            <div class="card big-stat">
+                <div class="card-glow"></div>
+                <div class="big-stat-val">2.2 ans</div>
+                <div class="big-stat-label">Energy Payback Time</div>
+                <p style="margin-top: 1rem; font-size: 0.85rem;">Temps pour compenser l'énergie de fabrication</p>
+            </div>
+            <div class="card big-stat">
+                <div class="card-glow"></div>
+                <div class="big-stat-val">3.40</div>
+                <div class="big-stat-label">kg CO₂eq / kg H₂</div>
+                <p style="margin-top: 1rem; font-size: 0.85rem;">66% de réduction vs hydrogène gris (SMR : 10 kg CO₂/kg)</p>
+            </div>
+        </div>
+
+        <div class="card" style="margin-bottom: 2rem; overflow-x: auto;">
+            <h3 style="margin-bottom: 1.5rem;"><i class="ph-bold ph-chart-bar" style="color: var(--green);"></i> Performance Baseline — 1.5 MWp + 1 MW PEM + 1 MWh BESS</h3>
+            <table class="spec-table">
+                <thead>
+                    <tr>
+                        <th>Paramètre</th>
+                        <th>Valeur</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Production H₂ Moyenne</td>
+                        <td>~2,885 kg/mois</td>
+                        <td>34,630 kg/an (34.63 t)</td>
+                    </tr>
+                    <tr>
+                        <td>CAPEX Total</td>
+                        <td>$5,094,711</td>
+                        <td>PV $1.44M + Electrolyseur $1.20M + Batterie $0.30M + LOHC $0.33M</td>
+                    </tr>
+                    <tr>
+                        <td>OPEX Annuel</td>
+                        <td>$173,590</td>
+                        <td>Maintenance, eau, personnel, remplacement stacks</td>
+                    </tr>
+                    <tr>
+                        <td>LCOH</td>
+                        <td>$9.84 / kg</td>
+                        <td>Coût nivelé — Laâyoune (Optimum absolu)</td>
+                    </tr>
+                    <tr>
+                        <td>Intensité Carbone</td>
+                        <td>3.40 kg CO₂/kg</td>
+                        <td>Réduction de 66% vs SMR (grey H₂)</td>
+                    </tr>
+                    <tr>
+                        <td>SOC Final LOHC</td>
+                        <td>60.2%</td>
+                        <td>État de charge du stockage LOHC (départ : 20%)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ═══════════════════ MULTI-SITE ═══════════════════ -->
+    <div id="multisite" class="section-dark">
+        <div class="section" style="padding-top: 7rem; padding-bottom: 7rem;">
+            <div class="section-head">
+                <span class="section-num">04</span>
+                <h2 class="section-title">Classement Multi-Site Marocain</h2>
+            </div>
+
+            <p style="color: hsla(var(--foreground), 0.6); max-width: 700px; margin-bottom: 3rem; font-size: 1.05rem;">
+                Simulation identique sur 7 zones climatiques distinctes du Maroc. Les sites du sud dominent grâce à l'irradiance solaire extrême.
+            </p>
+
+            <div class="card" style="overflow-x: auto;">
+                <h3 style="margin-bottom: 1.5rem;"><i class="ph-bold ph-map-pin" style="color: var(--green);"></i> Comparaison Techno-Économique par Ville</h3>
+                <table class="spec-table">
+                    <thead>
+                        <tr>
+                            <th>Rang</th>
+                            <th>Ville</th>
+                            <th>GHI (kWh/m²/j)</th>
+                            <th>H₂ / an</th>
+                            <th>LCOH ($/kg)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>🥇</td>
+                            <td style="color: var(--green); font-weight: 700;">Laâyoune</td>
+                            <td>6.8</td>
+                            <td>34.63 t</td>
+                            <td style="color: var(--green); font-weight: 700;">$9.84</td>
+                        </tr>
+                        <tr>
+                            <td>🥈</td>
+                            <td>Ouarzazate</td>
+                            <td>6.5</td>
+                            <td>33.16 t</td>
+                            <td>$10.54</td>
+                        </tr>
+                        <tr>
+                            <td>🥉</td>
+                            <td>Agadir</td>
+                            <td>5.9</td>
+                            <td>30.28 t</td>
+                            <td>$11.19</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>Marrakech</td>
+                            <td>5.8</td>
+                            <td>29.71 t</td>
+                            <td>$11.71</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>Dakhla</td>
+                            <td>7.0</td>
+                            <td>35.57 t</td>
+                            <td>$11.82</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>Casablanca</td>
+                            <td>5.2</td>
+                            <td>26.74 t</td>
+                            <td>$13.57</td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td>Tangier</td>
+                            <td>4.8</td>
+                            <td>24.78 t</td>
+                            <td>$14.28</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card" style="margin-top: 2rem; padding: 2rem;">
+                <p style="color: hsla(var(--foreground), 0.7); font-size: 0.9rem;">
+                    <i class="ph-bold ph-info" style="color: var(--accent-2);"></i>
+                    <strong style="color: hsl(var(--foreground));">Pourquoi Dakhla est 5ᵉ malgré le meilleur GHI ?</strong> Dakhla produit le plus d’H₂ (35.57 t/an), mais son LCOH calculé est de $11.82/kg. L’écart exige une ventilation des hypothèses de coût par site.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════ ROADMAP ═══════════════════ -->
+    <div id="roadmap" class="section">
+        <div class="section-head">
+            <span class="section-num">05</span>
+            <h2 class="section-title">Roadmap & Perspectives</h2>
+        </div>
+
+        <div class="grid-2">
+            <div class="card">
+                <div class="card-glow"></div>
+                <h3><i class="ph-bold ph-wind" style="color: var(--green);"></i> Hybride Éolien-Solaire</h3>
+                <p>Ajout de turbines éoliennes pour atteindre des facteurs de capacité de 60-70% et réduire significativement le LCOH.</p>
+            </div>
+            <div class="card">
+                <div class="card-glow"></div>
+                <h3><i class="ph-bold ph-thermometer-hot" style="color: var(--green);"></i> Chaleur de Déhydrogénation</h3>
+                <p>La chaleur PEM sert au préchauffage ; une source haute température fournit les +65 kJ/mol requis pour la déhydrogénation.</p>
+            </div>
+            <div class="card">
+                <div class="card-glow"></div>
+                <h3><i class="ph-bold ph-waves" style="color: var(--green);"></i> Module de Dessalement</h3>
+                <p>Modélisation de l'énergie de dessalement par osmose inverse (SWRO) pour les sites côtiers (Laâyoune, Dakhla, Tangier).</p>
+            </div>
+            <div class="card">
+                <div class="card-glow"></div>
+                <h3><i class="ph-bold ph-chart-line-up" style="color: var(--green);"></i> Dégradation Rétroactive</h3>
+                <p>Intégration des feedback de dégradation de l'électrolyseur PEM dans les boucles horaires sur toute la durée de vie de 25 ans.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════ FOOTER ═══════════════════ -->
+    <footer>
+        <p>© 2026 Ibrahim Khallouq — HydroTwin Green Hydrogen Optimizer</p>
+    </footer>
+
+</body>
+</html>

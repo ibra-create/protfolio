@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Micro-Réseau PV-BESS Hors Réseau | Ibrahim Khallouq</title>
+    <meta name="description" content="Conception complète de centrales PV bifaciales couplées BESS pour Dakhla & Djibouti — Remplacement total du diesel.">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        :root {
+            --gold: #e8a500;
+            --gold-light: #ffd566;
+            --gold-dim: rgba(232, 165, 0, 0.15);
+            --dark: #0a0a0a;
+            --dark-card: #111111;
+            --dark-surface: #161616;
+            --text: #e8e8e8;
+            --text-muted: #888;
+            --border: rgba(255,255,255,0.06);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Sora', sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.7;
+        }
+
+        /* ═══════════════ SCROLLBAR ═══════════════ */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--dark); }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+        ::selection { background: var(--gold); color: #000; }
+
+        /* ═══════════════ NAV ═══════════════ */
+        .top-nav {
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
+            padding: 1.25rem 2.5rem;
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(10,10,10,0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            transition: background 0.4s;
+        }
+        .nav-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700; font-size: 1.2rem;
+            color: #fff; text-decoration: none; letter-spacing: 1px;
+        }
+        .nav-logo span { color: var(--gold); }
+        .nav-links { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        .nav-link {
+            padding: 0.5rem 1.25rem;
+            border-radius: 999px;
+            font-size: 0.8rem; font-weight: 600;
+            color: #ccc; text-decoration: none;
+            border: 1px solid transparent;
+            transition: all 0.3s ease;
+        }
+        .nav-link:hover {
+            color: var(--gold);
+            border-color: rgba(232,165,0,0.3);
+            background: rgba(232,165,0,0.05);
+        }
+
+        /* ═══════════════ HERO ═══════════════ */
+        .hero {
+            position: relative;
+            width: 100%; height: 100vh;
+            min-height: 700px;
+            overflow: hidden;
+        }
+        .hero-img-wrapper {
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            overflow: hidden;
+        }
+        .hero-img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            /* Ken Burns pan animation */
+            animation: heroPan 25s ease-in-out infinite alternate;
+            transform-origin: center center;
+            filter: brightness(0.6) saturate(1.2);
+        }
+        @keyframes heroPan {
+            0%   { transform: scale(1.15) translateX(-2%) translateY(-1%); }
+            50%  { transform: scale(1.2)  translateX(2%) translateY(1%); }
+            100% { transform: scale(1.15) translateX(-1%) translateY(-2%); }
+        }
+
+        /* Dark gradient overlay on hero */
+        .hero-overlay {
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(
+                180deg,
+                rgba(10,10,10,0.4) 0%,
+                rgba(10,10,10,0.2) 40%,
+                rgba(10,10,10,0.6) 70%,
+                rgba(10,10,10,0.95) 100%
+            );
+            z-index: 2;
+        }
+
+        /* Golden grain scanning effect */
+        .hero-scan {
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent, transparent 2px,
+                rgba(232,165,0,0.02) 2px,
+                rgba(232,165,0,0.02) 4px
+            );
+            animation: scanMove 8s linear infinite;
+            z-index: 3;
+            pointer-events: none;
+        }
+        @keyframes scanMove {
+            0%   { background-position: 0 0; }
+            100% { background-position: 0 200px; }
+        }
+
+        .hero-content {
+            position: absolute; bottom: 0; left: 0;
+            width: 100%; padding: 4rem 2.5rem;
+            z-index: 10;
+        }
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 0.4rem 1rem; border-radius: 999px;
+            background: var(--gold-dim);
+            border: 1px solid rgba(232,165,0,0.3);
+            color: var(--gold); font-size: 0.75rem;
+            font-weight: 700; text-transform: uppercase;
+            letter-spacing: 2px; margin-bottom: 1.5rem;
+        }
+        .hero-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 800; line-height: 1.1;
+            color: #fff; max-width: 900px;
+            margin-bottom: 1.5rem;
+        }
+        .hero-title .gold { color: var(--gold); }
+        .hero-sub {
+            font-size: 1.15rem; color: #aaa;
+            max-width: 650px; margin-bottom: 2rem;
+            font-weight: 300;
+        }
+        .hero-stats {
+            display: flex; gap: 3rem; flex-wrap: wrap;
+        }
+        .hero-stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem; font-weight: 800;
+            color: var(--gold);
+        }
+        .hero-stat-label {
+            font-size: 0.8rem; color: #888;
+            text-transform: uppercase; letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        /* ═══════════════ SECTIONS ═══════════════ */
+        .section { padding: 7rem 2.5rem; max-width: 1200px; margin: 0 auto; }
+        .section-dark { background: var(--dark-surface); }
+
+        .section-head {
+            display: flex; align-items: center; gap: 1rem;
+            margin-bottom: 4rem;
+        }
+        .section-num {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.8rem; font-weight: 700;
+            color: var(--gold); padding: 0.4rem 0.8rem;
+            border: 1px solid rgba(232,165,0,0.3);
+            border-radius: 6px;
+        }
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            font-weight: 800; color: #fff;
+        }
+
+        /* ═══════════════ CARDS ═══════════════ */
+        .card {
+            background: var(--dark-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative; overflow: hidden;
+        }
+        .card:hover {
+            border-color: rgba(232,165,0,0.25);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 60px -20px rgba(232,165,0,0.15);
+        }
+        .card-glow {
+            position: absolute; top: -60px; right: -60px;
+            width: 200px; height: 200px;
+            background: var(--gold);
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
+        }
+        .card:hover .card-glow { opacity: 0.08; }
+
+        .card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem; font-weight: 700;
+            color: #fff; margin-bottom: 1rem;
+        }
+        .card p { color: #999; font-size: 0.95rem; }
+
+        /* ═══════════════ GRID LAYOUTS ═══════════════ */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+
+        @media (max-width: 768px) {
+            .grid-2, .grid-3 { grid-template-columns: 1fr; }
+            .hero-stats { gap: 1.5rem; }
+            .hero-content { padding: 2rem 1.5rem; }
+            .section { padding: 4rem 1.5rem; }
+            .top-nav { padding: 1rem 1.25rem; }
+            .nav-links { display: none; }
+            .full-img-section { height: 50vh; }
+        }
+
+        /* ═══════════════ FULL IMAGE SECTIONS ═══════════════ */
+        .full-img-section {
+            position: relative; width: 100%;
+            height: 70vh; min-height: 400px;
+            overflow: hidden;
+        }
+        .full-img-section img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+        .full-img-section:hover img {
+            transform: scale(1.03);
+        }
+        .full-img-overlay {
+            position: absolute; bottom: 0; left: 0;
+            width: 100%; padding: 3rem 2.5rem;
+            background: linear-gradient(transparent, rgba(10,10,10,0.95));
+            z-index: 2;
+        }
+        .full-img-overlay h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem; font-weight: 800;
+            color: #fff; margin-bottom: 0.5rem;
+        }
+        .full-img-overlay p {
+            color: #aaa; font-size: 1rem;
+            max-width: 600px;
+        }
+
+        /* ═══════════════ TAGS / PILLS ═══════════════ */
+        .tag {
+            display: inline-block;
+            padding: 0.35rem 0.9rem;
+            border-radius: 6px;
+            background: rgba(232,165,0,0.08);
+            border: 1px solid rgba(232,165,0,0.15);
+            color: var(--gold);
+            font-size: 0.8rem; font-weight: 600;
+            margin: 0.2rem;
+        }
+
+        /* ═══════════════ BIG NUMBER STAT ═══════════════ */
+        .big-stat {
+            text-align: center; padding: 3rem 2rem;
+        }
+        .big-stat-val {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(3rem, 8vw, 5rem);
+            font-weight: 800; color: var(--gold);
+            line-height: 1;
+        }
+        .big-stat-label {
+            font-size: 1rem; color: #888;
+            margin-top: 0.5rem; font-weight: 400;
+        }
+
+        /* ═══════════════ STEPS / WORKFLOW ═══════════════ */
+        .workflow-step {
+            display: flex; gap: 2rem; padding: 2rem 0;
+            border-bottom: 1px solid var(--border);
+            align-items: flex-start;
+        }
+        .workflow-step:last-child { border-bottom: none; }
+        /* Methodology hover focus only */
+        #methodology .workflow-step {
+            position: relative;
+            border-radius: 14px;
+            padding-left: 1.25rem;
+            padding-right: 1.25rem;
+            transition: opacity 0.35s ease, background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease, transform 0.35s ease;
+        }
+        #methodology > div:last-child:hover .workflow-step:not(:hover) {
+            opacity: 0.28;
+        }
+        #methodology .workflow-step:hover {
+            opacity: 1;
+            transform: translateX(8px);
+            background: linear-gradient(90deg, rgba(232,165,0,0.13), rgba(232,165,0,0.025));
+            border-bottom-color: rgba(232,165,0,0.55);
+            box-shadow: inset 0 0 0 1px rgba(232,165,0,0.2), 0 16px 45px -24px rgba(232,165,0,0.65);
+        }
+        #methodology .workflow-step .step-num {
+            transition: color 0.35s ease, text-shadow 0.35s ease, transform 0.35s ease;
+        }
+        #methodology .workflow-step:hover .step-num {
+            color: var(--gold-light);
+            text-shadow: 0 0 10px rgba(255,213,102,0.9), 0 0 28px rgba(232,165,0,0.75);
+            transform: scale(1.08);
+        }
+        #methodology .workflow-step .step-content h4,
+        #methodology .workflow-step .step-content p,
+        #methodology .workflow-step .step-tag {
+            transition: color 0.35s ease, text-shadow 0.35s ease;
+        }
+        #methodology .workflow-step:hover .step-content h4 {
+            color: #fff;
+            text-shadow: 0 0 18px rgba(232,165,0,0.22);
+        }
+        #methodology .workflow-step:hover .step-content p { color: #d0d0d0; }
+        #methodology .workflow-step:hover .step-tag {
+            color: var(--gold-light);
+            text-shadow: 0 0 12px rgba(232,165,0,0.45);
+        }
+        .step-num {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem; font-weight: 800;
+            color: rgba(232,165,0,0.2);
+            min-width: 60px;
+        }
+        .step-content h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.15rem; font-weight: 700;
+            color: #fff; margin-bottom: 0.5rem;
+        }
+        .step-content p { color: #999; font-size: 0.9rem; }
+        .step-tag {
+            display: inline-block;
+            font-size: 0.7rem; font-weight: 700;
+            color: var(--gold); text-transform: uppercase;
+            letter-spacing: 1.5px; margin-top: 0.5rem;
+        }
+
+        /* ═══════════════ SPEC TABLE ═══════════════ */
+        .spec-table {
+            width: 100%; border-collapse: collapse;
+        }
+        .spec-table th {
+            text-align: left; padding: 1rem;
+            font-size: 0.75rem; font-weight: 700;
+            color: var(--gold); text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-bottom: 1px solid rgba(232,165,0,0.2);
+        }
+        .spec-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.95rem;
+        }
+        .spec-table td:first-child { color: #999; font-weight: 500; }
+        .spec-table td:nth-child(2),
+        .spec-table td:nth-child(3) { color: #fff; font-weight: 600; }
+
+        /* ═══════════════ FOOTER ═══════════════ */
+        footer {
+            padding: 3rem 2.5rem;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            color: #555; font-size: 0.85rem;
+        }
+
+        /* ═══════════════ SUBTLE PARALLAX ═══════════════ */
+        .parallax-img {
+            animation: parallaxFloat 20s ease-in-out infinite alternate;
+            filter: brightness(0.7) saturate(1.1);
+        }
+        @keyframes parallaxFloat {
+            0%   { transform: scale(1.08) translateY(0); }
+            100% { transform: scale(1.12) translateY(-3%); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ═══════════════════ NAVIGATION ═══════════════════ -->
+    <nav class="top-nav">
+        <a href="index.html" class="nav-logo"><i class="ph-bold ph-arrow-left"></i> IK<span>.</span></a>
+        <div class="nav-links">
+            <a href="#methodology" class="nav-link">Méthodologie</a>
+            <a href="#sizing" class="nav-link">Dimensionnement</a>
+            <a href="#electrical" class="nav-link">Électrique</a>
+            <a href="#ems" class="nav-link">EMS & IA</a>
+            <a href="#impact" class="nav-link">Impact</a>
+        </div>
+    </nav>
+
+    <!-- ═══════════════════ HERO ═══════════════════ -->
+    <section class="hero">
+        <div class="hero-img-wrapper">
+            <img class="hero-img" src="images/solar pannel.png" alt="Champ de panneaux solaires">
+        </div>
+        <div class="hero-overlay"></div>
+        <div class="hero-scan"></div>
+
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="ph-fill ph-sun"></i>
+                Projet PFE — NOVEC / CDG Group
+            </div>
+            <h1 class="hero-title">
+                Micro-Réseau Hybride<br>
+                <span class="gold">PV-BESS</span> Hors Réseau
+            </h1>
+            <p class="hero-sub">
+                Conception de centrales photovoltaïques bifaciales avec stockage par batteries LFP, réduisant les groupes électrogènes existants à un rôle de secours sur deux sites isolés à Dakhla, Maroc.
+            </p>
+            <div class="hero-stats">
+                <div>
+                    <div class="hero-stat-value">1 080</div>
+                    <div class="hero-stat-label">kWc PV Total</div>
+                </div>
+                <div>
+                    <div class="hero-stat-value">3 615</div>
+                    <div class="hero-stat-label">kWh Stockage BESS</div>
+                </div>
+                <div>
+                    <div class="hero-stat-value">>60%</div>
+                    <div class="hero-stat-label">Réduction LCOE</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════ METHODOLOGY ═══════════════════ -->
+    <div id="methodology" class="section">
+        <div class="section-head">
+            <span class="section-num">01</span>
+            <h2 class="section-title">Méthodologie d'Ingénierie</h2>
+        </div>
+        <p style="color: #999; max-width: 700px; margin-bottom: 3rem; font-size: 1.05rem;">
+            Une démarche rigoureuse de calcul analytique en amont, validée par simulation numérique multi-logicielle. Chaque étape contrainte la suivante.
+        </p>
+        <div>
+            <div class="workflow-step">
+                <div class="step-num">01</div>
+                <div class="step-content">
+                    <h4>Pré-Dimensionnement & Choix Technologique</h4>
+                    <p>Calcul théorique des capacités PV et BESS à partir du profil de charge, puis comparaison des technologies photovoltaïques (monofacial vs bifacial) afin de sélectionner la solution la plus performante.</p>
+                    <span class="step-tag">Calcul Analytique • Étude Comparative</span>
+                </div>
+            </div>
+
+            <div class="workflow-step">
+                <div class="step-num">02</div>
+                <div class="step-content">
+                    <h4>Conception Géométrique du Champ PV</h4>
+                    <p>Définition de la configuration du champ photovoltaïque bifacial, optimisation de l'espacement entre rangées et validation des pertes d'ombrage par simulation 3D sous PVsyst.</p>
+                    <span class="step-tag">PVsyst • Layout & Shading</span>
+                </div>
+            </div>
+
+            <div class="workflow-step">
+                <div class="step-num">03</div>
+                <div class="step-content">
+                    <h4>Optimisation Technico-Économique</h4>
+                    <p>Simulation annuelle (8 760 h) sous HOMER Pro afin d'optimiser les capacités PV et BESS, minimiser le coût global du système et définir la stratégie énergétique optimale.</p>
+                    <span class="step-tag">HOMER Pro • Optimisation</span>
+                </div>
+            </div>
+
+            <div class="workflow-step">
+                <div class="step-num">04</div>
+                <div class="step-content">
+                    <h4>Dimensionnement Électrique & Validation</h4>
+                    <p>Conception complète de l'installation électrique : configuration des strings, dimensionnement des câbles DC/AC, protections, appareillage et tableaux BT, puis validation sous Caneco BT selon la NF C 15-100.</p>
+                    <span class="step-tag">Caneco BT • NF C 15-100</span>
+                </div>
+            </div>
+
+            <div class="workflow-step">
+                <div class="step-num">05</div>
+                <div class="step-content">
+                    <h4>Validation du Microréseau</h4>
+                    <p>Modélisation du microréseau sous DIgSILENT PowerFactory et validation de ses performances par des simulations de régime permanent, de défauts et de stabilité dynamique.</p>
+                    <span class="step-tag">PowerFactory • RMS Studies</span>
+                </div>
+            </div>
+
+            <div class="workflow-step">
+                <div class="step-num">06</div>
+                <div class="step-content">
+                    <h4>EMS Intelligent & Intégration IA</h4>
+                    <p>Développement d'un EMS sous Python intégrant des modèles XGBoost pour prévoir la production PV, la demande énergétique et automatiser l'exploitation de l'énergie excédentaire.</p>
+                    <span class="step-tag">Python • XGBoost • EMS</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════ BIFACIAL IMAGE BREAK ═══════════════════ -->
+    <div class="full-img-section">
+        <img class="parallax-img" src="images/bifacial pannels.png" alt="Panneaux bifaciaux au coucher du soleil">
+        <div class="full-img-overlay">
+            <h3>Modules ASTRO N8 Bifaciaux 710 Wp</h3>
+            <p>Technologie n-type TOPCon avec gain bifacial de 10% grâce au sable désertique à albédo élevé de Dakhla.</p>
+        </div>
+    </div>
+
+    <!-- ═══════════════════ SIZING ═══════════════════ -->
+    <div id="sizing" class="section">
+        <div class="section-head">
+            <span class="section-num">02</span>
+            <h2 class="section-title">Architecture & Dimensionnement</h2>
+        </div>
+
+        <p style="color: #999; max-width: 700px; margin-bottom: 3rem; font-size: 1.05rem;">
+            Deux centrales autonomes dimensionnées pour les profils de charge distincts de chaque site. L'optimisation HOMER Pro a affiné les capacités théoriques pour atteindre le coût économique optimal.
+        </p>
+
+        <div class="card" style="margin-bottom: 2rem; overflow-x: auto;">
+            <h3 style="margin-bottom: 1.5rem;"><i class="ph-bold ph-table" style="color: var(--gold);"></i> Spécifications Techniques</h3>
+            <table class="spec-table">
+                <thead>
+                    <tr>
+                        <th>Paramètre</th>
+                        <th>Poste 1 </th>
+                        <th>Poste 2 </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Charge journalière</td>
+                        <td>2 605 kWh/j</td>
+                        <td>2 264 kWh/j</td>
+                    </tr>
+                    <tr>
+                        <td>pic charge journalière</td>
+                        <td>174 kW</td>
+                        <td>110 kW</td>
+                    </tr>
+                    <tr>
+                        <td>Puissance PV installée</td>
+                        <td>580 kWc (818 modules)</td>
+                        <td>500 kWc (704 modules)</td>
+                    </tr>
+                    <tr>
+                        <td>Stockage BESS</td>
+                        <td>1 687 kWh (7 LUNA2000)</td>
+                        <td>1 928 kWh (8 LUNA2000)</td>
+                    </tr>
+                    <tr>
+                        <td>Taux de décharge max</td>
+                        <td>0.103 C</td>
+                        <td>0.057 C</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <!-- ═══════════════════ BESS IMAGE BREAK ═══════════════════ -->
+    <div class="full-img-section">
+        <img class="parallax-img" src="images/bess.png" alt="Conteneurs BESS Huawei LUNA2000" style="animation-delay: -5s;">
+        <div class="full-img-overlay">
+            <h3>Huawei LUNA2000-241 kWh </h3>
+            <p>15 unités de stockage BESS déployées en configuration Grid-Forming pour assurer l'autonomie nocturne complète des deux sites.</p>
+        </div>
+    </div>
+
+    <!-- ═══════════════════ ELECTRICAL ═══════════════════ -->
+    <div id="electrical" class="section">
+        <div class="section-head">
+            <span class="section-num">03</span>
+            <h2 class="section-title">Ingénierie Électrique</h2>
+        </div>
+
+        <div class="grid-2" style="margin-bottom: 3rem;">
+            <div class="card">
+                <div class="card-glow"></div>
+                <h3><i class="ph-bold ph-plug" style="color: var(--gold);"></i> Architecture DC</h3>
+                <p style="margin-bottom: 1rem;">Dimensionnement des chaînes PV selon les limites de tension et de courant des modules et des onduleurs, conformément aux exigences des normes IEC.</p>
+                <div style="background: #0a0a0a; border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem; font-family: 'Space Grotesk'; font-size: 0.95rem; color: var(--gold-light); margin-bottom: 1rem;">
+                    N<sub>max</sub> = E(U<sub>max</sub> / U<sub>co</sub> × 1.15) = 19 modules
+                </div>
+                <p>Câblage 6 mm² Cu H1Z2Z2-K — chute de tension maximale de <strong style="color: var(--gold);">0.71%</strong>.</p>
+            </div>
+            <div class="card">
+                <div class="card-glow"></div>
+                <h3><i class="ph-bold ph-lightning" style="color: var(--gold);"></i> Architecture AC & Derating</h3>
+                <p style="margin-bottom: 1rem;">Conception du réseau BT 400 V sous schéma TN-S avec vérification de l'ampacité, des chutes de tension et de la coordination des protections selon la NF C 15-100.</p>
+                <div style="background: #0a0a0a; border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem; font-family: 'Space Grotesk'; font-size: 0.95rem; color: var(--gold-light); margin-bottom: 1rem;">
+                    K₁ = √((90 − 45) / (90 − 30)) = 0.866
+                </div>
+                <p>Câbles 5G70 Cu U1000R2V XLPE sélectionnés avec une chute de tension ≤ <strong style="color: var(--gold);">2.60%</strong>.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-glow"></div>
+            <h3><i class="ph-bold ph-shield-check" style="color: var(--gold);"></i> Stabilité Transitoire & Grid-Forming</h3>
+
+            <p style="margin-bottom: 1.5rem; max-width: 800px;">
+                Le BESS opère en mode <strong>Grid-Forming</strong> et fournit la référence de tension et de fréquence du micro-réseau isolé. Les simulations RMS sous PowerFactory ont validé plusieurs scénarios dynamiques critiques :
+            </p>
+
+            <div class="grid-2">
+
+                <div style="padding: 1.5rem; background: #0a0a0a; border-radius: 12px; border: 1px solid var(--border);">
+                    <div style="color: var(--gold); font-weight: 700; font-family: 'Space Grotesk'; margin-bottom: 0.75rem;">
+                        <i class="ph-bold ph-warning-circle"></i> Court-Circuit Triphasé
+                    </div>
+                    <p style="color: #aaa; font-size: 0.9rem;">
+                        Courant de défaut initial de <strong style="color:#fff;">2.27 kA</strong> éliminé en
+                        <strong style="color:#fff;">120 ms</strong> par les disjoncteurs ACB.
+                    </p>
+                </div>
+
+                <div style="padding: 1.5rem; background: #0a0a0a; border-radius: 12px; border: 1px solid var(--border);">
+                    <div style="color: var(--gold); font-weight: 700; font-family: 'Space Grotesk'; margin-bottom: 0.75rem;">
+                        <i class="ph-bold ph-cloud"></i> Chute de 70% PV
+                    </div>
+                    <p style="color: #aaa; font-size: 0.9rem;">
+                        Le BESS passe instantanément en décharge afin de compenser la perte de production et maintenir la stabilité du réseau.
+                    </p>
+                </div>
+
+                <div style="padding: 1.5rem; background: #0a0a0a; border-radius: 12px; border: 1px solid var(--border);">
+                    <div style="color: var(--gold); font-weight: 700; font-family: 'Space Grotesk'; margin-bottom: 0.75rem;">
+                        <i class="ph-bold ph-chart-line-up"></i> Augmentation Soudaine de Charge
+                    </div>
+                    <p style="color: #aaa; font-size: 0.9rem;">
+                        Hausse instantanée de <strong style="color:#fff;">20%</strong> de la charge. Le BESS fournit immédiatement la puissance supplémentaire tout en maintenant la stabilité du micro-réseau.
+                    </p>
+                </div>
+
+                <div style="padding: 1.5rem; background: #0a0a0a; border-radius: 12px; border: 1px solid var(--border);">
+                    <div style="color: var(--gold); font-weight: 700; font-family: 'Space Grotesk'; margin-bottom: 0.75rem;">
+                        <i class="ph-bold ph-wave-sine"></i> Rétablissement de la Tension
+                    </div>
+                    <p style="color: #aaa; font-size: 0.9rem;">
+                        Vérification de la récupération de la tension après les perturbations afin de confirmer la stabilité dynamique et le maintien de la qualité de l'alimentation.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════ EMS ═══════════════════ -->
+    <div id="ems" class="section-dark">
+        <div class="section" style="padding-top: 7rem; padding-bottom: 7rem;">
+            <div class="section-head">
+                <span class="section-num">04</span>
+                <h2 class="section-title">EMS Intelligent par IA</h2>
+            </div>
+
+            <div class="grid-2">
+                <div>
+                    <p style="color: #999; font-size: 1.05rem; margin-bottom: 2rem; line-height: 1.8;">
+                        Une couche logicielle avancée développée en Python pour <strong style="color: #ccc;">monétiser l'énergie perdue</strong> — celle générée quand le BESS est plein (SOC = 100%) et la charge déjà satisfaite. Au lieu de la perdre, l'EMS la redirige automatiquement vers une flotte de robots de nettoyage PV.
+                    </p>
+                    <div style="margin-bottom: 2rem;">
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                            <span class="tag">Python</span>
+                            <span class="tag">XGBoost</span>
+                            <span class="tag">Automatisation</span>
+                            <span class="tag">Machine Learning</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card" style="background: #0e0e0e;">
+                    <div class="card-glow"></div>
+                    <h3 style="margin-bottom: 1.5rem;"><i class="ph-bold ph-code" style="color: var(--gold);"></i> Architecture du Dispatching</h3>
+                    <div style="margin-bottom: 1.5rem;">
+                        <div style="color: var(--gold); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 0.5rem;">Prédiction</div>
+                        <p style="color: #aaa; font-size: 0.9rem;">XGBoost forecast la production PV horaire avec une MAE de <strong style="color:#fff;">6.09 kW</strong>.</p>
+                    </div>
+                    <div style="margin-bottom: 1.5rem;">
+                        <div style="color: var(--gold); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 0.5rem;">Condition de Déclenchement</div>
+                        <p style="color: #aaa; font-size: 0.9rem;">SOC ≥ 95% <strong style="color:#fff;">ET</strong> excédent > 5 kW → Déploiement robots.</p>
+                    </div>
+                    <div>
+                        <div style="color: var(--gold); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 0.5rem;">Résultat</div>
+                        <p style="color: #aaa; font-size: 0.9rem;"><strong style="color:#fff;">6.9 MWh</strong> récupérés / an — <strong style="color:#fff;">1 389 h</strong> de travail du robot de nettoyage.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════ IMPACT ═══════════════════ -->
+    <div id="impact" class="section">
+        <div class="section-head">
+            <span class="section-num">05</span>
+            <h2 class="section-title">Impact Technico-Économique</h2>
+        </div>
+
+        <div class="grid-3" style="margin-bottom: 4rem;">
+            <div class="card big-stat">
+                <div class="card-glow"></div>
+                <div class="big-stat-val">>60%</div>
+                <div class="big-stat-label">Réduction du LCOE</div>
+                <p style="margin-top: 1rem; font-size: 0.85rem;">De 4.05 MAD/kWh (diesel) à ~1.4 MAD/kWh (hybride PV-BESS).</p>
+            </div>
+            <div class="card big-stat">
+                <div class="card-glow"></div>
+                <div class="big-stat-val">3–5</div>
+                <div class="big-stat-label">Ans de Payback</div>
+                <p style="margin-top: 1rem; font-size: 0.85rem;">IRR supérieur au benchmark de 8%. Investissement hautement rentable.</p>
+            </div>
+            <div class="card big-stat">
+                <div class="card-glow"></div>
+                <div class="big-stat-val">33K</div>
+                <div class="big-stat-label">Tonnes CO₂ Évitées</div>
+                <p style="margin-top: 1rem; font-size: 0.85rem;">Économie de 496 679 litres de diesel/an sur 25 ans de durée de vie.</p>
+            </div>
+        </div>
+
+        <div class="card" style="text-align: center; padding: 3rem;">
+            <h3 style="margin-bottom: 1rem;"><i class="ph-fill ph-seal-check" style="color: var(--gold);"></i> Standards & Conformité</h3>
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center;">
+                <span class="tag">NF C 15-100</span>
+                <span class="tag">EN 50618</span>
+                <span class="tag">IEC 61215</span>
+                <span class="tag">UTE C15-712</span>
+                <span class="tag">IEC 62933</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════ FOOTER ═══════════════════ -->
+    <footer>
+        <p>© 2026 Ibrahim Khallouq — NOVEC Engineering & Consulting (CDG Group)</p>
+    </footer>
+
+</body>
+</html>

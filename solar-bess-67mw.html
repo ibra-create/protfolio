@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centrale PV 67 MW + BESS (Modélisation EMS/BMS) | Ibrahim Khallouq</title>
+    <meta name="description" content="Étude, dimensionnement et modélisation d'un système BESS de 80 MWh pour la centrale PV de Benguerir (OCP Group).">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        :root {
+            --gold: #e8a500;
+            --gold-light: #ffd566;
+            --gold-dim: rgba(232, 165, 0, 0.15);
+            --dark: #0a0a0a;
+            --dark-card: #111111;
+            --dark-surface: #161616;
+            --text: #e8e8e8;
+            --text-muted: #888;
+            --border: rgba(255,255,255,0.06);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Sora', sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.7;
+        }
+
+        /* ═══════════════ SCROLLBAR ═══════════════ */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--dark); }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+        ::selection { background: var(--gold); color: #000; }
+
+        /* ═══════════════ NAV ═══════════════ */
+        .top-nav {
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
+            padding: 1.25rem 2.5rem;
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(10,10,10,0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            transition: background 0.4s;
+        }
+        .nav-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700; font-size: 1.2rem;
+            color: #fff; text-decoration: none; letter-spacing: 1px;
+        }
+        .nav-logo span { color: var(--gold); }
+        .nav-links { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        .nav-link {
+            padding: 0.5rem 1.25rem;
+            border-radius: 999px;
+            font-size: 0.8rem; font-weight: 600;
+            color: #ccc; text-decoration: none;
+            border: 1px solid transparent;
+            transition: all 0.3s ease;
+        }
+        .nav-link:hover {
+            color: var(--gold);
+            border-color: rgba(232,165,0,0.3);
+            background: rgba(232,165,0,0.05);
+        }
+
+        /* ═══════════════ HERO ═══════════════ */
+        .hero {
+            position: relative;
+            width: 100%; height: 100vh;
+            min-height: 700px;
+            overflow: hidden;
+        }
+        .hero-img-wrapper {
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            overflow: hidden;
+        }
+        .hero-img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            /* Ken Burns pan animation */
+            animation: heroPan 25s ease-in-out infinite alternate;
+            transform-origin: center center;
+            filter: brightness(0.6) saturate(1.2);
+        }
+        @keyframes heroPan {
+            0%   { transform: scale(1.15) translateX(-2%) translateY(-1%); }
+            50%  { transform: scale(1.2)  translateX(2%) translateY(1%); }
+            100% { transform: scale(1.15) translateX(-1%) translateY(-2%); }
+        }
+
+        /* Dark gradient overlay on hero */
+        .hero-overlay {
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(
+                180deg,
+                rgba(10,10,10,0.4) 0%,
+                rgba(10,10,10,0.2) 40%,
+                rgba(10,10,10,0.6) 70%,
+                rgba(10,10,10,0.95) 100%
+            );
+            z-index: 2;
+        }
+
+        /* Golden grain scanning effect */
+        .hero-scan {
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent, transparent 2px,
+                rgba(232,165,0,0.02) 2px,
+                rgba(232,165,0,0.02) 4px
+            );
+            animation: scanMove 8s linear infinite;
+            z-index: 3;
+            pointer-events: none;
+        }
+        @keyframes scanMove {
+            0%   { background-position: 0 0; }
+            100% { background-position: 0 200px; }
+        }
+
+        .hero-content {
+            position: absolute; bottom: 0; left: 0;
+            width: 100%; padding: 4rem 2.5rem;
+            z-index: 10;
+        }
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 0.4rem 1rem; border-radius: 999px;
+            background: var(--gold-dim);
+            border: 1px solid rgba(232,165,0,0.3);
+            color: var(--gold); font-size: 0.75rem;
+            font-weight: 700; text-transform: uppercase;
+            letter-spacing: 2px; margin-bottom: 1.5rem;
+        }
+        .hero-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 800; line-height: 1.1;
+            color: #fff; max-width: 900px;
+            margin-bottom: 1.5rem;
+        }
+        .hero-title .gold { color: var(--gold); }
+        .hero-sub {
+            font-size: 1.15rem; color: #aaa;
+            max-width: 650px; margin-bottom: 2rem;
+            font-weight: 300;
+        }
+        .hero-stats {
+            display: flex; gap: 3rem; flex-wrap: wrap;
+        }
+        .hero-stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem; font-weight: 800;
+            color: var(--gold);
+        }
+        .hero-stat-label {
+            font-size: 0.8rem; color: #888;
+            text-transform: uppercase; letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        /* ═══════════════ SECTIONS ═══════════════ */
+        .section { padding: 7rem 2.5rem; max-width: 1200px; margin: 0 auto; }
+        .section-dark { background: var(--dark-surface); }
+
+        .section-head {
+            display: flex; align-items: center; gap: 1rem;
+            margin-bottom: 4rem;
+        }
+        .section-num {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.8rem; font-weight: 700;
+            color: var(--gold); padding: 0.4rem 0.8rem;
+            border: 1px solid rgba(232,165,0,0.3);
+            border-radius: 6px;
+        }
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            font-weight: 800; color: #fff;
+        }
+
+        /* ═══════════════ CARDS ═══════════════ */
+        .card {
+            background: var(--dark-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative; overflow: hidden;
+        }
+        .card:hover {
+            border-color: rgba(232,165,0,0.25);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 60px -20px rgba(232,165,0,0.15);
+        }
+        .card-glow {
+            position: absolute; top: -60px; right: -60px;
+            width: 200px; height: 200px;
+            background: var(--gold);
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
+        }
+        .card:hover .card-glow { opacity: 0.08; }
+
+        .card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem; font-weight: 700;
+            color: #fff; margin-bottom: 1rem;
+        }
+        .card p { color: #999; font-size: 0.95rem; }
+
+        /* ═══════════════ GRID LAYOUTS ═══════════════ */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+
+        @media (max-width: 768px) {
+            .grid-2, .grid-3 { grid-template-columns: 1fr; }
+            .hero-stats { gap: 1.5rem; }
+            .hero-content { padding: 2rem 1.5rem; }
+            .section { padding: 4rem 1.5rem; }
+            .top-nav { padding: 1rem 1.25rem; }
+            .nav-links { display: none; }
+            .full-img-section { height: 50vh; }
+        }
+
+        /* ═══════════════ FULL IMAGE SECTIONS ═══════════════ */
+        .full-img-section {
+            position: relative; width: 100%;
+            height: 70vh; min-height: 400px;
+            overflow: hidden;
+        }
+        .full-img-section img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+        .full-img-section:hover img {
+            transform: scale(1.03);
+        }
+        .full-img-overlay {
+            position: absolute; bottom: 0; left: 0;
+            width: 100%; padding: 3rem 2.5rem;
+            background: linear-gradient(transparent, rgba(10,10,10,0.95));
+            z-index: 2;
+        }
+        .full-img-overlay h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem; font-weight: 800;
+            color: #fff; margin-bottom: 0.5rem;
+        }
+        .full-img-overlay p {
+            color: #aaa; font-size: 1rem;
+            max-width: 600px;
+        }
+
+        /* ═══════════════ TAGS / PILLS ═══════════════ */
+        .tag {
+            display: inline-block;
+            padding: 0.35rem 0.9rem;
+            border-radius: 6px;
+            background: rgba(232,165,0,0.08);
+            border: 1px solid rgba(232,165,0,0.15);
+            color: var(--gold);
+            font-size: 0.8rem; font-weight: 600;
+            margin: 0.2rem;
+        }
+
+        /* ═══════════════ BIG NUMBER STAT ═══════════════ */
+        .big-stat {
+            text-align: center; padding: 3rem 2rem;
+        }
+        .big-stat-val {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(3rem, 8vw, 5rem);
+            font-weight: 800; color: var(--gold);
+            line-height: 1;
+        }
+        .big-stat-label {
+            font-size: 1rem; color: #888;
+            margin-top: 0.5rem; font-weight: 400;
+        }
+
+        /* ═══════════════ STEPS / WORKFLOW ═══════════════ */
+        .workflow-step {
+            display: flex; gap: 2rem; padding: 2rem 0;
+            border-bottom: 1px solid var(--border);
+            align-items: flex-start;
+        }
+        .workflow-step:last-child { border-bottom: none; }
+        .step-num {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem; font-weight: 800;
+            color: rgba(232,165,0,0.2);
+            min-width: 60px;
+        }
+        .step-content h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.15rem; font-weight: 700;
+            color: #fff; margin-bottom: 0.5rem;
+        }
+        .step-content p { color: #999; font-size: 0.9rem; }
+        .step-tag {
+            display: inline-block;
+            font-size: 0.7rem; font-weight: 700;
+            color: var(--gold); text-transform: uppercase;
+            letter-spacing: 1.5px; margin-top: 0.5rem;
+        }
+
+        /* ═══════════════ SPEC TABLE ═══════════════ */
+        .spec-table {
+            width: 100%; border-collapse: collapse;
+        }
+        .spec-table th {
+            text-align: left; padding: 1rem;
+            font-size: 0.75rem; font-weight: 700;
+            color: var(--gold); text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-bottom: 1px solid rgba(232,165,0,0.2);
+        }
+        .spec-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.95rem;
+        }
+        .spec-table td:first-child { color: #999; font-weight: 500; }
+        .spec-table td:nth-child(2),
+        .spec-table td:nth-child(3) { color: #fff; font-weight: 600; }
+
+        /* ═══════════════ FOOTER ═══════════════ */
+        footer {
+            padding: 3rem 2.5rem;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            color: #555; font-size: 0.85rem;
+        }
+
+        /* ═══════════════ SUBTLE PARALLAX ═══════════════ */
+        .parallax-img {
+            animation: parallaxFloat 20s ease-in-out infinite alternate;
+            filter: brightness(0.7) saturate(1.1);
+        }
+        @keyframes parallaxFloat {
+            0%   { transform: scale(1.08) translateY(0); }
+            100% { transform: scale(1.12) translateY(-3%); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ═══════════════════ NAVIGATION ═══════════════════ -->
+    <nav class="top-nav">
+        <a href="index.html" class="nav-logo"><i class="ph-bold ph-arrow-left"></i> IK<span>.</span></a>
+        <div class="nav-links">
+            <a href="#methodology" class="nav-link">Méthodologie</a>
+            <a href="#sizing" class="nav-link">Scénarios</a>
+            <a href="#electrical" class="nav-link">Simulink</a>
+            <a href="#ems" class="nav-link">EMS Python</a>
+            <a href="#impact" class="nav-link">Rentabilité</a>
+        </div>
+    </nav>
+
+    <!-- ═══════════════════ HERO ═══════════════════ -->
+    <section class="hero">
+        <div class="hero-img-wrapper">
+            <img class="hero-img" src="images/the pv farm.png" alt="Champ de panneaux solaires">
+        </div>
+        <div class="hero-overlay"></div>
+        <div class="hero-scan"></div>
+
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="ph-fill ph-lightning"></i>
+                Projet Industriel — OCP Group / Green Energy Park
+            </div>
+            <h1 class="hero-title">
+                Intégration BESS<br>
+                <span class="gold">67 MW</span> Benguerir Phase 1
+            </h1>
+            <p class="hero-sub">
+                Modélisation EMS/BMS pour la Centrale Benguerir Phase 1 — Récupération d'écrêtage, autoconsommation et simulation dynamique MATLAB Simulink.
+            </p>
+            <div class="hero-stats">
+                <div>
+                    <div class="hero-stat-value">67 MWc</div>
+                    <div class="hero-stat-label">Capacité PV DC</div>
+                </div>
+                <div>
+                    <div class="hero-stat-value">80 MWh</div>
+                    <div class="hero-stat-label">Stockage BESS LFP</div>
+                </div>
+                <div>
+                    <div class="hero-stat-value">$16.0M</div>
+                    <div class="hero-stat-label">Économies / An</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════ METHODOLOGY ═══════════════════ -->
+    <div id="methodology" class="section">
+        <div class="section-head">
+            <span class="section-num">01</span>
+            <h2 class="section-title">Stack Technique & Approche</h2>
+        </div>
+        <p style="color: #999; max-width: 700px; margin-bottom: 3rem; font-size: 1.05rem;">
+            Un pipeline multi-outils pour analyser, dimensionner, optimiser et valider dynamiquement le système BESS afin d'atteindre les objectifs de décarbonation 2027.
+        </p>
+        <div>
+            <div class="workflow-step">
+                <div class="step-num">01</div>
+                <div class="step-content">
+                    <h4>PVsyst 8.0.6 (Simulation Primaire)</h4>
+                    <p>Modélisation de la ressource solaire, des modules (Jinko 575W Bifacial), des onduleurs (Sungrow), du tracking single-axis et des limitations réseau pour extraire les 8760 heures de production.</p>
+                    <span class="step-tag">PVsyst • 8760 Hourly Records</span>
+                </div>
+            </div>
+            <div class="workflow-step">
+                <div class="step-num">02</div>
+                <div class="step-content">
+                    <h4>HOMER Pro (Optimisation Économique)</h4>
+                    <p>Algorithmes d'optimisation faisant varier la capacité BESS (40 à 150 MWh) avec les tarifs de l'ONEE pour trouver la rentabilité maximale (NPV optimale).</p>
+                    <span class="step-tag">HOMER Pro • NPV Optimization</span>
+                </div>
+            </div>
+            <div class="workflow-step">
+                <div class="step-num">03</div>
+                <div class="step-content">
+                    <h4>Python (Analyse & Stratégies EMS)</h4>
+                    <p>Développement de scripts Python (ems_strategy.py) évaluant 4 stratégies de dispatching et analyses de sensibilité Monte Carlo sur les coûts et l'inflation.</p>
+                    <span class="step-tag">Python • Monte Carlo • Data Analysis</span>
+                </div>
+            </div>
+            <div class="workflow-step">
+                <div class="step-num">04</div>
+                <div class="step-content">
+                    <h4>MATLAB Simulink (Validation Dynamique)</h4>
+                    <p>Construction d'une simulation électrique de bout en bout (Simscape Electrical) pour valider les contrôleurs et l'électronique de puissance transitoire.</p>
+                    <span class="step-tag">MATLAB Simulink • Power Electronics</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════ PV FARM IMAGE BREAK ═══════════════════ -->
+    <div class="full-img-section">
+        <img class="parallax-img" src="images/pv farm.png" alt="Ferme solaire PV Benguerir">
+        <div class="full-img-overlay">
+            <h3>Centrale Solaire PV Benguerir Phase 1 — 67 MWp</h3>
+            <p>Le projet compense l'écrêtage de l'énergie causé par la limitation à 50 MW AC au Point de Couplage Commun (PCC).</p>
+        </div>
+    </div>
+
+    <!-- ═══════════════════ SIZING / SCENARIOS ═══════════════════ -->
+    <div id="sizing" class="section">
+        <div class="section-head">
+            <span class="section-num">02</span>
+            <h2 class="section-title">Comparaison des Scénarios</h2>
+        </div>
+
+        <p style="color: #999; max-width: 700px; margin-bottom: 3rem; font-size: 1.05rem;">
+            Le projet a évolué à travers deux stratégies principales de dimensionnement : un BESS limité à la récupération de l'écrêtage, et un modèle orienté autoconsommation industrielle pour l'OCP.
+        </p>
+
+        <div class="card" style="margin-bottom: 2rem; overflow-x: auto;">
+            <h3 style="margin-bottom: 1.5rem;"><i class="ph-bold ph-table" style="color: var(--gold);"></i> Modèles Financiers BESS</h3>
+            <table class="spec-table">
+                <thead>
+                    <tr>
+                        <th>Métrique Financière</th>
+                        <th>Scénario 1 : Clipping-Only BESS</th>
+                        <th>Scénario 2 : Autoconsommation BESS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Dimensionnement BESS</td>
+                        <td>16 MW / 100 MWh</td>
+                        <td>62 MW / 28 MW / 80 MWh</td>
+                    </tr>
+                    <tr>
+                        <td>CAPEX Total</td>
+                        <td>$24.39 Millions</td>
+                        <td>$21.20 Millions</td>
+                    </tr>
+                    <tr>
+                        <td>Économies Annuelles</td>
+                        <td>$1.14M – $1.41M / an</td>
+                        <td>$16.00 Millions / an (ONEE évité)</td>
+                    </tr>
+                    <tr>
+                        <td>NPV (20 ans)</td>
+                        <td style="color: #e57373;">-$4.20 Millions</td>
+                        <td style="color: #81c784;">+$98.50 Millions</td>
+                    </tr>
+                    <tr>
+                        <td>IRR / Taux de Rentabilité</td>
+                        <td>5.2%</td>
+                        <td>31.2%</td>
+                    </tr>
+                    <tr>
+                        <td>Payback Simple</td>
+                        <td>18.5 ans</td>
+                        <td>5.8 ans</td>
+                    </tr>
+                    <tr>
+                        <td>LCOS / LCOE</td>
+                        <td>$112.50 / MWh</td>
+                        <td>$48.20 / MWh</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="grid-2">
+            <div class="card">
+                <div class="card-glow"></div>
+                <h3><i class="ph-bold ph-scissors" style="color: var(--gold);"></i> Scénario 1 : Écrêtage (Clipping)</h3>
+                <p style="margin-bottom: 1rem;">L'objectif était de capturer le surplus de midi dépassant la limite de 50 MW AC.</p>
+                <p style="margin-bottom: 1rem;"><strong>Résultats :</strong> 10.75 GWh récupérés/an (72.8%). Cependant, avec seulement 120 cycles par an, le projet n'est pas viable (NPV négative) sans empilement de services réseau complémentaires.</p>
+            </div>
+            <div class="card">
+                <div class="card-glow"></div>
+                <h3><i class="ph-bold ph-factory" style="color: var(--gold);"></i> Scénario 2 : Autoconsommation OCP</h3>
+                <p style="margin-bottom: 1rem;">Stocker l'excédent et le décharger asymétriquement (Charge 62MW / Décharge 28MW) pour satisfaire la demande variable de l'usine.</p>
+                <p style="margin-bottom: 1rem;"><strong>Résultats :</strong> 347 cycles/an avec 66.5% de fraction solaire. Extrêmement rentable en évitant les tarifs industriels de l'ONEE ($95/MWh).</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════ BESS 2 IMAGE BREAK ═══════════════════ -->
+    <div class="full-img-section">
+        <img class="parallax-img" src="images/bess2.png" alt="Installations de batteries" style="animation-delay: -5s;">
+        <div class="full-img-overlay">
+            <h3>BESS 62 MW / 80 MWh Asymétrique</h3>
+            <p>Utilisation de cellules CATL 280Ah LFP. Un design de pack de 394 Séries × 291 Parallèles pour un bus DC de 1261 V.</p>
+        </div>
+    </div>
+
+    <!-- ═══════════════════ ELECTRICAL SIMULINK ═══════════════════ -->
+    <div id="electrical" class="section">
+        <div class="section-head">
+            <span class="section-num">03</span>
+            <h2 class="section-title">Modèle Dynamique MATLAB Simulink</h2>
+        </div>
+
+        <div class="grid-2" style="margin-bottom: 3rem;">
+            <div class="card">
+                <div class="card-glow"></div>
+                <h3><i class="ph-bold ph-sun" style="color: var(--gold);"></i> Génération PV & MPPT</h3>
+                <p>Source DC dimensionnée avec une logique de contrôle <strong>MPPT Incremental Conductance</strong> (`MPPT_IncCond.m`) régulant le convertisseur DC-DC Boost.</p>
+            </div>
+            <div class="card">
+                <div class="card-glow"></div>
+                <h3><i class="ph-bold ph-battery-full" style="color: var(--gold);"></i> Contrôleur Batterie</h3>
+                <p>Convertisseur DC-DC bidirectionnel Half-Bridge géré par un contrôleur à double boucle (`Battery_Controller.m`) : boucle externe (Tension bus DC 1350V) et boucle interne de courant.</p>
+            </div>
+            <div class="card">
+                <div class="card-glow"></div>
+                <h3><i class="ph-bold ph-wave-sine" style="color: var(--gold);"></i> Contrôle Onduleur</h3>
+                <p>Onduleur Universal Bridge triphasé utilisant le <strong>Vector dq Current Control</strong> (`Inverter_dq_Control.m`) avec génération SPWM.</p>
+            </div>
+            <div class="card">
+                <div class="card-glow"></div>
+                <h3><i class="ph-bold ph-plugs-connected" style="color: var(--gold);"></i> Couplage Réseau</h3>
+                <p>Synchronisation réseau via <strong>SRF-PLL</strong> (`SRF_PLL.m`). Filtre LCL intégré et transformateur élévateur 70 MVA (0.63kV/22kV) pour le raccordement.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════ EMS PYTHON ═══════════════════ -->
+    <div id="ems" class="section-dark">
+        <div class="section" style="padding-top: 7rem; padding-bottom: 7rem;">
+            <div class="section-head">
+                <span class="section-num">04</span>
+                <h2 class="section-title">Stratégies EMS (Python)</h2>
+            </div>
+
+            <div class="grid-2">
+                <div>
+                    <p style="color: #999; font-size: 1.05rem; margin-bottom: 2rem; line-height: 1.8;">
+                        Codage et comparaison de <strong style="color: #ccc;">4 contrôleurs de dispatching intelligents</strong> pour optimiser le comportement de la batterie selon les fluctuations météorologiques et les tarifs horaires marocains.
+                    </p>
+                    <div style="margin-bottom: 2rem;">
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                            <span class="tag">Python</span>
+                            <span class="tag">EMS</span>
+                            <span class="tag">Dispatch Strategy</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card" style="background: #0e0e0e;">
+                    <div class="card-glow"></div>
+                    <h3 style="margin-bottom: 1.5rem;"><i class="ph-bold ph-cpu" style="color: var(--gold);"></i> Modèles de Dispatching (`ems_strategy.py`)</h3>
+                    
+                    <div style="margin-bottom: 1.25rem;">
+                        <div style="color: var(--gold); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 0.25rem;">1. Static EMS</div>
+                        <p style="color: #aaa; font-size: 0.9rem;">Stocke uniquement l'écrêtage, décharge immédiatement lors des creux PV.</p>
+                    </div>
+                    <div style="margin-bottom: 1.25rem;">
+                        <div style="color: var(--gold); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 0.25rem;">2. Time-of-Use (ToU)</div>
+                        <p style="color: #aaa; font-size: 0.9rem;">Stocke l'énergie et la décharge de manière ciblée durant les heures de pointe tarifaire marocaines (17h-22h hiver).</p>
+                    </div>
+                    <div style="margin-bottom: 1.25rem;">
+                        <div style="color: var(--gold); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 0.25rem;">3. Predictive EMS</div>
+                        <p style="color: #aaa; font-size: 0.9rem;">Utilise une anticipation de prévisions météo sur 6 heures (Look-ahead) pour optimiser les décisions.</p>
+                    </div>
+                    <div>
+                        <div style="color: var(--gold); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 0.25rem;">4. Multi-Service</div>
+                        <p style="color: #aaa; font-size: 0.9rem;">Combine la récupération d'énergie avec les services auxiliaires (réserve tournante, régulation de fréquence).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════ IMPACT ═══════════════════ -->
+    <div id="impact" class="section">
+        <div class="section-head">
+            <span class="section-num">05</span>
+            <h2 class="section-title">Rentabilité & Viabilité</h2>
+        </div>
+
+        <div class="grid-3" style="margin-bottom: 4rem;">
+            <div class="card big-stat">
+                <div class="card-glow"></div>
+                <div class="big-stat-val">347</div>
+                <div class="big-stat-label">Cycles par An</div>
+                <p style="margin-top: 1rem; font-size: 0.85rem;">Utilisation intensive (~0.95 cycles/jour) grâce à la modélisation d'autoconsommation.</p>
+            </div>
+            <div class="card big-stat">
+                <div class="card-glow"></div>
+                <div class="big-stat-val">5.8</div>
+                <div class="big-stat-label">Ans de Payback</div>
+                <p style="margin-top: 1rem; font-size: 0.85rem;">TRI (IRR) explosif de 31.2%, écrasant le taux d'actualisation cible de 8%.</p>
+            </div>
+            <div class="card big-stat">
+                <div class="card-glow"></div>
+                <div class="big-stat-val">74%</div>
+                <div class="big-stat-label">Probabilité de Profitabilité</div>
+                <p style="margin-top: 1rem; font-size: 0.85rem;">Calculé via une simulation de Monte Carlo à 1000 itérations (Latin Hypercube).</p>
+            </div>
+        </div>
+
+        <div class="card" style="text-align: center; padding: 3rem;">
+            <h3 style="margin-bottom: 1rem;"><i class="ph-fill ph-thermometer-hot" style="color: var(--gold);"></i> Contraintes Climatiques (Benguerir)</h3>
+            <p style="color: #aaa; font-size: 0.95rem; max-width: 800px; margin: 0 auto;">
+                Températures extrêmes jusqu'à 50°C en été. L'analyse Arrhenius montre une chute de capacité LFP de <strong>0.5%/°C</strong> au-delà de 25°C et une dégradation calendaire qui double tous les 10°C, justifiant la marge de sécurité de 10-15% implémentée.
+            </p>
+        </div>
+    </div>
+
+    <!-- ═══════════════════ FOOTER ═══════════════════ -->
+    <footer>
+        <p>© 2026 Ibrahim Khallouq — Étude de Faisabilité BESS OCP Group</p>
+    </footer>
+
+</body>
+</html>

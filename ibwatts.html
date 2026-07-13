@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IBWatts — Moroccan Solar PV Viability Suite | Ibrahim Khallouq</title>
+    <meta name="description" content="Dashboard professionnel d'ingénierie solaire pour le marché marocain, intégrant données de tarification, physique solaire et financement bancaire vert.">
+    <link href="https://api.fontshare.com/v2/css?f[]=general-sans@300,400,500,600,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <style>
+        :root {
+            --background: #020617; /* Very dark slate */
+            --foreground: #f8fafc;
+            --accent-1: #0ea5e9; /* Cyan */
+            --accent-2: #3b82f6; /* Blue */
+            --accent-3: #8b5cf6; /* Violet */
+            --surface: rgba(15, 23, 42, 0.4);
+            --border: rgba(255, 255, 255, 0.08);
+            --card-bg: rgba(30, 41, 59, 0.5);
+            --radius-lg: 24px;
+            --radius-md: 16px;
+        }
+
+        @font-face {
+            font-family: 'Geist Sans';
+            src: url('https://cdn.jsdelivr.net/npm/geist@1.3.0/dist/fonts/geist-sans/Geist-Variable.woff2') format('woff2');
+            font-weight: 100 900;
+            font-display: swap;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Geist Sans', 'General Sans', system-ui, sans-serif;
+            background: var(--background);
+            color: var(--foreground);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.7;
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--background); }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-1); }
+
+        .liquid-glass {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        /* NAVBAR */
+        .navbar {
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
+            padding: 1.5rem 0; transition: all 0.4s;
+        }
+        .navbar.scrolled { padding: 1rem 0; background: rgba(2, 6, 23, 0.8); backdrop-filter: blur(10px); }
+        .nav-inner { display: flex; justify-content: space-between; align-items: center; max-width: 1400px; margin: 0 auto; padding: 0 2rem; }
+        .logo { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 700; color: #fff; text-decoration: none; display: flex; align-items: center; gap: 8px; }
+        .back-btn { display: flex; align-items: center; gap: 8px; color: var(--foreground); text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: color 0.3s; }
+        .back-btn:hover { color: var(--accent-1); }
+
+        /* HERO SECTION */
+        #hero {
+            position: relative; height: 100vh; display: flex; align-items: center; justify-content: center;
+            overflow: hidden; padding-top: 5rem;
+        }
+        #webgl-container { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+        
+        .hero-overlay {
+            position: absolute; inset: 0; z-index: 1; pointer-events: none;
+            background: radial-gradient(circle at center, transparent 0%, var(--background) 100%);
+            opacity: 0.8;
+        }
+
+        .hero-content {
+            position: relative; z-index: 2; text-align: center; max-width: 900px; padding: 0 2rem;
+        }
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 8px 20px; border-radius: 99px;
+            background: rgba(14, 165, 233, 0.1); border: 1px solid rgba(14, 165, 233, 0.3);
+            color: var(--accent-1); font-weight: 600; font-size: 0.85rem; letter-spacing: 1px;
+            text-transform: uppercase; margin-bottom: 2rem;
+        }
+        .hero-title {
+            font-family: 'Space Grotesk', sans-serif; font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 700; line-height: 1.1; margin-bottom: 1.5rem; letter-spacing: -0.02em;
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #0ea5e9, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .hero-desc {
+            font-size: 1.25rem; color: #94a3b8; max-width: 700px; margin: 0 auto; line-height: 1.6;
+        }
+
+        /* MAIN CONTENT LAYOUT */
+        main { position: relative; z-index: 5; background: var(--background); }
+        .container { max-width: 1200px; margin: 0 auto; padding: 6rem 2rem; }
+
+        /* INTRO / VALUE PROP */
+        .value-prop {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; margin-bottom: 6rem;
+        }
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; font-weight: 700; margin-bottom: 1.5rem;
+        }
+        .text-body { color: #94a3b8; font-size: 1.1rem; line-height: 1.8; margin-bottom: 1.5rem; }
+        
+        .highlight-box {
+            padding: 2rem; border-radius: var(--radius-lg); background: var(--card-bg);
+            border: 1px solid var(--border);
+        }
+        .highlight-item {
+            display: flex; gap: 1rem; margin-bottom: 1.5rem;
+        }
+        .highlight-item:last-child { margin-bottom: 0; }
+        .highlight-icon {
+            width: 40px; height: 40px; border-radius: 10px; background: rgba(14, 165, 233, 0.1);
+            display: flex; align-items: center; justify-content: center; color: var(--accent-1);
+            font-size: 1.4rem; flex-shrink: 0;
+        }
+
+        /* SHOWCASE IMAGES */
+        .showcase-wrapper {
+            position: relative; width: 100%; margin: 8rem 0;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center;
+        }
+        .showcase-bg {
+            position: absolute; width: 80%; height: 80%; top: 10%; left: 10%;
+            background: radial-gradient(circle at center, rgba(14, 165, 233, 0.15) 0%, transparent 70%);
+            filter: blur(60px); z-index: 0; pointer-events: none;
+        }
+        .showcase-img-1, .showcase-img-2 {
+            width: 100%; position: relative; z-index: 2; border-radius: var(--radius-md); 
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); border: 1px solid rgba(255, 255, 255, 0.1); 
+            transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.6s;
+        }
+        .showcase-img-1 { transform: translateY(-20px); }
+        .showcase-img-2 { transform: translateY(20px); }
+        .showcase-img-1:hover { transform: translateY(-30px) scale(1.02); box-shadow: 0 35px 60px rgba(14, 165, 233, 0.15); z-index: 3; }
+        .showcase-img-2:hover { transform: translateY(10px) scale(1.02); box-shadow: 0 35px 60px rgba(14, 165, 233, 0.15); z-index: 3; }
+
+        /* FEATURES GRID */
+        .features-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-top: 4rem;
+        }
+        .feature-card {
+            padding: 2.5rem; border-radius: var(--radius-lg); background: var(--card-bg);
+            border: 1px solid var(--border); transition: all 0.3s ease; position: relative; overflow: hidden;
+        }
+        .feature-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, var(--accent-1), var(--accent-3)); opacity: 0; transition: opacity 0.3s;
+        }
+        .feature-card:hover { transform: translateY(-5px); background: rgba(30, 41, 59, 0.8); }
+        .feature-card:hover::before { opacity: 1; }
+        
+        .f-icon { font-size: 2.5rem; color: var(--accent-1); margin-bottom: 1.5rem; }
+        .f-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 1rem; color: #fff; }
+        .f-desc { color: #94a3b8; font-size: 1rem; line-height: 1.6; }
+
+        /* INNOVATIONS & WORKFLOW */
+        .innovations-section {
+            padding: 8rem 0; border-top: 1px solid var(--border); margin-top: 4rem;
+        }
+        .workflow-box {
+            background: #0f172a; border: 1px solid #1e293b; padding: 3rem; border-radius: var(--radius-lg);
+            font-family: 'Space Grotesk', monospace; color: #38bdf8; overflow-x: auto;
+        }
+        .workflow-box pre { font-size: 0.95rem; line-height: 1.8; margin: 0; }
+
+        @media (max-width: 900px) {
+            .value-prop { grid-template-columns: 1fr; }
+            .showcase-wrapper { grid-template-columns: 1fr; gap: 4rem; }
+            .showcase-img-1, .showcase-img-2 { transform: none; }
+            .showcase-img-1:hover, .showcase-img-2:hover { transform: translateY(-10px) scale(1.02); }
+        }
+
+        /* ============================================================
+           PREMIUM VISUAL ENHANCEMENT
+           ============================================================ */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 9998;
+            opacity: 0.035;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");
+        }
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            z-index: 1002;
+            pointer-events: none;
+            background: linear-gradient(90deg, var(--accent-1), var(--accent-2), var(--accent-3));
+            box-shadow: 0 0 18px rgba(14, 165, 233, 0.9);
+        }
+        .navbar::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            width: min(92%, 1400px);
+            height: 1px;
+            transform: translateX(-50%) scaleX(0);
+            background: linear-gradient(90deg, transparent, rgba(14,165,233,.5), rgba(139,92,246,.5), transparent);
+            transition: transform .45s ease;
+        }
+        .navbar.scrolled::after { transform: translateX(-50%) scaleX(1); }
+        .logo {
+            padding: .35rem .7rem;
+            border-radius: 12px;
+            transition: background .3s ease, box-shadow .3s ease, transform .3s ease;
+        }
+        .logo:hover {
+            transform: translateY(-1px);
+            background: rgba(14,165,233,.08);
+            box-shadow: 0 0 30px rgba(14,165,233,.12);
+        }
+        .back-btn {
+            padding: .6rem 1rem;
+            border: 1px solid rgba(148,163,184,.13);
+            border-radius: 999px;
+            background: rgba(15,23,42,.28);
+            backdrop-filter: blur(10px);
+        }
+        .back-btn:hover {
+            border-color: rgba(14,165,233,.35);
+            background: rgba(14,165,233,.08);
+            box-shadow: 0 0 28px rgba(14,165,233,.1);
+        }
+        .hero-content::before {
+            content: '';
+            position: absolute;
+            inset: -25% -15%;
+            z-index: -1;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(14,165,233,.1), rgba(59,130,246,.04) 38%, transparent 72%);
+            filter: blur(30px);
+            animation: heroAura 7s ease-in-out infinite alternate;
+        }
+        @keyframes heroAura {
+            from { transform: scale(.92); opacity: .65; }
+            to { transform: scale(1.08); opacity: 1; }
+        }
+        .hero-badge {
+            box-shadow: inset 0 0 18px rgba(14,165,233,.06), 0 0 35px rgba(14,165,233,.08);
+        }
+        .hero-title { text-shadow: 0 18px 55px rgba(0,0,0,.45); }
+        .gradient-text {
+            background-size: 200% 200%;
+            animation: gradientShift 7s ease infinite;
+            filter: drop-shadow(0 0 26px rgba(14,165,233,.18));
+        }
+        @keyframes gradientShift {
+            0%,100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        main::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: min(90%, 1200px);
+            height: 1px;
+            transform: translateX(-50%);
+            background: linear-gradient(90deg, transparent, rgba(14,165,233,.32), rgba(139,92,246,.25), transparent);
+        }
+        .highlight-box {
+            position: relative;
+            isolation: isolate;
+            overflow: hidden;
+        }
+        .highlight-box::before {
+            content: '';
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            right: -90px;
+            top: -100px;
+            z-index: -1;
+            border-radius: 50%;
+            background: rgba(14,165,233,.14);
+            filter: blur(65px);
+        }
+        .highlight-item {
+            padding: .75rem;
+            border-radius: 14px;
+            transition: transform .3s ease, background .3s ease;
+        }
+        .highlight-item:hover {
+            transform: translateX(7px);
+            background: rgba(14,165,233,.045);
+        }
+        .highlight-icon {
+            box-shadow: inset 0 0 18px rgba(14,165,233,.12), 0 0 22px rgba(14,165,233,.08);
+        }
+        .showcase-wrapper::after {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            pointer-events: none;
+            z-index: 4;
+            border-radius: 28px;
+            background: linear-gradient(110deg, transparent 35%, rgba(255,255,255,.07) 48%, transparent 61%);
+            transform: translateX(-110%);
+            animation: showcaseSheen 8s ease-in-out infinite;
+        }
+        @keyframes showcaseSheen {
+            0%,55% { transform: translateX(-110%); }
+            80%,100% { transform: translateX(110%); }
+        }
+        .showcase-img-1, .showcase-img-2 {
+            outline: 1px solid rgba(14,165,233,.05);
+            outline-offset: 6px;
+        }
+        .section-label { position: relative; }
+        .section-label::before, .section-label::after {
+            content: '';
+            display: inline-block;
+            width: 42px;
+            height: 1px;
+            margin: 0 14px 4px;
+            background: linear-gradient(90deg, transparent, var(--accent-1));
+        }
+        .section-label::after { transform: rotate(180deg); }
+        .feature-card {
+            isolation: isolate;
+            transform-style: preserve-3d;
+            box-shadow: 0 18px 55px -35px rgba(0,0,0,.9);
+        }
+        .feature-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            opacity: 0;
+            pointer-events: none;
+            background: radial-gradient(420px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(14,165,233,.13), transparent 42%);
+            transition: opacity .3s ease;
+        }
+        .feature-card:hover {
+            border-color: rgba(14,165,233,.28);
+            box-shadow: 0 28px 75px -40px rgba(14,165,233,.45);
+        }
+        .feature-card:hover::after { opacity: 1; }
+        .f-icon {
+            display: inline-flex;
+            transition: transform .35s cubic-bezier(.22,1,.36,1), filter .35s ease;
+        }
+        .feature-card:hover .f-icon {
+            transform: translateY(-4px) scale(1.08);
+            filter: drop-shadow(0 0 16px rgba(14,165,233,.42));
+        }
+        .premium-footer {
+            position: relative;
+            overflow: hidden;
+            padding: 4rem 2rem 2rem;
+            border-top: 1px solid rgba(148,163,184,.1);
+            background: linear-gradient(180deg, #020617 0%, #030817 100%);
+        }
+        .premium-footer::before {
+            content: '';
+            position: absolute;
+            top: -160px;
+            left: 50%;
+            width: 700px;
+            height: 300px;
+            transform: translateX(-50%);
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(14,165,233,.13), rgba(59,130,246,.05) 42%, transparent 72%);
+            filter: blur(30px);
+            pointer-events: none;
+        }
+        .footer-inner {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .footer-main {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 2rem;
+            padding-bottom: 2.5rem;
+        }
+        .footer-brand {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.2rem, 5vw, 4.5rem);
+            font-weight: 700;
+            line-height: 1;
+            letter-spacing: -.04em;
+        }
+        .footer-brand span {
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2), var(--accent-3));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .footer-copy {
+            max-width: 460px;
+            color: #94a3b8;
+            font-size: 1rem;
+        }
+        .footer-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.4rem; }
+        .footer-link {
+            display: inline-flex;
+            align-items: center;
+            gap: .5rem;
+            padding: .7rem 1rem;
+            border-radius: 999px;
+            color: #e2e8f0;
+            text-decoration: none;
+            border: 1px solid rgba(148,163,184,.15);
+            background: rgba(15,23,42,.5);
+            transition: transform .3s ease, border-color .3s ease, background .3s ease, box-shadow .3s ease;
+        }
+        .footer-link:hover {
+            transform: translateY(-3px);
+            color: #fff;
+            border-color: rgba(14,165,233,.4);
+            background: rgba(14,165,233,.08);
+            box-shadow: 0 12px 35px rgba(14,165,233,.1);
+        }
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(148,163,184,.09);
+            color: #64748b;
+            font-size: .85rem;
+        }
+        @media (max-width: 760px) {
+            .footer-main { align-items: flex-start; flex-direction: column; }
+            .footer-bottom { flex-direction: column; }
+            .section-label::before, .section-label::after { width: 20px; margin-inline: 8px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .gradient-text, .hero-content::before, .showcase-wrapper::after { animation: none; }
+        }
+
+        /* ============================================================
+           IBWATTS — NEW MARKET & DELIVERABLE SECTIONS
+           ============================================================ */
+        .narrative-section {
+            position: relative;
+            margin: 8rem 0;
+        }
+        .section-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: .65rem;
+            margin-bottom: 1rem;
+            color: var(--accent-1);
+            font-size: .78rem;
+            font-weight: 700;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+        }
+        .section-kicker::before {
+            content: '';
+            width: 28px;
+            height: 1px;
+            background: linear-gradient(90deg, var(--accent-1), var(--accent-3));
+            box-shadow: 0 0 12px rgba(14,165,233,.55);
+        }
+        .section-heading {
+            max-width: 780px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.2rem, 5vw, 4.2rem);
+            line-height: 1.08;
+            letter-spacing: -.035em;
+            margin-bottom: 1.25rem;
+        }
+        .section-intro {
+            max-width: 720px;
+            color: #94a3b8;
+            font-size: 1.08rem;
+            line-height: 1.8;
+        }
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 3.5rem;
+        }
+        .comparison-card {
+            position: relative;
+            min-height: 360px;
+            padding: 2.5rem;
+            overflow: hidden;
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(148,163,184,.12);
+            background: linear-gradient(145deg, rgba(15,23,42,.74), rgba(15,23,42,.35));
+            box-shadow: 0 24px 70px -45px rgba(0,0,0,.95);
+            transition: transform .45s cubic-bezier(.22,1,.36,1), border-color .45s ease, box-shadow .45s ease;
+        }
+        .comparison-card:hover { transform: translateY(-7px); }
+        .comparison-card.problem:hover {
+            border-color: rgba(248,113,113,.3);
+            box-shadow: 0 30px 80px -45px rgba(248,113,113,.3);
+        }
+        .comparison-card.solution:hover {
+            border-color: rgba(14,165,233,.38);
+            box-shadow: 0 30px 80px -45px rgba(14,165,233,.45);
+        }
+        .comparison-card::before {
+            content: '';
+            position: absolute;
+            width: 260px;
+            height: 260px;
+            top: -150px;
+            right: -110px;
+            border-radius: 50%;
+            filter: blur(45px);
+            opacity: .35;
+            pointer-events: none;
+        }
+        .comparison-card.problem::before { background: #ef4444; }
+        .comparison-card.solution::before { background: var(--accent-1); }
+        .comparison-index {
+            position: absolute;
+            right: 1.8rem;
+            bottom: .6rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 7rem;
+            font-weight: 700;
+            color: rgba(148,163,184,.035);
+            line-height: 1;
+            pointer-events: none;
+        }
+        .comparison-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 52px;
+            height: 52px;
+            margin-bottom: 1.5rem;
+            border-radius: 15px;
+            font-size: 1.55rem;
+        }
+        .problem .comparison-icon { color: #fca5a5; background: rgba(239,68,68,.1); }
+        .solution .comparison-icon { color: #38bdf8; background: rgba(14,165,233,.1); }
+        .comparison-label {
+            margin-bottom: .65rem;
+            font-size: .75rem;
+            font-weight: 700;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+        }
+        .problem .comparison-label { color: #fca5a5; }
+        .solution .comparison-label { color: #38bdf8; }
+        .comparison-title {
+            margin-bottom: 1rem;
+            color: #fff;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.65rem;
+        }
+        .comparison-text { color: #94a3b8; line-height: 1.75; }
+        .comparison-points {
+            display: grid;
+            gap: .75rem;
+            margin-top: 1.5rem;
+            list-style: none;
+        }
+        .comparison-points li {
+            display: flex;
+            align-items: flex-start;
+            gap: .65rem;
+            color: #cbd5e1;
+            font-size: .93rem;
+        }
+        .comparison-points i { margin-top: .25rem; color: var(--accent-1); }
+        .audience-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 3.5rem;
+        }
+        .audience-card {
+            position: relative;
+            padding: 2.25rem;
+            overflow: hidden;
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(148,163,184,.1);
+            background: rgba(15,23,42,.5);
+            transition: transform .4s cubic-bezier(.22,1,.36,1), border-color .4s ease, background .4s ease;
+        }
+        .audience-card:hover {
+            transform: translateY(-7px);
+            border-color: rgba(14,165,233,.3);
+            background: rgba(20,34,58,.72);
+        }
+        .audience-card::after {
+            content: '';
+            position: absolute;
+            inset: auto 0 0;
+            height: 3px;
+            opacity: 0;
+            transform: scaleX(.25);
+            background: linear-gradient(90deg, var(--accent-1), var(--accent-3));
+            transition: opacity .4s ease, transform .4s ease;
+        }
+        .audience-card:hover::after { opacity: 1; transform: scaleX(1); }
+        .audience-number {
+            display: block;
+            margin-bottom: 1.5rem;
+            color: rgba(56,189,248,.35);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: .8rem;
+            letter-spacing: .18em;
+        }
+        .audience-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            margin-bottom: 1.35rem;
+            color: var(--accent-1);
+            border-radius: 14px;
+            background: rgba(14,165,233,.09);
+            box-shadow: inset 0 0 18px rgba(14,165,233,.08);
+            font-size: 1.4rem;
+        }
+        .audience-title {
+            margin-bottom: .9rem;
+            color: #fff;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem;
+        }
+        .audience-text { color: #94a3b8; line-height: 1.7; font-size: .96rem; }
+        .deliverable-shell {
+            position: relative;
+            display: grid;
+            grid-template-columns: .9fr 1.1fr;
+            gap: 3.5rem;
+            align-items: center;
+            margin-top: 3.5rem;
+            padding: clamp(2rem, 5vw, 4rem);
+            overflow: hidden;
+            border: 1px solid rgba(14,165,233,.2);
+            border-radius: 30px;
+            background: linear-gradient(135deg, rgba(15,23,42,.86), rgba(15,23,42,.42));
+            box-shadow: 0 35px 100px -55px rgba(14,165,233,.45);
+        }
+        .deliverable-shell::before {
+            content: '';
+            position: absolute;
+            width: 420px;
+            height: 420px;
+            right: -180px;
+            top: -220px;
+            border-radius: 50%;
+            background: rgba(14,165,233,.15);
+            filter: blur(80px);
+            pointer-events: none;
+        }
+        .report-visual {
+            position: relative;
+            min-height: 410px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            perspective: 1200px;
+        }
+        .report-sheet {
+            position: relative;
+            width: min(300px, 82%);
+            min-height: 385px;
+            padding: 1.6rem;
+            color: #0f172a;
+            border-radius: 12px;
+            background: linear-gradient(145deg, #f8fafc, #dbeafe);
+            box-shadow: 28px 34px 70px rgba(0,0,0,.38), -1px -1px 0 rgba(255,255,255,.7);
+            transform: rotateY(-10deg) rotateX(3deg) rotateZ(-2deg);
+            transition: transform .6s cubic-bezier(.22,1,.36,1);
+        }
+        .deliverable-shell:hover .report-sheet { transform: rotateY(-3deg) rotateX(1deg) rotateZ(0); }
+        .report-sheet::before,
+        .report-sheet::after {
+            content: '';
+            position: absolute;
+            inset: 10px -12px -10px 12px;
+            z-index: -1;
+            border-radius: 12px;
+            background: #bfdbfe;
+            opacity: .55;
+        }
+        .report-sheet::after { inset: 20px -22px -20px 22px; opacity: .22; }
+        .report-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(15,23,42,.12);
+        }
+        .report-logo { font-family: 'Space Grotesk'; font-size: 1.1rem; font-weight: 700; }
+        .report-logo span { color: #0284c7; }
+        .report-chip { padding: .3rem .55rem; color: #0369a1; border-radius: 99px; background: #e0f2fe; font-size: .58rem; font-weight: 700; }
+        .report-title { margin: 1.25rem 0 .35rem; font-family: 'Space Grotesk'; font-size: 1.15rem; }
+        .report-sub { color: #64748b; font-size: .65rem; }
+        .report-chart {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+            height: 95px;
+            margin: 1.4rem 0;
+            padding: .8rem;
+            border-radius: 8px;
+            background: rgba(255,255,255,.65);
+        }
+        .report-chart span { flex: 1; border-radius: 3px 3px 0 0; background: linear-gradient(#38bdf8, #2563eb); }
+        .report-metrics { display: grid; grid-template-columns: repeat(2,1fr); gap: .55rem; }
+        .report-metric { padding: .65rem; border-radius: 7px; background: rgba(255,255,255,.68); }
+        .report-metric strong { display: block; color: #0369a1; font-family: 'Space Grotesk'; font-size: .85rem; }
+        .report-metric small { color: #64748b; font-size: .55rem; }
+        .deliverable-list { display: grid; gap: 1rem; margin-top: 2rem; }
+        .deliverable-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem;
+            border: 1px solid rgba(148,163,184,.09);
+            border-radius: 14px;
+            background: rgba(2,6,23,.28);
+            transition: transform .3s ease, border-color .3s ease, background .3s ease;
+        }
+        .deliverable-item:hover {
+            transform: translateX(6px);
+            border-color: rgba(14,165,233,.25);
+            background: rgba(14,165,233,.045);
+        }
+        .deliverable-item i { margin-top: .2rem; color: var(--accent-1); font-size: 1.2rem; }
+        .deliverable-item strong { display: block; margin-bottom: .2rem; color: #fff; }
+        .deliverable-item span { color: #94a3b8; font-size: .9rem; line-height: 1.55; }
+        @media (max-width: 900px) {
+            .comparison-grid, .deliverable-shell { grid-template-columns: 1fr; }
+            .audience-grid { grid-template-columns: 1fr; }
+            .report-visual { min-height: 350px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="scroll-progress" id="scroll-progress"></div>
+
+    <nav class="navbar" id="navbar">
+        <div class="nav-inner">
+            <a href="index.html" class="logo">IK<span style="color: var(--accent-1);">.</span></a>
+            <a href="index.html" class="back-btn"><i class="ph-bold ph-arrow-left"></i> Retour au Portfolio</a>
+        </div>
+    </nav>
+
+    <!-- HERO WITH WEBGL BACKGROUND -->
+    <section id="hero">
+        <div id="webgl-container"></div>
+        <div class="hero-overlay"></div>
+        
+        <div class="hero-content gsap-hero">
+            <div class="hero-badge"><i class="ph-bold ph-sun-horizon"></i> Web Application</div>
+            <h1 class="hero-title">IBWatts <br><span class="gradient-text">Solar Viability Suite</span></h1>
+            <p class="hero-desc">Une plateforme logicielle d'ingénierie et d'aide à la décision pour le dimensionnement solaire, la modélisation tarifaire marocaine et l'ingénierie financière bancaire.</p>
+        </div>
+    </section>
+
+    <main>
+        <div class="container">
+            
+            <!-- VALUE PROPOSITION -->
+            <div class="value-prop gsap-fade">
+                <div>
+                    <h2 class="section-title">Pourquoi IBWatts se démarque</h2>
+                    <p class="text-body">Dans le secteur de l'énergie solaire, la plupart des calculateurs génériques ignorent les contraintes physiques locales et les structures tarifaires complexes. <strong>IBWatts comble cette lacune.</strong></p>
+                    <p class="text-body">Il ne s'agit pas d'une simple estimation, mais d'une modélisation rigoureuse qui réunit la physique de l'ensoleillement, l'économie des factures locales (ONEE, Redal) et la réalité des financements bancaires verts au Maroc.</p>
+                </div>
+                <div class="highlight-box liquid-glass">
+                    <div class="highlight-item">
+                        <div class="highlight-icon"><i class="ph-bold ph-thermometer"></i></div>
+                        <div>
+                            <h4 style="color: #fff; margin-bottom: 4px;">Contraintes Physiques Strictes</h4>
+                            <p style="color: #94a3b8; font-size: 0.95rem;">Le rendement solaire est modélisé selon les coordonnées exactes, la transposition mathématique et la dégradation thermique des cellules.</p>
+                        </div>
+                    </div>
+                    <div class="highlight-item">
+                        <div class="highlight-icon"><i class="ph-bold ph-chart-line-down"></i></div>
+                        <div>
+                            <h4 style="color: #fff; margin-bottom: 4px;">Règles Tarifaires Granulaires</h4>
+                            <p style="color: #94a3b8; font-size: 0.95rem;">Modélisation de l'effacement de pointe et des changements de tranches progressives pour maximiser les économies réelles.</p>
+                        </div>
+                    </div>
+                    <div class="highlight-item">
+                        <div class="highlight-icon"><i class="ph-bold ph-bank"></i></div>
+                        <div>
+                            <h4 style="color: #fff; margin-bottom: 4px;">Ingénierie Financière Bancaire</h4>
+                            <p style="color: #94a3b8; font-size: 0.95rem;">Génération de tableaux d'amortissement complets pour les banques marocaines afin de prouver le point de basculement positif du cash-flow.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROBLEM VS SOLUTION -->
+            <section class="narrative-section gsap-fade" id="problem-solution">
+                <div class="section-kicker">Pourquoi construire IBWatts ?</div>
+                <h2 class="section-heading">Le problème n'est pas le soleil.<br> C'est la qualité de la décision.</h2>
+                <p class="section-intro">Une étude solaire crédible au Maroc doit relier la physique du site, la facture réelle du client, le prix local des équipements et les exigences du financement bancaire.</p>
+                <div class="comparison-grid">
+                    <article class="comparison-card problem">
+                        <span class="comparison-index">01</span>
+                        <div class="comparison-icon"><i class="ph-bold ph-warning"></i></div>
+                        <div class="comparison-label">Le Problème</div>
+                        <h3 class="comparison-title">Des estimations génériques qui ne reflètent pas le terrain</h3>
+                        <p class="comparison-text">Les calculateurs standards ignorent souvent les tranches tarifaires ONEE/Redal, les contraintes locales et les preuves financières demandées par les banques marocaines.</p>
+                        <ul class="comparison-points">
+                            <li><i class="ph-bold ph-x-circle"></i><span>Économies approximatives et ROI peu fiable</span></li>
+                            <li><i class="ph-bold ph-x-circle"></i><span>Tarification progressive mal représentée</span></li>
+                            <li><i class="ph-bold ph-x-circle"></i><span>Dossier insuffisant pour une demande de crédit</span></li>
+                        </ul>
+                    </article>
+                    <article class="comparison-card solution">
+                        <span class="comparison-index">02</span>
+                        <div class="comparison-icon"><i class="ph-bold ph-lightning"></i></div>
+                        <div class="comparison-label">La Solution IBWatts</div>
+                        <h3 class="comparison-title">Une suite conçue pour le marché solaire marocain</h3>
+                        <p class="comparison-text">IBWatts utilise des équipements et des prix locaux, modélise précisément le « Peak Shaving » et produit les indicateurs financiers attendus par les décideurs et les banques.</p>
+                        <ul class="comparison-points">
+                            <li><i class="ph-bold ph-check-circle"></i><span>Économies calculées sur la facture réelle</span></li>
+                            <li><i class="ph-bold ph-check-circle"></i><span>Équipements disponibles sur le marché marocain</span></li>
+                            <li><i class="ph-bold ph-check-circle"></i><span>Analyse prête pour l'étude et le financement</span></li>
+                        </ul>
+                    </article>
+                </div>
+            </section>
+            <!-- SHOWCASE IMAGES -->
+            <div class="showcase-wrapper gsap-fade">
+                <div class="showcase-bg"></div>
+                <img src="images/ibwatts home page.png" alt="IBWatts Dashboard Home" class="showcase-img-1">
+                <img src="images/ibwatts etude page.png" alt="IBWatts Etude Interface" class="showcase-img-2">
+            </div>
+
+            <!-- KEY FEATURES -->
+            <div class="section-label" style="text-align: center; color: var(--accent-1); font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">Fonctionnalités Clés</div>
+            <h2 class="section-title" style="text-align: center; margin-bottom: 3rem;">L'Architecture du Produit</h2>
+            
+            <div class="features-grid gsap-fade">
+                <div class="feature-card">
+                    <i class="ph-bold ph-bounding-box f-icon"></i>
+                    <h3 class="f-title">Visualiseur de Toiture Temps Réel</h3>
+                    <p class="f-desc">Un moteur HTML5 Canvas personnalisé permet aux utilisateurs de dessiner leur toiture et d'y superposer dynamiquement les panneaux solaires en tenant compte des espacements et de l'inclinaison.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="ph-bold ph-planet f-icon"></i>
+                    <h3 class="f-title">Simulation Physique NASA POWER</h3>
+                    <p class="f-desc">Interroge l'API NASA pour obtenir 10 ans de moyennes historiques d'irradiation (GHI, DNI) basées sur la longitude et latitude exactes, cachées localement pour une réponse ultra-rapide.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="ph-bold ph-scissors f-icon"></i>
+                    <h3 class="f-title">Peak Shaving des Tarifs</h3>
+                    <p class="f-desc">Calcule les économies exactes en modélisant les tarifs par tranches marocains. Démontre comment le solaire fait reculer le client vers une tranche moins chère, augmentant la rentabilité.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="ph-bold ph-battery-charging f-icon"></i>
+                    <h3 class="f-title">Sélection Intelligente d'Équipements</h3>
+                    <p class="f-desc">Recommande des équipements spécifiques disponibles au Maroc (Jinko Solar, Huawei) avec dimensionnement optimal DC/AC et capacités de batteries respectant le DoD de sécurité (20%).</p>
+                </div>
+                <div class="feature-card">
+                    <i class="ph-bold ph-chart-bar f-icon"></i>
+                    <h3 class="f-title">Financement Banque Verte</h3>
+                    <p class="f-desc">Simule les structures de prêt des banques locales (Crédit Vert CIH, Éco-Prêt BMCE) avec taux et durées, prouvant que le système s'autofinance dès la première année.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="ph-bold ph-file-pdf f-icon"></i>
+                    <h3 class="f-title">Exports Corporate Automatisés</h3>
+                    <p class="f-desc">Génère des dossiers PDF haute-fidélité pour les demandes de crédit bancaire, ainsi que des classeurs Excel multi-feuilles contenant les cash-flows détaillés sur 25 ans.</p>
+                </div>
+            </div>
+
+
+
+            <!-- TARGET AUDIENCE -->
+            <section class="narrative-section gsap-fade" id="audience">
+                <div class="section-kicker">À qui s'adresse IBWatts ?</div>
+                <h2 class="section-heading">Une même plateforme.<br> Trois décisions facilitées.</h2>
+                <p class="section-intro">Chaque acteur accède au niveau d'information dont il a besoin : vendre une solution, valider un investissement ou sécuriser un financement.</p>
+                <div class="audience-grid">
+                    <article class="audience-card">
+                        <span class="audience-number">PUBLIC 01</span>
+                        <div class="audience-icon"><i class="ph-bold ph-hard-hat"></i></div>
+                        <h3 class="audience-title">Installateurs & EPC</h3>
+                        <p class="audience-text">Générer des devis structurés et des études de rentabilité en quelques clics afin de réduire le temps d'avant-vente et convaincre les clients plus rapidement.</p>
+                    </article>
+                    <article class="audience-card">
+                        <span class="audience-number">PUBLIC 02</span>
+                        <div class="audience-icon"><i class="ph-bold ph-buildings"></i></div>
+                        <h3 class="audience-title">Clients Finaux</h3>
+                        <p class="audience-text">Offrir aux industriels et aux particuliers une transparence complète sur le ROI, le temps de retour et les économies réellement attendues sur leur facture.</p>
+                    </article>
+                    <article class="audience-card">
+                        <span class="audience-number">PUBLIC 03</span>
+                        <div class="audience-icon"><i class="ph-bold ph-bank"></i></div>
+                        <h3 class="audience-title">Banques & Financeurs</h3>
+                        <p class="audience-text">Fournir des tableaux d'amortissement standardisés, des flux de trésorerie lisibles et des indicateurs fiables pour accélérer les financements « Crédit Vert ».</p>
+                    </article>
+                </div>
+            </section>
+            <!-- FINAL DELIVERABLE -->
+            <section class="narrative-section gsap-fade" id="deliverable">
+                <div class="section-kicker">Le livrable final</div>
+                <h2 class="section-heading">Un dossier bancaire clé en main.</h2>
+                <p class="section-intro">À partir des données du projet, IBWatts transforme l'analyse technique et financière en un rapport PDF professionnel, personnalisé et directement exploitable.</p>
+                <div class="deliverable-shell">
+                    <div class="report-visual" aria-hidden="true">
+                        <div class="report-sheet">
+                            <div class="report-header">
+                                <div class="report-logo">IB<span>Watts</span></div>
+                                <div class="report-chip">ÉTUDE BANCAIRE</div>
+                            </div>
+                            <div class="report-title">Étude de Viabilité Solaire</div>
+                            <div class="report-sub">Synthèse technique, économique et financière</div>
+                            <div class="report-chart">
+                                <span style="height:32%"></span><span style="height:48%"></span><span style="height:62%"></span><span style="height:78%"></span><span style="height:67%"></span><span style="height:91%"></span><span style="height:82%"></span>
+                            </div>
+                            <div class="report-metrics">
+                                <div class="report-metric"><strong>ROI</strong><small>Rentabilité projet</small></div>
+                                <div class="report-metric"><strong>Payback</strong><small>Temps de retour</small></div>
+                                <div class="report-metric"><strong>25 ans</strong><small>Cash-flow détaillé</small></div>
+                                <div class="report-metric"><strong>PDF</strong><small>Dossier prêt à présenter</small></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="deliverable-list">
+                            <div class="deliverable-item"><i class="ph-bold ph-chart-line-up"></i><div><strong>Rentabilité documentée</strong><span>ROI, économies annuelles, valeur actualisée et temps de retour sur investissement.</span></div></div>
+                            <div class="deliverable-item"><i class="ph-bold ph-sun-horizon"></i><div><strong>Étude solaire complète</strong><span>Dimensionnement, production estimée, contraintes de toiture et analyse des ombrages.</span></div></div>
+                            <div class="deliverable-item"><i class="ph-bold ph-table"></i><div><strong>Amortissement bancaire</strong><span>Échéancier du prêt, intérêts, mensualités et évolution du cash-flow sur la durée du projet.</span></div></div>
+                            <div class="deliverable-item"><i class="ph-bold ph-file-pdf"></i><div><strong>Rapport professionnel personnalisé</strong><span>Un dossier PDF structuré et brandé, prêt à être transmis au client ou présenté à la banque.</span></div></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="premium-footer">
+        <div class="footer-inner">
+            <div class="footer-main">
+                <div>
+                    <div class="footer-brand">IB<span>Watts</span></div>
+                    <div class="footer-actions">
+                        <a href="index.html" class="footer-link"><i class="ph-bold ph-arrow-left"></i> Portfolio</a>
+                        <a href="mailto:khallouk.ibrahim@uir.ac.ma" class="footer-link"><i class="ph-bold ph-envelope-simple"></i> Contact</a>
+                        <a href="https://github.com/ibra-create" target="_blank" rel="noopener noreferrer" class="footer-link"><i class="ph-bold ph-github-logo"></i> GitHub</a>
+                    </div>
+                </div>
+                <p class="footer-copy">Ingénierie solaire, modélisation énergétique et analyse financière réunies dans une plateforme conçue pour le contexte marocain.</p>
+            </div>
+            <div class="footer-bottom">
+                <span>© 2026 Ibrahim Khallouq — IBWatts Solar Viability Suite</span>
+                <span>Conçu pour transformer les données solaires en décisions d'investissement.</span>
+            </div>
+        </div>
+    </footer>
+        <!-- WEBGL SHADER SCRIPT -->
+    <script>
+        // Smooth scroll listener for navbar
+        window.addEventListener('scroll', () => {
+            document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+            const progress = document.getElementById('scroll-progress');
+            const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+            progress.style.width = (scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0) + '%';
+        });
+        // Cursor-following light inside feature cards
+        document.querySelectorAll('.feature-card').forEach(card => {
+            card.addEventListener('pointermove', event => {
+                const rect = card.getBoundingClientRect();
+                card.style.setProperty('--mouse-x', `${event.clientX - rect.left}px`);
+                card.style.setProperty('--mouse-y', `${event.clientY - rect.top}px`);
+            });
+        });
+
+        // GSAP Animations
+        gsap.registerPlugin(ScrollTrigger);
+        gsap.from(".gsap-hero", { y: 30, opacity: 0, duration: 1, ease: "power3.out", delay: 0.5 });
+        gsap.utils.toArray('.gsap-fade').forEach(el => {
+            gsap.from(el, { scrollTrigger: { trigger: el, start: "top 85%" }, y: 40, opacity: 0, duration: 0.8, ease: "power3.out" });
+        });
+
+        // ==========================================
+        // THREE.JS VOLUMETRIC SMOKE & PARTICLES
+        // ==========================================
+        const initWebGL = () => {
+            const container = document.getElementById('webgl-container');
+            const scene = new THREE.Scene();
+            
+            // Camera
+            const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 1;
+
+            const renderer = new THREE.WebGLRenderer({ alpha: false, antialias: true, powerPreference: "high-performance" });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            container.appendChild(renderer.domElement);
+
+            // 1. VOLUMETRIC SMOKE SHADER (Background Quad)
+            const vertexShader = `
+                varying vec2 vUv;
+                void main() {
+                    vUv = uv;
+                    gl_Position = vec4(position, 1.0);
+                }
+            `;
+
+            const fragmentShader = `
+                uniform float time;
+                uniform vec2 resolution;
+                varying vec2 vUv;
+
+                // Hash function for noise
+                float hash(vec2 p) {
+                    return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453123);
+                }
+
+                // 2D Noise
+                float noise(vec2 p) {
+                    vec2 i = floor(p);
+                    vec2 f = fract(p);
+                    vec2 u = f * f * (3.0 - 2.0 * f);
+                    return mix(mix(hash(i + vec2(0.0,0.0)), hash(i + vec2(1.0,0.0)), u.x),
+                               mix(hash(i + vec2(0.0,1.0)), hash(i + vec2(1.0,1.0)), u.x), u.y);
+                }
+
+                // Fractal Brownian Motion
+                float fbm(vec2 p) {
+                    float v = 0.0;
+                    float a = 0.5;
+                    vec2 shift = vec2(100.0);
+                    mat2 rot = mat2(cos(0.5), sin(0.5), -sin(0.5), cos(0.50));
+                    for (int i = 0; i < 6; ++i) {
+                        v += a * noise(p);
+                        p = rot * p * 2.0 + shift;
+                        a *= 0.5;
+                    }
+                    return v;
+                }
+
+                void main() {
+                    vec2 p = (gl_FragCoord.xy * 2.0 - resolution) / min(resolution.x, resolution.y);
+                    
+                    // Slow moving coordinates for fog flow
+                    vec2 q = vec2(0.);
+                    q.x = fbm(p + 0.00 * time);
+                    q.y = fbm(p + vec2(1.0));
+
+                    vec2 r = vec2(0.);
+                    r.x = fbm(p + 1.0 * q + vec2(1.7, 9.2) + 0.05 * time);
+                    r.y = fbm(p + 1.0 * q + vec2(8.3, 2.8) + 0.02 * time);
+
+                    float f = fbm(p + r);
+
+                    // Colors: Dark cinematic slate, cyan, and deep blue
+                    vec3 color = mix(vec3(0.01, 0.02, 0.05), vec3(0.02, 0.06, 0.15), clamp((f*f)*4.0, 0.0, 1.0));
+                    color = mix(color, vec3(0.05, 0.3, 0.5), clamp(length(q), 0.0, 1.0));
+                    color = mix(color, vec3(0.0, 0.6, 0.8), clamp(length(r.x), 0.0, 1.0) * 0.5); // Cyan highlights
+                    
+                    // Vignette & contrast
+                    color *= (1.5 * f * f * f + 0.5 * f);
+                    float vignette = clamp(1.0 - length(p * 0.4), 0.0, 1.0);
+                    color *= vignette;
+
+                    gl_FragColor = vec4(color, 1.0);
+                }
+            `;
+
+            const uniforms = {
+                time: { value: 0.0 },
+                resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) }
+            };
+
+            const quadGeo = new THREE.PlaneGeometry(2, 2);
+            const quadMat = new THREE.ShaderMaterial({
+                vertexShader,
+                fragmentShader,
+                uniforms,
+                depthWrite: false,
+                depthTest: false
+            });
+            const quad = new THREE.Mesh(quadGeo, quadMat);
+            scene.add(quad); // Adds background shader to scene
+
+            // 2. GLOWING PARTICLES (Floating in front)
+            const createGlowingTexture = () => {
+                const canvas = document.createElement('canvas');
+                canvas.width = 64; canvas.height = 64;
+                const ctx = canvas.getContext('2d');
+                const gradient = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+                gradient.addColorStop(0, 'rgba(14, 165, 233, 1)'); // Cyan core
+                gradient.addColorStop(0.2, 'rgba(14, 165, 233, 0.8)');
+                gradient.addColorStop(0.6, 'rgba(14, 165, 233, 0.1)');
+                gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, 64, 64);
+                return new THREE.CanvasTexture(canvas);
+            };
+
+            const particleCount = 200;
+            const particleGeo = new THREE.BufferGeometry();
+            const posArray = new Float32Array(particleCount * 3);
+            const speedArray = new Float32Array(particleCount);
+
+            for (let i = 0; i < particleCount; i++) {
+                posArray[i * 3] = (Math.random() - 0.5) * 4;     // x
+                posArray[i * 3 + 1] = (Math.random() - 0.5) * 4; // y
+                posArray[i * 3 + 2] = (Math.random() - 0.5) * 2 - 1; // z (depth)
+                speedArray[i] = 0.1 + Math.random() * 0.3;
+            }
+
+            particleGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            particleGeo.setAttribute('aSpeed', new THREE.BufferAttribute(speedArray, 1));
+
+            const particleMat = new THREE.PointsMaterial({
+                size: 0.05,
+                map: createGlowingTexture(),
+                transparent: true,
+                blending: THREE.AdditiveBlending,
+                depthWrite: false,
+                opacity: 0.8
+            });
+
+            const particles = new THREE.Points(particleGeo, particleMat);
+            scene.add(particles);
+
+            // Parallax interaction
+            let mouseX = 0, mouseY = 0;
+            let targetX = 0, targetY = 0;
+            const windowHalfX = window.innerWidth / 2;
+            const windowHalfY = window.innerHeight / 2;
+
+            document.addEventListener('mousemove', (event) => {
+                mouseX = (event.clientX - windowHalfX) * 0.0005;
+                mouseY = (event.clientY - windowHalfY) * 0.0005;
+            });
+
+            // Animation Loop
+            const clock = new THREE.Clock();
+
+            const animate = () => {
+                requestAnimationFrame(animate);
+                const t = clock.getElapsedTime();
+
+                // Update Shader Time
+                uniforms.time.value = t * 0.6;
+
+                // Parallax easing
+                targetX = mouseX * 0.5;
+                targetY = mouseY * 0.5;
+                particles.rotation.y += 0.05 * (targetX - particles.rotation.y);
+                particles.rotation.x += 0.05 * (targetY - particles.rotation.x);
+
+                // Slowly float particles upwards
+                const positions = particles.geometry.attributes.position.array;
+                const speeds = particles.geometry.attributes.aSpeed.array;
+                for (let i = 0; i < particleCount; i++) {
+                    positions[i * 3 + 1] += speeds[i] * 0.005; // Move up
+                    if (positions[i * 3 + 1] > 2.0) {          // Reset if too high
+                        positions[i * 3 + 1] = -2.0;
+                    }
+                }
+                particles.geometry.attributes.position.needsUpdate = true;
+
+                renderer.render(scene, camera);
+            };
+
+            animate();
+
+            // Resize handling
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                uniforms.resolution.value.set(window.innerWidth, window.innerHeight);
+            });
+        };
+
+        // Ensure Three.js is loaded, then init
+        if (typeof THREE !== 'undefined') {
+            initWebGL();
+        } else {
+            document.addEventListener('DOMContentLoaded', initWebGL);
+        }
+    </script>
+</body>
+</html>

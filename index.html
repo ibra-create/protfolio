@@ -779,6 +779,65 @@
             .ik-aura-intro { margin:10px 10px 0; }
             .ik-chat-message-body { max-width:89%; }
         }
+        /* IK AURA - phone and tablet layout refinements only */
+        #ik-assistant-root, #ik-assistant-root * { -webkit-tap-highlight-color: transparent; }
+        .ik-chat-window { max-width: calc(100vw - 24px); max-height: calc(100dvh - 24px); }
+        .ik-chat-messages { min-height: 0; -webkit-overflow-scrolling: touch; touch-action: pan-y; }
+        .ik-chat-composer-wrap { min-width: 0; padding-bottom: max(12px, env(safe-area-inset-bottom)); }
+        .ik-chat-textarea { min-width: 0; }
+
+        @media (min-width: 601px) and (max-width: 1024px) {
+            #ik-assistant-root { right: max(18px, env(safe-area-inset-right)); bottom: max(18px, env(safe-area-inset-bottom)); }
+            .ik-chat-window { right: 0; bottom: 88px; width: min(470px, calc(100vw - 36px)); height: min(720px, calc(100dvh - 124px)); min-height: min(520px, calc(100dvh - 124px)); border-radius: 27px; }
+            .ik-chat-launcher { width: 72px; height: 72px; }
+        }
+
+        @media (max-width: 600px) {
+            #ik-assistant-root { right: max(10px, env(safe-area-inset-right)); bottom: max(10px, env(safe-area-inset-bottom)); }
+            .ik-chat-window {
+                position: fixed; top: max(6px, env(safe-area-inset-top)); right: max(6px, env(safe-area-inset-right));
+                bottom: max(6px, env(safe-area-inset-bottom)); left: max(6px, env(safe-area-inset-left));
+                width: auto; height: auto; min-height: 0; max-width: none; max-height: none;
+                border-radius: 23px; grid-template-rows: auto auto minmax(0, 1fr) auto;
+            }
+            .ik-chat-header { gap: 9px; padding: 12px 12px 10px; }
+            .ik-chat-avatar { width: 40px; height: 40px; border-radius: 13px; flex: 0 0 auto; }
+            .ik-chat-heading strong { font-size: .94rem; }
+            .ik-chat-heading span { font-size: .65rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+            .ik-chat-controls { flex: 0 0 auto; }
+            .ik-chat-icon-btn { width: 38px; height: 38px; border-radius: 12px; }
+            .ik-aura-intro { margin: 8px 9px 0; min-height: 74px; padding: 12px 12px 11px 70px; border-radius: 17px; }
+            .ik-aura-intro-mascot { left: 13px; top: 12px; transform: scale(.92); transform-origin: top left; }
+            .ik-aura-intro h3 { font-size: .86rem; }
+            .ik-aura-intro p { font-size: .65rem; line-height: 1.38; }
+            .ik-aura-badge { margin-top: 5px; font-size: .54rem; }
+            .ik-chat-messages { padding: 11px 10px 5px; }
+            .ik-chat-message { gap: 7px; margin-bottom: 12px; }
+            .ik-chat-mini-avatar { width: 27px; height: 27px; border-radius: 9px; }
+            .ik-chat-message-body { max-width: calc(100% - 34px); }
+            .ik-chat-message.user .ik-chat-message-body { max-width: 88%; }
+            .ik-chat-bubble { padding: 10px 11px; font-size: .81rem; line-height: 1.48; }
+            .ik-chat-composer-wrap { padding: 8px 9px max(9px, env(safe-area-inset-bottom)); }
+            .ik-chat-suggestions { gap: 6px; padding-bottom: 7px!important; }
+            .ik-chat-chip { max-width: min(240px, 78vw); min-height: 36px; padding: 7px 10px; font-size: .66rem; }
+            .ik-chat-composer { gap: 6px; padding: 5px 5px 5px 10px; border-radius: 16px; }
+            .ik-chat-textarea { min-height: 38px; max-height: 82px; padding: 9px 0 6px; font-size: 16px; }
+            .ik-chat-send { width: 42px; height: 42px; border-radius: 13px; }
+            .ik-chat-footnote { display: none; }
+            .ik-chat-launcher { width: 64px; height: 64px; border-radius: 22px; }
+            .ik-aura-orbit { border-radius: 21px; }
+            .ik-aura-launch-core { border-radius: 20px; }
+            .ik-aura-teaser { right: 74px; bottom: max(8px, env(safe-area-inset-bottom)); max-width: calc(100vw - 96px - env(safe-area-inset-left)); }
+        }
+
+        @media (max-width: 600px) and (max-height: 680px), (max-height: 500px) and (hover: none) and (pointer: coarse) {
+            .ik-chat-window { top: max(3px, env(safe-area-inset-top)); right: max(3px, env(safe-area-inset-right)); bottom: max(3px, env(safe-area-inset-bottom)); left: max(3px, env(safe-area-inset-left)); border-radius: 18px; grid-template-rows: auto minmax(0, 1fr) auto; }
+            .ik-aura-intro { display: none; }
+            .ik-chat-header { padding-block: 8px; }
+            .ik-chat-messages { padding-top: 8px; }
+            .ik-chat-chip { min-height: 32px; padding-block: 5px; }
+        }
+
         @media (prefers-reduced-motion:reduce) {
             .ik-aura-orbit,.ik-aura-launch-core::after,.ik-mascot-hand,.ik-mascot-eye,.ik-mascot-antenna,.ik-chat-thinking span { animation:none!important; }
             .ik-chat-window,.ik-chat-message,.ik-chat-launcher { transition:none!important; }
@@ -1686,7 +1745,7 @@
                 const limitedHistory = state.conversation.slice(-8);
                 try {
                     const controller = new AbortController();
-                    const timeout = setTimeout(() => controller.abort(), 30000);
+                    const timeout = setTimeout(() => controller.abort(), 100000);
                     const response = await fetch(API_URL, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },

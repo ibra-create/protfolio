@@ -1,0 +1,631 @@
+[
+  {
+    "stable_key": "profile.professional_summary.fr",
+    "project_id": null,
+    "language": "fr",
+    "content_type": "professional_summary",
+    "category": "identity",
+    "title": "Résumé Professionnel",
+    "content": "Ibrahim Khallouq est un Ingénieur en Énergétique et Énergies Renouvelables diplômé de l'UIR. Il maîtrise l'ensemble du domaine énergétique : systèmes thermiques, électriques, renouvelables, conventionnels, et technologies émergentes comme l'hydrogène vert et le stockage (BESS). Il est capable de gérer un projet de A à Z : étude de faisabilité, conception, simulation, optimisation, et audit.",
+    "keywords": [
+      "Ingénieur",
+      "Énergies Renouvelables",
+      "BESS",
+      "Hydrogène",
+      "Thermique"
+    ],
+    "skills": [
+      "Étude technico-économique",
+      "Conception",
+      "Simulation numérique",
+      "Audit énergétique"
+    ],
+    "tools": [],
+    "question_variants": [
+      "Qui est Ibrahim Khallouq ?",
+      "Quel est le profil d'Ibrahim ?"
+    ],
+    "source_url": "index.html",
+    "source_label": "Profil (me.md)",
+    "source_file": "me.md",
+    "metadata": {
+      "contribution_scope": "individual"
+    }
+  },
+  {
+    "stable_key": "profile.professional_summary.en",
+    "project_id": null,
+    "language": "en",
+    "content_type": "professional_summary",
+    "category": "identity",
+    "title": "Professional Summary",
+    "content": "Ibrahim Khallouq is an Energy and Renewable Energies Engineer graduated from UIR. He masters the entire energy field: thermal, electrical, renewable, conventional systems, and emerging technologies like green hydrogen and storage (BESS). He can manage a project from A to Z: feasibility study, design, simulation, optimization, and energy audit.",
+    "keywords": [
+      "Engineer",
+      "Renewable Energy",
+      "BESS",
+      "Hydrogen",
+      "Thermal"
+    ],
+    "skills": [
+      "Techno-economic study",
+      "Design",
+      "Numerical simulation",
+      "Energy audit"
+    ],
+    "tools": [],
+    "question_variants": [
+      "Who is Ibrahim Khallouq?",
+      "What is Ibrahim's profile?"
+    ],
+    "source_url": "index.html",
+    "source_label": "Profile (me.md)",
+    "source_file": "me.md",
+    "metadata": {
+      "contribution_scope": "individual"
+    }
+  },
+  {
+    "stable_key": "profile.education.fr",
+    "project_id": null,
+    "language": "fr",
+    "content_type": "education",
+    "category": "education",
+    "title": "Formation d'Ibrahim",
+    "content": "Ibrahim a obtenu son Diplôme d'Ingénieur en Énergétique & Énergies Renouvelables à l'Université Internationale de Rabat (UIR) (2021–2026). Ses modules clés incluent la Thermodynamique, Mécanique des Fluides (CFD), Électrotechnique, Smart Grids, et l'Audit Énergétique.",
+    "keywords": [
+      "UIR",
+      "Diplôme",
+      "Université Internationale de Rabat"
+    ],
+    "skills": [],
+    "tools": [],
+    "question_variants": [
+      "Quelle est la formation d'Ibrahim ?",
+      "Où Ibrahim a-t-il étudié ?"
+    ],
+    "source_url": "index.html",
+    "source_label": "Education (me.md)",
+    "source_file": "me.md",
+    "metadata": {
+      "contribution_scope": "individual"
+    }
+  },
+  {
+    "stable_key": "experience.novec.responsibilities.fr",
+    "project_id": null,
+    "language": "fr",
+    "content_type": "experience_responsibility",
+    "category": "experience",
+    "title": "Expérience chez Novec",
+    "content": "Ibrahim a travaillé comme Ingénieur Projet Énergie chez Novec (Bureau d'Études) en 2026. Il a mené les études de faisabilité complètes, la conception de bout en bout (SLD) et les simulations pour une centrale PV de 30 MWc avec BESS à Djibouti, et deux centrales de 580 kWc à Dakhla.",
+    "keywords": [
+      "Novec",
+      "Djibouti",
+      "Dakhla",
+      "Bureau d'Études"
+    ],
+    "skills": [
+      "Études de faisabilité",
+      "SLD",
+      "Dimensionnement"
+    ],
+    "tools": [
+      "PVSyst",
+      "HOMER Pro",
+      "Caneco BT",
+      "PowerFactory"
+    ],
+    "question_variants": [
+      "Où Ibrahim a-t-il travaillé en 2026 ?",
+      "Quelle est son expérience chez Novec ?"
+    ],
+    "source_url": "solar-project.html",
+    "source_label": "Experience (me.md)",
+    "source_file": "me.md",
+    "metadata": {
+      "contribution_scope": "individual"
+    }
+  },
+  {
+    "stable_key": "experience.novec.responsibilities.en",
+    "project_id": null,
+    "language": "en",
+    "content_type": "experience_responsibility",
+    "category": "experience",
+    "title": "Experience at Novec",
+    "content": "Ibrahim worked as an Energy Project Engineer at Novec (Consulting Firm) in 2026. He led full feasibility studies, end-to-end electrical design (SLD), and simulations for a 30 MWp PV plant with BESS in Djibouti, and two 580 kWp plants in Dakhla.",
+    "keywords": [
+      "Novec",
+      "Djibouti",
+      "Dakhla",
+      "Consulting"
+    ],
+    "skills": [
+      "Feasibility studies",
+      "SLD",
+      "Sizing"
+    ],
+    "tools": [
+      "PVSyst",
+      "HOMER Pro",
+      "Caneco BT",
+      "PowerFactory"
+    ],
+    "question_variants": [
+      "Where did Ibrahim work in 2026?",
+      "What is his experience at Novec?",
+      "Has Ibrahim worked on utility-scale solar?"
+    ],
+    "source_url": "solar-project.html",
+    "source_label": "Experience (me.md)",
+    "source_file": "me.md",
+    "metadata": {
+      "contribution_scope": "individual"
+    }
+  },
+  {
+    "stable_key": "profile.powerfactory_skill.fr",
+    "project_id": null,
+    "language": "fr",
+    "content_type": "software_skill",
+    "category": "software",
+    "title": "Compétences PowerFactory (DIgSILENT)",
+    "content": "Ibrahim utilise PowerFactory (DIgSILENT) pour la simulation de réseaux électriques et l'intégration de centrales solaires au réseau (simulations RMS, conception de SLD, validation dynamique).",
+    "keywords": [
+      "PowerFactory",
+      "DIgSILENT",
+      "Réseaux électriques",
+      "RMS"
+    ],
+    "skills": [
+      "Simulation de réseaux",
+      "Intégration réseau"
+    ],
+    "tools": [
+      "PowerFactory"
+    ],
+    "question_variants": [
+      "Quels projets utilisent PowerFactory ?",
+      "Ibrahim maîtrise-t-il PowerFactory ?"
+    ],
+    "source_url": "index.html",
+    "source_label": "Skills (me.md)",
+    "source_file": "me.md",
+    "metadata": {
+      "contribution_scope": "individual"
+    }
+  },
+  {
+    "stable_key": "profile.powerfactory_skill.en",
+    "project_id": null,
+    "language": "en",
+    "content_type": "software_skill",
+    "category": "software",
+    "title": "PowerFactory (DIgSILENT) Skills",
+    "content": "Ibrahim uses PowerFactory (DIgSILENT) for electrical grid simulations and solar plant grid integration (RMS simulations, SLD design, dynamic validation).",
+    "keywords": [
+      "PowerFactory",
+      "DIgSILENT",
+      "Electrical grids",
+      "RMS"
+    ],
+    "skills": [
+      "Grid simulation",
+      "Grid integration"
+    ],
+    "tools": [
+      "PowerFactory"
+    ],
+    "question_variants": [
+      "Which projects use PowerFactory?",
+      "Does Ibrahim know PowerFactory?"
+    ],
+    "source_url": "index.html",
+    "source_label": "Skills (me.md)",
+    "source_file": "me.md",
+    "metadata": {
+      "contribution_scope": "individual"
+    }
+  },
+  {
+    "stable_key": "profile.python_skill.fr",
+    "project_id": null,
+    "language": "fr",
+    "content_type": "software_skill",
+    "category": "python",
+    "title": "Compétences en Python",
+    "content": "Ibrahim a un niveau avancé en Python. Il utilise Pandas, NumPy et Matplotlib pour l'analyse de données, le Machine Learning (prédiction avec 92% de précision), la modélisation physique (moteur LCOH pour l'hydrogène vert) et Streamlit pour développer des applications web technico-économiques comme IBWatts.",
+    "keywords": [
+      "Python",
+      "Pandas",
+      "Streamlit",
+      "Machine Learning"
+    ],
+    "skills": [
+      "Développement Web",
+      "Analyse de données"
+    ],
+    "tools": [
+      "Python",
+      "Streamlit"
+    ],
+    "question_variants": [
+      "Quel projet démontre ses compétences en Python ?",
+      "Ibrahim code-t-il en Python ?"
+    ],
+    "source_url": "ibwatts.html",
+    "source_label": "Skills (me.md)",
+    "source_file": "me.md",
+    "metadata": {
+      "contribution_scope": "individual"
+    }
+  },
+  {
+    "stable_key": "profile.python_skill.en",
+    "project_id": null,
+    "language": "en",
+    "content_type": "software_skill",
+    "category": "python",
+    "title": "Python Skills",
+    "content": "Ibrahim has an advanced level in Python. He uses Pandas, NumPy, and Matplotlib for data analysis, Machine Learning (forecasting with 92% accuracy), physical modeling (LCOH engine for green hydrogen), and Streamlit to develop techno-economic web apps like IBWatts.",
+    "keywords": [
+      "Python",
+      "Pandas",
+      "Streamlit",
+      "Machine Learning"
+    ],
+    "skills": [
+      "Web Development",
+      "Data Analysis"
+    ],
+    "tools": [
+      "Python",
+      "Streamlit"
+    ],
+    "question_variants": [
+      "Which project demonstrates his Python skills?",
+      "Does Ibrahim code in Python?"
+    ],
+    "source_url": "ibwatts.html",
+    "source_label": "Skills (me.md)",
+    "source_file": "me.md",
+    "metadata": {
+      "contribution_scope": "individual"
+    }
+  },
+  {
+    "stable_key": "profile.bess_skill.fr",
+    "project_id": null,
+    "language": "fr",
+    "content_type": "technical_skill",
+    "category": "bess",
+    "title": "Expérience avec les BESS",
+    "content": "Ibrahim possède une vaste expérience avec les systèmes de stockage d'énergie par batterie (BESS). Il a dimensionné un BESS de 5 MWh pour Djibouti, intégré des BESS pour des projets de 580 kWc à Dakhla, et modélisé la logique EMS/BMS pour une centrale couplée de 67 MW sur MATLAB/Simulink.",
+    "keywords": [
+      "BESS",
+      "Stockage",
+      "Batterie",
+      "EMS",
+      "BMS"
+    ],
+    "skills": [
+      "Dimensionnement",
+      "Modélisation",
+      "BMS"
+    ],
+    "tools": [
+      "MATLAB",
+      "Simulink",
+      "PVSyst"
+    ],
+    "question_variants": [
+      "Quelle expérience Ibrahim a-t-il avec les BESS ?",
+      "A-t-il travaillé sur le stockage par batterie ?"
+    ],
+    "source_url": "solar-bess-67mw.html",
+    "source_label": "Skills (me.md)",
+    "source_file": "me.md",
+    "metadata": {
+      "contribution_scope": "individual"
+    }
+  },
+  {
+    "stable_key": "profile.bess_skill.en",
+    "project_id": null,
+    "language": "en",
+    "content_type": "technical_skill",
+    "category": "bess",
+    "title": "Experience with BESS",
+    "content": "Ibrahim has extensive experience with Battery Energy Storage Systems (BESS). He sized a 5 MWh BESS for Djibouti, integrated BESS for 580 kWp projects in Dakhla, and modeled EMS/BMS logic for a 67 MW coupled plant using MATLAB/Simulink.",
+    "keywords": [
+      "BESS",
+      "Storage",
+      "Battery",
+      "EMS",
+      "BMS"
+    ],
+    "skills": [
+      "Sizing",
+      "Modeling",
+      "BMS"
+    ],
+    "tools": [
+      "MATLAB",
+      "Simulink",
+      "PVSyst"
+    ],
+    "question_variants": [
+      "What experience does Ibrahim have with BESS?",
+      "Has he worked on battery storage?"
+    ],
+    "source_url": "solar-bess-67mw.html",
+    "source_label": "Skills (me.md)",
+    "source_file": "me.md",
+    "metadata": {
+      "contribution_scope": "individual"
+    }
+  },
+  {
+    "stable_key": "project.ibwatts.financial_engine.fr",
+    "project_id": null,
+    "language": "fr",
+    "content_type": "engineering_result",
+    "category": "financial_analysis",
+    "title": "Moteur Financier d'IBWatts",
+    "content": "Pour l'application IBWatts, Ibrahim a développé un moteur financier complet. Il permet de simuler les prêts bancaires, de calculer le retour sur investissement (ROI), la valeur actuelle nette (VAN) et le délai d'amortissement en se basant sur les tarifs locaux marocains (ONE/Régies), avec génération de PDF automatiques.",
+    "keywords": [
+      "Finance",
+      "ROI",
+      "VAN",
+      "Tarifs locaux",
+      "Streamlit",
+      "IBWatts"
+    ],
+    "skills": [
+      "Analyse financière",
+      "Développement Python"
+    ],
+    "tools": [
+      "Python",
+      "Streamlit"
+    ],
+    "question_variants": [
+      "Comment fonctionne IBWatts ?",
+      "Ibrahim sait-il faire de l'analyse financière ?"
+    ],
+    "source_url": "ibwatts.html",
+    "source_label": "IBWatts Project (me.md)",
+    "source_file": "me.md",
+    "metadata": {
+      "contribution_scope": "individual"
+    }
+  },
+  {
+    "stable_key": "project.67mw.ems.fr",
+    "project_id": null,
+    "language": "fr",
+    "content_type": "control_logic",
+    "category": "ems",
+    "title": "Développement EMS pour centrale 67 MW",
+    "content": "Ibrahim a conçu et modélisé la logique d'un système de gestion de l'énergie (EMS) et d'un BMS pour une centrale photovoltaïque de 67 MW couplée à un BESS. Il a utilisé MATLAB/Simulink pour simuler le contrôle en temps réel et assurer la stabilité du réseau électrique.",
+    "keywords": [
+      "EMS",
+      "BMS",
+      "MATLAB",
+      "Simulink",
+      "Contrôle en temps réel"
+    ],
+    "skills": [
+      "Modélisation",
+      "Contrôle"
+    ],
+    "tools": [
+      "MATLAB",
+      "Simulink"
+    ],
+    "question_variants": [
+      "Ibrahim a-t-il développé un EMS ?",
+      "Qu'a fait Ibrahim sur la centrale 67 MW ?"
+    ],
+    "source_url": "solar-bess-67mw.html",
+    "source_label": "67MW Project (me.md)",
+    "source_file": "me.md",
+    "metadata": {
+      "contribution_scope": "individual"
+    }
+  },
+  {
+    "stable_key": "project.67mw.ems.en",
+    "project_id": null,
+    "language": "en",
+    "content_type": "control_logic",
+    "category": "ems",
+    "title": "EMS Development for 67 MW Plant",
+    "content": "Ibrahim designed and modeled the logic for an Energy Management System (EMS) and BMS for a 67 MW PV plant coupled with a BESS. He used MATLAB/Simulink to simulate real-time control and ensure power grid stability.",
+    "keywords": [
+      "EMS",
+      "BMS",
+      "MATLAB",
+      "Simulink",
+      "Real-time control"
+    ],
+    "skills": [
+      "Modeling",
+      "Control"
+    ],
+    "tools": [
+      "MATLAB",
+      "Simulink"
+    ],
+    "question_variants": [
+      "Did Ibrahim develop an EMS?",
+      "What did Ibrahim do on the 67 MW plant?"
+    ],
+    "source_url": "solar-bess-67mw.html",
+    "source_label": "67MW Project (me.md)",
+    "source_file": "me.md",
+    "metadata": {
+      "contribution_scope": "individual"
+    }
+  },
+  {
+    "stable_key": "project.smart_house.energy_results.fr",
+    "project_id": null,
+    "language": "fr",
+    "content_type": "engineering_result",
+    "category": "thermal_engineering",
+    "title": "Résultats de la Maison Bioclimatique (Smart House)",
+    "content": "Dans le cadre du projet de maison bioclimatique intelligente, Ibrahim a conçu un système de stockage thermique intersaisonnier à base de sable. Il a aussi prototypé un système de contrôle automatisé matériel (Arduino R4, capteurs DHT22, PID) pour réguler le confort thermique.",
+    "keywords": [
+      "Stockage thermique",
+      "Sable",
+      "Arduino",
+      "IoT",
+      "PID"
+    ],
+    "skills": [
+      "Thermique du bâtiment",
+      "IoT",
+      "Régulation PID"
+    ],
+    "tools": [
+      "DesignBuilder",
+      "Arduino",
+      "Python"
+    ],
+    "question_variants": [
+      "Quels sont les résultats de la maison intelligente ?",
+      "Ibrahim a-t-il fait de l'IoT ?"
+    ],
+    "source_url": "smart_house.html",
+    "source_label": "Smart House (me.md)",
+    "source_file": "me.md",
+    "metadata": {
+      "contribution_scope": "individual"
+    }
+  },
+  {
+    "stable_key": "project.smart_house.energy_results.en",
+    "project_id": null,
+    "language": "en",
+    "content_type": "engineering_result",
+    "category": "thermal_engineering",
+    "title": "Smart House Results",
+    "content": "As part of the smart bioclimatic house project, Ibrahim designed an interseasonal sand-based thermal storage system. He also prototyped an automated hardware climate control system (Arduino R4, DHT22 sensors, PID) to regulate thermal comfort.",
+    "keywords": [
+      "Thermal storage",
+      "Sand",
+      "Arduino",
+      "IoT",
+      "PID"
+    ],
+    "skills": [
+      "Building thermal engineering",
+      "IoT",
+      "PID control"
+    ],
+    "tools": [
+      "DesignBuilder",
+      "Arduino",
+      "Python"
+    ],
+    "question_variants": [
+      "What are the Smart House results?",
+      "Did Ibrahim work with IoT?"
+    ],
+    "source_url": "smart_house.html",
+    "source_label": "Smart House (me.md)",
+    "source_file": "me.md",
+    "metadata": {
+      "contribution_scope": "individual"
+    }
+  },
+  {
+    "stable_key": "project.hydrotwin.lcoh_optimization.fr",
+    "project_id": null,
+    "language": "fr",
+    "content_type": "engineering_result",
+    "category": "hydrogen",
+    "title": "Optimisation LCOH - HydroTwin",
+    "content": "Pour le jumeau numérique Power-to-X (HydroTwin), Ibrahim a développé un moteur physique sur mesure en Python. Le résultat principal a été l'optimisation du LCOH (Levelized Cost of Hydrogen) en prenant en compte l'irradiation marocaine et les contraintes de réseau pour la chaîne PV - Électrolyseur - LOHC.",
+    "keywords": [
+      "LCOH",
+      "LOHC",
+      "Hydrogène",
+      "Power-to-X",
+      "Optimisation"
+    ],
+    "skills": [
+      "Modélisation hydrogène",
+      "Analyse LCOH"
+    ],
+    "tools": [
+      "Python"
+    ],
+    "question_variants": [
+      "Comment le LCOH a-t-il été optimisé ?",
+      "Qu'est-ce que le projet HydroTwin ?"
+    ],
+    "source_url": "hydrotwin.html",
+    "source_label": "HydroTwin (me.md)",
+    "source_file": "me.md",
+    "metadata": {
+      "contribution_scope": "individual"
+    }
+  },
+  {
+    "stable_key": "contact.info.fr",
+    "project_id": null,
+    "language": "fr",
+    "content_type": "contact",
+    "category": "contact",
+    "title": "Coordonnées",
+    "content": "Vous pouvez contacter Ibrahim Khallouq par téléphone au +212 650 93 18 50 ou par email à khallouk.ibrahim@uir.ac.ma. Son LinkedIn est linkedin.com/in/ibrahim-khallouq.",
+    "keywords": [
+      "Contact",
+      "Email",
+      "Téléphone",
+      "LinkedIn"
+    ],
+    "skills": [],
+    "tools": [],
+    "question_variants": [
+      "Comment contacter Ibrahim ?",
+      "Quel est son email ?"
+    ],
+    "source_url": "index.html",
+    "source_label": "Contact (me.md)",
+    "source_file": "me.md",
+    "metadata": {
+      "contribution_scope": "individual"
+    }
+  },
+  {
+    "stable_key": "contact.info.en",
+    "project_id": null,
+    "language": "en",
+    "content_type": "contact",
+    "category": "contact",
+    "title": "Contact Information",
+    "content": "You can contact Ibrahim Khallouq by phone at +212 650 93 18 50 or by email at khallouk.ibrahim@uir.ac.ma. His LinkedIn profile is linkedin.com/in/ibrahim-khallouq.",
+    "keywords": [
+      "Contact",
+      "Email",
+      "Phone",
+      "LinkedIn"
+    ],
+    "skills": [],
+    "tools": [],
+    "question_variants": [
+      "How can I contact Ibrahim?",
+      "What is his email?"
+    ],
+    "source_url": "index.html",
+    "source_label": "Contact (me.md)",
+    "source_file": "me.md",
+    "metadata": {
+      "contribution_scope": "individual"
+    }
+  }
+]

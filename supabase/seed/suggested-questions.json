@@ -1,0 +1,90 @@
+[
+  {
+    "stable_key": "sq_fr_1",
+    "language": "fr",
+    "label": "BESS & Stockage",
+    "question": "Quelle expérience Ibrahim a-t-il avec les BESS ?",
+    "category": "bess",
+    "icon": "battery-charging"
+  },
+  {
+    "stable_key": "sq_fr_2",
+    "language": "fr",
+    "label": "PowerFactory",
+    "question": "Quels projets utilisent PowerFactory ?",
+    "category": "software",
+    "icon": "cpu"
+  },
+  {
+    "stable_key": "sq_fr_3",
+    "language": "fr",
+    "label": "Micro-réseaux (EMS)",
+    "question": "Ibrahim a-t-il développé un EMS ?",
+    "category": "ems",
+    "icon": "activity"
+  },
+  {
+    "stable_key": "sq_fr_4",
+    "language": "fr",
+    "label": "Compétences Python",
+    "question": "Quel projet démontre ses compétences en Python ?",
+    "category": "python",
+    "icon": "code"
+  },
+  {
+    "stable_key": "sq_fr_5",
+    "language": "fr",
+    "label": "Smart House",
+    "question": "Quels sont les résultats de la maison intelligente ?",
+    "category": "thermal",
+    "icon": "home"
+  },
+  {
+    "stable_key": "sq_fr_6",
+    "language": "fr",
+    "label": "Contact",
+    "question": "Comment contacter Ibrahim ?",
+    "category": "contact",
+    "icon": "mail"
+  },
+  {
+    "stable_key": "sq_en_1",
+    "language": "en",
+    "label": "BESS Experience",
+    "question": "What experience does Ibrahim have with BESS?",
+    "category": "bess",
+    "icon": "battery-charging"
+  },
+  {
+    "stable_key": "sq_en_2",
+    "language": "en",
+    "label": "PowerFactory",
+    "question": "Which projects use PowerFactory?",
+    "category": "software",
+    "icon": "cpu"
+  },
+  {
+    "stable_key": "sq_en_3",
+    "language": "en",
+    "label": "Microgrids (EMS)",
+    "question": "Did Ibrahim develop an EMS?",
+    "category": "ems",
+    "icon": "activity"
+  },
+  {
+    "stable_key": "sq_en_4",
+    "language": "en",
+    "label": "Python Skills",
+    "question": "Which project demonstrates his Python skills?",
+    "category": "python",
+    "icon": "code"
+  },
+  {
+    "stable_key": "sq_en_5",
+    "language": "en",
+    "label": "Smart House",
+    "question": "What are the Smart House results?",
+    "category": "thermal",
+    "icon": "home"
+  }
+]

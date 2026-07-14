@@ -568,6 +568,222 @@
             html { scroll-behavior: auto; }
             .shiny { animation: none; }
         }
+    
+        /* ============================================================
+           IK AURA — isolated AI assistant UI (portfolio untouched)
+           ============================================================ */
+        #ik-assistant-root {
+            --aura-indigo: #6366f1;
+            --aura-violet: #a855f7;
+            --aura-cyan: #22d3ee;
+            --aura-green: #34d399;
+            --aura-ink: rgba(5, 5, 18, .965);
+            position: fixed;
+            right: 24px;
+            bottom: 22px;
+            z-index: 5000;
+            font-family: var(--font);
+            line-height: 1.5;
+            isolation: isolate;
+        }
+        .ik-chat-launcher {
+            position: relative;
+            width: 76px;
+            height: 76px;
+            border: 0;
+            padding: 0;
+            border-radius: 26px;
+            color: #fff;
+            cursor: pointer;
+            background: transparent;
+            filter: drop-shadow(0 18px 30px rgba(40,34,120,.42));
+            transition: transform .3s cubic-bezier(.22,1,.36,1), opacity .2s;
+        }
+        .ik-chat-launcher:hover { transform: translateY(-5px) scale(1.025); }
+        .ik-chat-launcher:focus-visible, .ik-chat-icon-btn:focus-visible, .ik-chat-chip:focus-visible,
+        .ik-chat-send:focus-visible, .ik-chat-action:focus-visible, .ik-chat-textarea:focus-visible {
+            outline: 2px solid var(--aura-cyan); outline-offset: 4px;
+        }
+        .ik-aura-orbit {
+            position: absolute; inset: 2px; border-radius: 25px;
+            background: conic-gradient(from 0deg, var(--aura-cyan), var(--aura-indigo), var(--aura-violet), var(--aura-cyan));
+            animation: ikAuraSpin 5s linear infinite;
+        }
+        .ik-aura-launch-core {
+            position: absolute; inset: 4px; border-radius: 23px;
+            overflow: hidden;
+            display: grid; place-items: center;
+            background:
+                radial-gradient(circle at 50% 10%, rgba(255,255,255,.24), transparent 30%),
+                linear-gradient(145deg, #282765, #100f32 68%);
+            border: 1px solid rgba(255,255,255,.17);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.18);
+        }
+        .ik-aura-launch-core::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(110deg, transparent 25%, rgba(255,255,255,.11) 45%, transparent 65%);
+            transform: translateX(-130%); animation: ikAuraSweep 4s ease-in-out infinite;
+        }
+        @keyframes ikAuraSpin { to { transform: rotate(360deg); } }
+        @keyframes ikAuraSweep { 0%,55% { transform: translateX(-130%); } 82%,100% { transform: translateX(130%); } }
+
+        /* CSS-only AI mascot */
+        .ik-mascot { position: relative; width: 49px; height: 49px; z-index: 2; }
+        .ik-mascot-antenna { position: absolute; left: 23px; top: 0; width: 3px; height: 9px; border-radius: 5px; background: #c9ccff; transform-origin: bottom; animation: ikAntenna 2.2s ease-in-out infinite; }
+        .ik-mascot-antenna::before { content: ''; position: absolute; width: 7px; height: 7px; left: -2px; top: -4px; border-radius: 50%; background: var(--aura-cyan); box-shadow: 0 0 12px var(--aura-cyan); }
+        .ik-mascot-head { position: absolute; left: 5px; top: 9px; width: 39px; height: 29px; border-radius: 13px 13px 15px 15px; background: linear-gradient(155deg,#fbfbff,#bfc4ff); box-shadow: inset 0 -4px 9px rgba(49,43,140,.2), 0 4px 13px rgba(0,0,0,.25); }
+        .ik-mascot-face { position: absolute; inset: 5px 5px 6px; border-radius: 9px; background: #17163c; box-shadow: inset 0 1px 5px rgba(0,0,0,.7); }
+        .ik-mascot-eye { position: absolute; top: 8px; width: 6px; height: 6px; border-radius: 50%; background: #78f1ff; box-shadow: 0 0 8px #22d3ee; animation: ikBlink 4.2s infinite; }
+        .ik-mascot-eye.left { left: 7px; } .ik-mascot-eye.right { right: 7px; }
+        .ik-mascot-smile { position: absolute; left: 12px; top: 16px; width: 7px; height: 3px; border-bottom: 2px solid #9af8ff; border-radius: 0 0 8px 8px; }
+        .ik-mascot-body { position: absolute; left: 14px; top: 36px; width: 22px; height: 12px; border-radius: 8px 8px 5px 5px; background: linear-gradient(150deg,#a9afff,#686be8); }
+        /* Articulated waving arm: shoulder -> upper arm -> rounded hand */
+        .ik-mascot-hand {
+            position: absolute;
+            left: 33px;
+            top: 35px;
+            width: 15px;
+            height: 7px;
+            border-radius: 7px;
+            background: linear-gradient(180deg, #b7bcff, #858ce9);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.55), 0 2px 5px rgba(35,31,104,.28);
+            transform-origin: 2px 50%;
+            animation: ikWave 2.15s cubic-bezier(.45,0,.25,1) infinite;
+            z-index: -1;
+        }
+        .ik-mascot-hand::before {
+            content: '';
+            position: absolute;
+            left: -4px;
+            top: 0;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #8f96ed;
+            border: 1px solid rgba(255,255,255,.3);
+            box-shadow: 0 1px 4px rgba(28,25,84,.35);
+        }
+        .ik-mascot-hand::after {
+            content: '';
+            position: absolute;
+            right: -7px;
+            top: -4px;
+            width: 10px;
+            height: 13px;
+            border-radius: 7px 7px 6px 6px;
+            background: linear-gradient(150deg, #ffffff, #cfd3ff 72%);
+            border: 1px solid rgba(113,119,208,.28);
+            box-shadow: inset 0 1px 0 #fff, 0 3px 7px rgba(28,25,84,.28);
+            transform: rotate(8deg);
+        }
+        @keyframes ikWave {
+            0%, 48%, 100% { transform: rotate(-17deg); }
+            10% { transform: rotate(-72deg); }
+            20% { transform: rotate(-39deg); }
+            30% { transform: rotate(-76deg); }
+            40% { transform: rotate(-31deg); }
+        }
+        @keyframes ikBlink { 0%,45%,49%,100% { transform: scaleY(1); } 47% { transform: scaleY(.15); } }
+        @keyframes ikAntenna { 0%,100% { transform: rotate(-5deg); } 50% { transform: rotate(7deg); } }
+        .ik-chat-status-dot { position: absolute; right: 3px; top: 4px; z-index: 5; width: 12px; height: 12px; border-radius: 50%; background: var(--aura-green); border: 3px solid #10102f; box-shadow: 0 0 14px rgba(52,211,153,.8); }
+        .ik-chat-unread { position: absolute; left: -4px; top: -5px; z-index: 8; min-width: 22px; height: 22px; display: none; place-items: center; padding: 0 5px; border-radius: 12px; background: #ef4444; border: 2px solid var(--bg); color: #fff; font-size: .63rem; font-weight: 800; }
+        .ik-chat-unread.is-visible { display: grid; }
+
+        .ik-chat-window {
+            position: absolute; right: 0; bottom: 92px;
+            width: min(440px, calc(100vw - 30px));
+            height: min(700px, calc(100vh - 126px)); min-height: 520px;
+            overflow: hidden;
+            display: grid; grid-template-rows: auto auto 1fr auto;
+            border: 1px solid rgba(159,163,255,.2); border-radius: 30px;
+            background:
+                radial-gradient(circle at 88% -5%, rgba(99,102,241,.28), transparent 31%),
+                radial-gradient(circle at -8% 70%, rgba(168,85,247,.15), transparent 37%),
+                var(--aura-ink);
+            -webkit-backdrop-filter: blur(28px) saturate(145%); backdrop-filter: blur(28px) saturate(145%);
+            box-shadow: 0 34px 110px rgba(0,0,0,.66), 0 0 0 1px rgba(255,255,255,.035) inset;
+            opacity: 0; visibility: hidden; pointer-events: none;
+            transform: translateY(22px) scale(.94); transform-origin: bottom right;
+            transition: opacity .28s, transform .38s cubic-bezier(.16,1,.3,1), visibility .28s;
+        }
+        .ik-chat-window::before { content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 0; opacity: .24; background-image: radial-gradient(rgba(255,255,255,.38) .6px, transparent .75px); background-size: 18px 18px; mask-image: linear-gradient(to bottom,#000,transparent 44%); }
+        .ik-chat-window.is-open { opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0) scale(1); }
+        .ik-chat-header { position: relative; z-index: 2; display: flex; align-items: center; gap: 12px; padding: 17px 18px 13px; border-bottom: 1px solid rgba(255,255,255,.065); }
+        .ik-chat-avatar { width: 44px; height: 44px; border-radius: 15px; display: grid; place-items: center; background: linear-gradient(145deg,rgba(99,102,241,.95),rgba(168,85,247,.85)); box-shadow: 0 9px 28px rgba(99,102,241,.28), inset 0 1px 0 rgba(255,255,255,.25); color:#fff; font-family:var(--font-display); font-size:.86rem; font-weight:800; }
+        .ik-chat-heading { min-width: 0; flex: 1; }
+        .ik-chat-heading strong { display:block; color:#f6f6ff; font-family:var(--font-display); font-size:1rem; }
+        .ik-chat-heading span { display:flex; align-items:center; gap:6px; color:#9494af; font-size:.71rem; }
+        .ik-chat-heading span::before { content:''; width:6px; height:6px; border-radius:50%; background:var(--aura-green); box-shadow:0 0 9px rgba(52,211,153,.8); }
+        .ik-chat-controls { display:flex; gap:4px; }
+        .ik-chat-icon-btn { width:35px; height:35px; border:0; border-radius:11px; display:grid; place-items:center; color:#a0a0b8; background:transparent; cursor:pointer; transition:.2s; }
+        .ik-chat-icon-btn:hover { color:#fff; background:rgba(255,255,255,.075); }
+
+        .ik-aura-intro { position:relative; z-index:1; margin: 12px 14px 0; padding: 16px 16px 14px 82px; min-height:87px; overflow:hidden; border:1px solid rgba(120,124,255,.18); border-radius:20px; background:linear-gradient(120deg,rgba(99,102,241,.13),rgba(168,85,247,.055)); }
+        .ik-aura-intro::after { content:''; position:absolute; inset:auto -34px -52px auto; width:130px; height:130px; border-radius:50%; border:1px solid rgba(34,211,238,.13); box-shadow:0 0 0 20px rgba(99,102,241,.035),0 0 0 42px rgba(168,85,247,.025); }
+        .ik-aura-intro-mascot { position:absolute; left:18px; top:17px; transform:scale(1.1); }
+        .ik-aura-intro h3 { position:relative; z-index:1; color:#fff; font-family:var(--font-display); font-size:.93rem; line-height:1.3; margin:0 0 3px; }
+        .ik-aura-intro p { position:relative; z-index:1; color:#aaaac0; font-size:.69rem; line-height:1.45; margin:0; }
+        .ik-aura-badge { position:relative; z-index:1; display:inline-flex; align-items:center; gap:5px; margin-top:7px; padding:3px 8px; border:1px solid rgba(34,211,238,.18); border-radius:99px; color:#83eefa; background:rgba(34,211,238,.055); font-size:.59rem; font-weight:700; letter-spacing:.04em; text-transform:uppercase; }
+        .ik-aura-badge::before { content:''; width:5px; height:5px; border-radius:50%; background:#22d3ee; box-shadow:0 0 8px #22d3ee; }
+
+        .ik-chat-messages { position:relative; z-index:1; overflow-y:auto; overscroll-behavior:contain; padding:15px 15px 8px; scroll-behavior:smooth; }
+        .ik-chat-messages::-webkit-scrollbar { width:4px; } .ik-chat-messages::-webkit-scrollbar-thumb { background:rgba(255,255,255,.13); border-radius:5px; }
+        .ik-chat-message { display:flex; gap:9px; margin-bottom:15px; animation:ikMessageIn .3s ease both; }
+        .ik-chat-message.user { justify-content:flex-end; }
+        @keyframes ikMessageIn { from { opacity:0; transform:translateY(8px) scale(.98); } }
+        .ik-chat-mini-avatar { width:29px; height:29px; margin-top:3px; flex:0 0 auto; display:grid; place-items:center; border-radius:10px; color:#d2d4ff; background:linear-gradient(145deg,rgba(99,102,241,.25),rgba(168,85,247,.15)); border:1px solid rgba(120,124,255,.25); font-size:.76rem; box-shadow:0 5px 16px rgba(0,0,0,.18); }
+        .ik-chat-message-body { max-width:86%; min-width:0; }
+        .ik-chat-bubble { padding:11px 13px; border:1px solid rgba(255,255,255,.075); border-radius:7px 18px 18px 18px; color:#ddddeb; background:rgba(255,255,255,.046); font-size:.84rem; white-space:pre-wrap; overflow-wrap:anywhere; box-shadow:0 8px 24px rgba(0,0,0,.12); }
+        .ik-chat-message.user .ik-chat-bubble { border-radius:18px 18px 7px 18px; border-color:rgba(124,127,245,.42); color:#fff; background:linear-gradient(145deg,rgba(99,102,241,.95),rgba(116,70,205,.92)); box-shadow:0 9px 25px rgba(67,54,180,.22); }
+        .ik-chat-meta { margin-top:5px; color:#64647d; font-size:.61rem; } .ik-chat-message.user .ik-chat-meta { text-align:right; }
+        .ik-chat-sources { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+        .ik-chat-action { max-width:100%; padding:6px 10px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; border:1px solid rgba(99,102,241,.28); border-radius:999px; color:#c9caff; background:rgba(99,102,241,.09); text-decoration:none; font-size:.67rem; transition:.2s; }
+        .ik-chat-action:hover { color:#fff; border-color:rgba(124,127,245,.58); background:rgba(99,102,241,.17); }
+        .ik-chat-thinking { display:inline-flex; align-items:center; gap:4px; min-width:52px; }
+        .ik-chat-thinking span { width:5px; height:5px; border-radius:50%; background:#a9aafe; animation:ikTyping 1.15s infinite ease-in-out; }
+        .ik-chat-thinking span:nth-child(2){animation-delay:.13s}.ik-chat-thinking span:nth-child(3){animation-delay:.26s}
+        @keyframes ikTyping { 0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-4px);opacity:1} }
+        .ik-chat-composer-wrap { position:relative; z-index:2; padding:10px 12px 12px; border-top:1px solid rgba(255,255,255,.065); background:rgba(4,4,15,.62); }
+        .ik-chat-suggestions { display:flex; gap:7px; overflow-x:auto; padding:2px 1px 7px; scrollbar-width:none; } .ik-chat-suggestions::-webkit-scrollbar{display:none}
+        .ik-chat-chip { flex:0 0 auto; max-width:260px; padding:7px 11px; border:1px solid rgba(255,255,255,.09); border-radius:999px; color:#b3b3c8; background:rgba(255,255,255,.035); font:inherit; font-size:.68rem; cursor:pointer; transition:.2s; }
+        .ik-chat-chip:hover { color:#fff; border-color:rgba(99,102,241,.5); background:rgba(99,102,241,.11); }
+        .ik-chat-composer { display:flex; align-items:flex-end; gap:8px; padding:7px 7px 7px 12px; border:1px solid rgba(255,255,255,.11); border-radius:17px; background:rgba(255,255,255,.045); transition:.2s; }
+        .ik-chat-composer:focus-within { border-color:rgba(99,102,241,.55); box-shadow:0 0 0 3px rgba(99,102,241,.09),0 10px 30px rgba(0,0,0,.14); }
+        .ik-chat-textarea { width:100%; min-height:36px; max-height:96px; resize:none; overflow-y:auto; border:0; outline:0; color:#f4f4f8; background:transparent; font:inherit; font-size:.82rem; line-height:1.45; padding:8px 0 5px; }
+        .ik-chat-textarea::placeholder { color:#686880; }
+        .ik-chat-send { width:39px; height:39px; flex:0 0 auto; border:0; border-radius:13px; display:grid; place-items:center; cursor:pointer; color:#fff; background:linear-gradient(145deg,var(--aura-indigo),#8a4bd7); box-shadow:0 8px 22px rgba(99,102,241,.29); transition:.2s; }
+        .ik-chat-send:hover { transform:translateY(-2px); box-shadow:0 11px 27px rgba(99,102,241,.36); } .ik-chat-send:disabled{cursor:not-allowed;opacity:.4;transform:none}
+        .ik-chat-footnote { margin-top:6px; color:#55556d; text-align:center; font-size:.58rem; }
+
+
+        /* Aura bilingual arrival teaser — chatbot only */
+        .ik-aura-teaser { position:absolute; right:88px; bottom:8px; width:max-content; max-width:min(310px,calc(100vw - 116px)); display:flex; align-items:center; gap:10px; padding:11px 15px 11px 12px; border:1px solid rgba(124,127,245,.30); border-radius:18px 18px 5px 18px; color:#f4f4ff; background:linear-gradient(135deg,rgba(99,102,241,.16),rgba(168,85,247,.08)),rgba(10,10,29,.95); backdrop-filter:blur(20px) saturate(145%); box-shadow:0 16px 45px rgba(0,0,0,.42),inset 0 1px 0 rgba(255,255,255,.08); font:600 .78rem/1.4 var(--font); cursor:pointer; opacity:0; visibility:hidden; pointer-events:none; transform:translate(12px,6px) scale(.96); transition:opacity .32s,transform .4s cubic-bezier(.16,1,.3,1),visibility .32s; }
+        .ik-aura-teaser::after { content:''; position:absolute; right:-7px; bottom:12px; width:13px; height:13px; border-top:1px solid rgba(124,127,245,.25); border-right:1px solid rgba(124,127,245,.25); background:#11102d; transform:rotate(45deg); }
+        .ik-aura-teaser.is-visible { opacity:1; visibility:visible; pointer-events:auto; transform:translate(0,0) scale(1); }
+        .ik-aura-teaser-icon { position:relative; z-index:1; width:28px; height:28px; flex:0 0 auto; display:grid; place-items:center; border-radius:9px; color:#fff; background:linear-gradient(145deg,var(--aura-indigo),var(--aura-violet)); box-shadow:0 6px 18px rgba(99,102,241,.3); }
+        .ik-aura-teaser-text { position:relative; z-index:1; }
+        /* Suggested questions: touch swipe, mouse wheel, drag and visible scrollbar */
+        .ik-chat-suggestions { position:relative; overflow-x:auto!important; overflow-y:hidden; overscroll-behavior-x:contain; scroll-behavior:smooth; scrollbar-width:thin!important; scrollbar-color:rgba(124,127,245,.55) rgba(255,255,255,.04); cursor:grab; touch-action:pan-x; -webkit-overflow-scrolling:touch; padding-bottom:9px!important; }
+        .ik-chat-suggestions:active { cursor:grabbing; }
+        .ik-chat-suggestions::-webkit-scrollbar { display:block!important; height:4px; }
+        .ik-chat-suggestions::-webkit-scrollbar-track { background:rgba(255,255,255,.035); border-radius:9px; }
+        .ik-chat-suggestions::-webkit-scrollbar-thumb { background:linear-gradient(90deg,var(--aura-indigo),var(--aura-violet)); border-radius:9px; }
+        .ik-chat-suggestions::after { content:''; flex:0 0 7px; }
+        @media (max-width:600px) { .ik-aura-teaser { position:fixed; right:84px; bottom:max(18px,env(safe-area-inset-bottom)); max-width:calc(100vw - 106px); font-size:.72rem; padding:10px 12px 10px 10px; } }
+        @media (max-width:600px) {
+            #ik-assistant-root { right:12px; bottom:max(12px,env(safe-area-inset-bottom)); }
+            .ik-chat-launcher { width:68px; height:68px; }
+            .ik-chat-window { position:fixed; inset:8px 8px max(8px,env(safe-area-inset-bottom)); width:auto; height:auto; min-height:0; border-radius:25px; transform-origin:bottom center; }
+            .ik-chat-window.is-open + .ik-chat-launcher { opacity:0; pointer-events:none; }
+            .ik-chat-header { padding-top:max(15px,env(safe-area-inset-top)); }
+            .ik-aura-intro { margin:10px 10px 0; }
+            .ik-chat-message-body { max-width:89%; }
+        }
+        @media (prefers-reduced-motion:reduce) {
+            .ik-aura-orbit,.ik-aura-launch-core::after,.ik-mascot-hand,.ik-mascot-eye,.ik-mascot-antenna,.ik-chat-thinking span { animation:none!important; }
+            .ik-chat-window,.ik-chat-message,.ik-chat-launcher { transition:none!important; }
+        }
+
     </style>
 </head>
 <body>
@@ -921,6 +1137,42 @@
         <p>© 2026 Ibrahim Khallouq — Ingénieur en Énergétique et Énergies Renouvelables</p>
     </footer>
 
+
+    <!-- IK Aura Assistant — additive interface; portfolio structure unchanged -->
+    <div id="ik-assistant-root">
+        <section id="ik-chat-window" class="ik-chat-window" role="dialog" aria-modal="false" aria-labelledby="ik-chat-title" aria-hidden="true">
+            <header class="ik-chat-header">
+                <div class="ik-chat-avatar" aria-hidden="true">IK</div>
+                <div class="ik-chat-heading"><strong id="ik-chat-title">IK Aura</strong><span id="ik-chat-subtitle">Assistant d’ingénierie · FR / EN</span></div>
+                <div class="ik-chat-controls">
+                    <button id="ik-chat-reset" class="ik-chat-icon-btn" type="button" title="Nouvelle conversation" aria-label="Nouvelle conversation"><i class="ph-bold ph-arrow-counter-clockwise"></i></button>
+                    <button id="ik-chat-close" class="ik-chat-icon-btn" type="button" title="Fermer" aria-label="Fermer l’assistant"><i class="ph-bold ph-x"></i></button>
+                </div>
+            </header>
+            <div class="ik-aura-intro">
+                <div class="ik-aura-intro-mascot"><span class="ik-mascot" aria-hidden="true"><span class="ik-mascot-antenna"></span><span class="ik-mascot-head"><span class="ik-mascot-face"><span class="ik-mascot-eye left"></span><span class="ik-mascot-eye right"></span><span class="ik-mascot-smile"></span></span></span><span class="ik-mascot-body"></span><span class="ik-mascot-hand"></span></span></div>
+                <h3>Bonjour, je suis Aura.</h3>
+                <p>Votre guide intelligent pour explorer les projets, compétences et résultats d’Ibrahim.</p>
+                <span class="ik-aura-badge">Portfolio vérifié</span>
+            </div>
+            <div id="ik-chat-messages" class="ik-chat-messages" role="log" aria-live="polite" aria-relevant="additions"></div>
+            <div class="ik-chat-composer-wrap">
+                <div id="ik-chat-suggestions" class="ik-chat-suggestions" aria-label="Questions suggérées"></div>
+                <form id="ik-chat-form" class="ik-chat-composer">
+                    <textarea id="ik-chat-input" class="ik-chat-textarea" rows="1" maxlength="500" placeholder="Posez une question sur mon parcours…" aria-label="Votre question"></textarea>
+                    <button id="ik-chat-send" class="ik-chat-send" type="submit" aria-label="Envoyer" disabled><i class="ph-bold ph-arrow-up"></i></button>
+                </form>
+                <div class="ik-chat-footnote">Entrée pour envoyer · Maj + Entrée pour une nouvelle ligne</div>
+            </div>
+        </section>
+        <button id="ik-aura-teaser" class="ik-aura-teaser" type="button" aria-label="Open IK Aura assistant" aria-live="polite">
+            <span class="ik-aura-teaser-icon" aria-hidden="true"><i class="ph-bold ph-sparkle"></i></span>
+            <span id="ik-aura-teaser-text" class="ik-aura-teaser-text">I'm Aura — ask me anything about Ibrahim.</span>
+        </button>
+        <button id="ik-chat-launcher" class="ik-chat-launcher" type="button" aria-label="Ouvrir IK Aura" aria-expanded="false" aria-controls="ik-chat-window">
+            <span id="ik-chat-unread" class="ik-chat-unread">1</span><span class="ik-aura-orbit"></span><span class="ik-aura-launch-core"><span class="ik-mascot" aria-hidden="true"><span class="ik-mascot-antenna"></span><span class="ik-mascot-head"><span class="ik-mascot-face"><span class="ik-mascot-eye left"></span><span class="ik-mascot-eye right"></span><span class="ik-mascot-smile"></span></span></span><span class="ik-mascot-body"></span><span class="ik-mascot-hand"></span></span></span><span class="ik-chat-status-dot" aria-hidden="true"></span>
+        </button>
+    </div>
     <!-- ═══════════════════ SCRIPTS ═══════════════════ -->
     <script>
         // ── GSAP ──
@@ -1136,5 +1388,349 @@
             });
         });
     </script>
+
+    <script>
+        // ── IK Engineering Assistant ──
+        (() => {
+            'use strict';
+            const API_URL = 'https://uftzoxeqlqflmxavhijn.supabase.co/functions/v1/portfolio-chat';
+            const els = {
+                root: document.getElementById('ik-assistant-root'),
+                window: document.getElementById('ik-chat-window'),
+                launcher: document.getElementById('ik-chat-launcher'),
+                close: document.getElementById('ik-chat-close'),
+                reset: document.getElementById('ik-chat-reset'),
+                messages: document.getElementById('ik-chat-messages'),
+                form: document.getElementById('ik-chat-form'),
+                input: document.getElementById('ik-chat-input'),
+                send: document.getElementById('ik-chat-send'),
+                suggestions: document.getElementById('ik-chat-suggestions'),
+                unread: document.getElementById('ik-chat-unread'),
+                teaser: document.getElementById('ik-aura-teaser'),
+                teaserText: document.getElementById('ik-aura-teaser-text')
+            };
+            if (!els.root || !els.window || !els.form) return;
+
+            const state = {
+                open: false,
+                loading: false,
+                conversation: [],
+                language: document.documentElement.lang?.toLowerCase().startsWith('fr') ? 'fr' : 'en',
+                sessionId: getSessionId()
+            };
+            const copy = {
+                fr: {
+                    welcome: "Bonjour ! Aura est prête. Explorez les projets, compétences, outils et résultats d’Ibrahim — posez simplement votre question.",
+                    placeholder: 'Posez une question sur mon parcours…',
+                    loading: 'Recherche dans le portfolio vérifié…',
+                    unavailable: "L’assistant est temporairement indisponible. Vous pouvez réessayer dans quelques instants.",
+                    rate: "La limite de requêtes a été atteinte. Merci de réessayer plus tard.",
+                    source: 'Source',
+                    reset: 'Conversation réinitialisée.',
+                    suggestions: [
+                        'Qui est Ibrahim ?',
+                        'Quels sont ses principaux projets ?',
+                        'Quelle est sa formation ?',
+                        'Quelle est son expérience professionnelle ?',
+                        'Quelle expérience a-t-il chez Novec ?',
+                        'Quel a été son rôle à Dakhla ?',
+                        'Quels projets utilisent PowerFactory ?',
+                        'Quelle expérience a-t-il avec les BESS ?',
+                        'Comment a-t-il développé l’EMS ?',
+                        'Quels projets démontrent ses compétences Python ?',
+                        'Comment utilise-t-il PVSyst ?',
+                        'Quelle expérience a-t-il avec HOMER Pro ?',
+                        'Comment utilise-t-il MATLAB/Simulink ?',
+                        'Qu’est-ce qu’IBWatts ?',
+                        'Comment fonctionne HydroTwin ?',
+                        'Quels sont les résultats de la maison intelligente ?',
+                        'Quel projet démontre le mieux ses compétences Python ?',
+                        'Quelles sont ses compétences en conception électrique ?',
+                        'Quelle est son expérience en Machine Learning ?',
+                        'Comment contacter Ibrahim ?'
+                    ]
+                },
+                en: {
+                    welcome: "Hello! Aura is ready. Explore Ibrahim’s projects, skills, tools, and technical results — just ask a question.",
+                    placeholder: 'Ask about my engineering experience…',
+                    loading: 'Searching the verified portfolio…',
+                    unavailable: 'The assistant is temporarily unavailable. Please try again shortly.',
+                    rate: 'The request limit has been reached. Please try again later.',
+                    source: 'Source',
+                    reset: 'Conversation reset.',
+                    suggestions: [
+                        'Who is Ibrahim?',
+                        'What are his main projects?',
+                        'What is his educational background?',
+                        'What is his professional experience?',
+                        'What experience does he have at Novec?',
+                        'What was his role in Dakhla?',
+                        'Which projects use PowerFactory?',
+                        'What experience does he have with BESS?',
+                        'How did he develop the EMS?',
+                        'Which projects demonstrate Python skills?',
+                        'How does he use PVSyst?',
+                        'What experience does he have with HOMER Pro?',
+                        'How does he use MATLAB/Simulink?',
+                        'What is IBWatts?',
+                        'How does HydroTwin work?',
+                        'What are the Smart House results?',
+                        'Which project best demonstrates his Python skills?',
+                        'What are his electrical design skills?',
+                        'What is his Machine Learning experience?',
+                        'How can I contact Ibrahim?'
+                    ]
+                }
+            };
+
+            function getSessionId() {
+                const key = 'ik_portfolio_chat_session';
+                let id = sessionStorage.getItem(key);
+                if (!id) {
+                    id = 'web_' + (crypto.randomUUID ? crypto.randomUUID().replace(/-/g, '') : Date.now().toString(36) + Math.random().toString(36).slice(2));
+                    sessionStorage.setItem(key, id);
+                }
+                return id;
+            }
+
+            function timeNow() {
+                return new Intl.DateTimeFormat(state.language === 'fr' ? 'fr-FR' : 'en-GB', { hour: '2-digit', minute: '2-digit' }).format(new Date());
+            }
+
+            function openChat() {
+                hideArrivalTeaser();
+                state.open = true;
+                els.window.classList.add('is-open');
+                els.window.setAttribute('aria-hidden', 'false');
+                els.launcher.setAttribute('aria-expanded', 'true');
+                els.unread.classList.remove('is-visible');
+                if (!els.messages.children.length) {
+                    addAssistantMessage(copy[state.language].welcome, { mode: 'verified portfolio' });
+                    renderSuggestions(copy[state.language].suggestions);
+                }
+                setTimeout(() => els.input.focus({ preventScroll: true }), 180);
+            }
+
+            function closeChat() {
+                state.open = false;
+                els.window.classList.remove('is-open');
+                els.window.setAttribute('aria-hidden', 'true');
+                els.launcher.setAttribute('aria-expanded', 'false');
+                els.launcher.focus({ preventScroll: true });
+            }
+
+            function resetChat() {
+                state.conversation = [];
+                els.messages.replaceChildren();
+                addAssistantMessage(copy[state.language].welcome, { mode: 'verified portfolio' });
+                renderSuggestions(copy[state.language].suggestions);
+                els.input.value = '';
+                resizeInput();
+                updateSendState();
+            }
+
+            function createMessage(role, text) {
+                const wrapper = document.createElement('div');
+                wrapper.className = `ik-chat-message ${role}`;
+                if (role === 'assistant') {
+                    const avatar = document.createElement('div');
+                    avatar.className = 'ik-chat-mini-avatar';
+                    avatar.setAttribute('aria-hidden', 'true');
+                    const icon = document.createElement('i');
+                    icon.className = 'ph-bold ph-lightning';
+                    avatar.appendChild(icon);
+                    wrapper.appendChild(avatar);
+                }
+                const body = document.createElement('div');
+                body.className = 'ik-chat-message-body';
+                const bubble = document.createElement('div');
+                bubble.className = 'ik-chat-bubble';
+                bubble.textContent = text;
+                const meta = document.createElement('div');
+                meta.className = 'ik-chat-meta';
+                meta.textContent = role === 'assistant' ? `IK Aura · ${timeNow()}` : timeNow();
+                body.append(bubble, meta);
+                wrapper.appendChild(body);
+                return { wrapper, body, bubble, meta };
+            }
+
+            function addUserMessage(text) {
+                const msg = createMessage('user', text);
+                els.messages.appendChild(msg.wrapper);
+                scrollToLatest();
+            }
+
+            function addAssistantMessage(text, options = {}) {
+                const msg = createMessage('assistant', text);
+                if (options.sources?.length) {
+                    const sources = document.createElement('div');
+                    sources.className = 'ik-chat-sources';
+                    options.sources.slice(0, 4).forEach((source) => {
+                        if (!source?.url) return;
+                        const link = document.createElement('a');
+                        link.className = 'ik-chat-action';
+                        link.href = source.url;
+                        link.textContent = source.label || copy[state.language].source;
+                        link.title = source.label || copy[state.language].source;
+                        if (/^https:\/\//i.test(source.url)) { link.target = '_blank'; link.rel = 'noopener noreferrer'; }
+                        sources.appendChild(link);
+                    });
+                    msg.body.appendChild(sources);
+                }
+                if (options.mode) msg.meta.textContent = `${options.mode === 'gemini' ? 'Gemini + portfolio RAG' : 'Verified portfolio'} · ${timeNow()}`;
+                els.messages.appendChild(msg.wrapper);
+                scrollToLatest();
+                return msg;
+            }
+
+            function addThinking() {
+                const msg = createMessage('assistant', '');
+                msg.wrapper.id = 'ik-chat-thinking-message';
+                msg.bubble.setAttribute('aria-label', copy[state.language].loading);
+                const dots = document.createElement('span');
+                dots.className = 'ik-chat-thinking';
+                dots.innerHTML = '<span></span><span></span><span></span>';
+                msg.bubble.appendChild(dots);
+                msg.meta.textContent = copy[state.language].loading;
+                els.messages.appendChild(msg.wrapper);
+                scrollToLatest();
+            }
+
+            function removeThinking() {
+                document.getElementById('ik-chat-thinking-message')?.remove();
+            }
+
+            function renderSuggestions(items) {
+                els.suggestions.replaceChildren();
+                (items || []).slice(0, 4).forEach((question) => {
+                    const button = document.createElement('button');
+                    button.type = 'button';
+                    button.className = 'ik-chat-chip';
+                    button.textContent = question;
+                    button.addEventListener('click', () => sendQuestion(question));
+                    els.suggestions.appendChild(button);
+                });
+            }
+
+            function scrollToLatest() {
+                requestAnimationFrame(() => { els.messages.scrollTop = els.messages.scrollHeight; });
+            }
+
+            function resizeInput() {
+                els.input.style.height = 'auto';
+                els.input.style.height = Math.min(els.input.scrollHeight, 96) + 'px';
+            }
+
+            function updateSendState() {
+                els.send.disabled = state.loading || els.input.value.trim().length < 3;
+            }
+
+
+            let teaserTimers = [];
+            function clearTeaserTimers() { teaserTimers.forEach(clearTimeout); teaserTimers = []; }
+            function hideArrivalTeaser() { clearTeaserTimers(); els.teaser?.classList.remove('is-visible'); }
+            function setTeaser(text, language) {
+                if (!els.teaser || !els.teaserText || state.open) return;
+                els.teaserText.textContent = text;
+                els.teaser.lang = language;
+                els.teaser.setAttribute('aria-label', text);
+                els.teaser.classList.add('is-visible');
+            }
+            function runArrivalTeaser() {
+                if (!els.teaser || !els.teaserText) return;
+                clearTeaserTimers();
+                teaserTimers.push(setTimeout(() => setTeaser("I'm Aura, ask me anything about Ibrahim.", 'en'), 900));
+                teaserTimers.push(setTimeout(() => els.teaser.classList.remove('is-visible'), 9000));
+                teaserTimers.push(setTimeout(() => setTeaser("Je suis Aura, posez-moi vos questions sur Ibrahim.", 'fr'), 9500));
+                teaserTimers.push(setTimeout(() => els.teaser.classList.remove('is-visible'), 17000));
+                teaserTimers.push(setTimeout(clearTeaserTimers, 18000));
+            }
+            function enableSuggestionRail() {
+                if (!els.suggestions) return;
+                els.suggestions.addEventListener('wheel', (event) => {
+                    if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
+                    if (els.suggestions.scrollWidth <= els.suggestions.clientWidth) return;
+                    event.preventDefault();
+                    els.suggestions.scrollLeft += event.deltaY;
+                }, { passive: false });
+                let dragging = false, startX = 0, startScroll = 0;
+                els.suggestions.addEventListener('pointerdown', (event) => {
+                    if (event.pointerType === 'touch' || event.target.closest('.ik-chat-chip')) return;
+                    dragging = true; startX = event.clientX; startScroll = els.suggestions.scrollLeft;
+                    els.suggestions.setPointerCapture(event.pointerId);
+                });
+                els.suggestions.addEventListener('pointermove', (event) => {
+                    if (dragging) els.suggestions.scrollLeft = startScroll - (event.clientX - startX);
+                });
+                const stopDrag = () => { dragging = false; };
+                els.suggestions.addEventListener('pointerup', stopDrag);
+                els.suggestions.addEventListener('pointercancel', stopDrag);
+            }
+            function detectQuestionLanguage(text) {
+                return /[àâçéèêëîïôùûüÿœ]|\b(quel|quelle|qui|quels|comment|pourquoi|avec|dans|projet|expérience|compétence|maison|énergie|contacter)\b/i.test(text) ? 'fr' : 'en';
+            }
+
+            async function sendQuestion(forcedText) {
+                const question = (typeof forcedText === 'string' ? forcedText : els.input.value).trim();
+                if (state.loading || question.length < 3) return;
+                state.language = detectQuestionLanguage(question);
+                els.input.placeholder = copy[state.language].placeholder;
+                els.input.value = '';
+                resizeInput();
+                state.loading = true;
+                updateSendState();
+                renderSuggestions([]);
+                addUserMessage(question);
+                addThinking();
+
+                const limitedHistory = state.conversation.slice(-8);
+                try {
+                    const controller = new AbortController();
+                    const timeout = setTimeout(() => controller.abort(), 30000);
+                    const response = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ question, language: state.language, conversation: limitedHistory, session_id: state.sessionId }),
+                        signal: controller.signal
+                    });
+                    clearTimeout(timeout);
+                    const data = await response.json().catch(() => null);
+                    removeThinking();
+                    if (!response.ok || !data?.ok) {
+                        const fallback = response.status === 429 ? copy[state.language].rate : (data?.error?.message || copy[state.language].unavailable);
+                        addAssistantMessage(fallback, { mode: 'verified portfolio' });
+                    } else {
+                        addAssistantMessage(data.answer, { sources: data.sources || [], mode: data.generation_mode });
+                        state.conversation.push({ role: 'user', content: question }, { role: 'assistant', content: data.answer });
+                        state.conversation = state.conversation.slice(-8);
+                        renderSuggestions(data.suggested_followups?.length ? data.suggested_followups : copy[state.language].suggestions);
+                        if (!state.open) els.unread.classList.add('is-visible');
+                    }
+                } catch (error) {
+                    removeThinking();
+                    addAssistantMessage(copy[state.language].unavailable, { mode: 'verified portfolio' });
+                    renderSuggestions(copy[state.language].suggestions);
+                } finally {
+                    state.loading = false;
+                    updateSendState();
+                    els.input.focus({ preventScroll: true });
+                }
+            }
+
+            els.launcher.addEventListener('click', () => state.open ? closeChat() : openChat());
+            els.teaser?.addEventListener('click', openChat);
+            els.close.addEventListener('click', closeChat);
+            els.reset.addEventListener('click', resetChat);
+            els.form.addEventListener('submit', (event) => { event.preventDefault(); sendQuestion(); });
+            els.input.addEventListener('input', () => { resizeInput(); updateSendState(); });
+            els.input.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); sendQuestion(); }
+            });
+            document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && state.open) closeChat(); });
+            enableSuggestionRail();
+            runArrivalTeaser();
+        })();
+    </script>
+
 </body>
 </html>

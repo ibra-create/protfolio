@@ -1,0 +1,248 @@
+[
+  {
+    "slug": "pv-bess-djibouti-dakhla",
+    "name_fr": "Centrale PV 30 MWc + BESS 5 MWh & 580 kWc",
+    "name_en": "30 MWp PV + 5 MWh BESS & 580 kWp Plants",
+    "short_summary_fr": "Études de faisabilité technico-économiques pour des projets solaires à grande échelle.",
+    "short_summary_en": "Techno-economic feasibility studies for utility-scale solar projects.",
+    "detailed_summary_fr": "Conception électrique complète (SLD, plans d'implantation) couvrant tout le cycle de vie du projet, du dimensionnement à l'intégration au réseau pour un projet de 30 MWc à Djibouti et deux de 580 kWc à Dakhla.",
+    "detailed_summary_en": "Complete electrical design (SLD, layout plans) covering the entire project lifecycle, from sizing to grid integration for a 30 MWp project in Djibouti and two 580 kWp projects in Dakhla.",
+    "my_role_fr": "Conception de bout en bout, simulations et modélisation",
+    "my_role_en": "End-to-end design, simulations and modeling",
+    "project_type": "Utility-scale Solar + BESS",
+    "organization": "Novec",
+    "location": "Djibouti / Dakhla, Maroc",
+    "start_date": "2026-01-01",
+    "end_date": "2026-04-30",
+    "tools": [
+      "PVSyst",
+      "Caneco BT",
+      "HOMER Pro",
+      "PowerFactory",
+      "AutoCAD"
+    ],
+    "skills": [
+      "Études technico-économiques",
+      "Conception électrique",
+      "SLD",
+      "Intégration au réseau"
+    ],
+    "key_results": [],
+    "page_url": "solar-project.html",
+    "featured": true,
+    "display_order": 1,
+    "verified": true,
+    "source_file": "me.md"
+  },
+  {
+    "slug": "pv-bess-67mw-ems",
+    "name_fr": "Centrale PV 67 MW + BESS (Modélisation EMS/BMS)",
+    "name_en": "67 MW PV + BESS (EMS/BMS Modeling)",
+    "short_summary_fr": "Dimensionnement et étude technico-économique d'une centrale de 67 MW avec BESS.",
+    "short_summary_en": "Sizing and techno-economic study of a 67 MW solar plant with BESS.",
+    "detailed_summary_fr": "Conception et modélisation de la logique EMS (Energy Management System) et BMS dans MATLAB/Simulink, simulant le contrôle en temps réel et la stabilité du réseau.",
+    "detailed_summary_en": "Design and modeling of EMS and BMS logic in MATLAB/Simulink, simulating real-time control and grid stability.",
+    "my_role_fr": "Conception de l'architecture EMS et simulation dynamique",
+    "my_role_en": "EMS architecture design and dynamic simulation",
+    "project_type": "Dynamic Simulation & Control",
+    "organization": "Université Internationale de Rabat (UIR)",
+    "location": "Maroc",
+    "start_date": null,
+    "end_date": null,
+    "tools": [
+      "PVSyst",
+      "MATLAB",
+      "Simulink"
+    ],
+    "skills": [
+      "Dimensionnement BESS",
+      "Logique EMS",
+      "BMS",
+      "Stabilité du réseau",
+      "Simulation RMS"
+    ],
+    "key_results": [],
+    "page_url": "solar-bess-67mw.html",
+    "featured": true,
+    "display_order": 2,
+    "verified": true,
+    "source_file": "me.md"
+  },
+  {
+    "slug": "ibwatts",
+    "name_fr": "Application Web Technico-Économique Solaire (IBWatts)",
+    "name_en": "Solar Techno-Economic Web App (IBWatts)",
+    "short_summary_fr": "Application Web avancée d'analyse technico-économique solaire pour le marché marocain.",
+    "short_summary_en": "Advanced web application for solar techno-economic analysis in the Moroccan market.",
+    "detailed_summary_fr": "Intègre une base de données d'équipements réels (panneaux, onduleurs, batteries), analyse des ombrages, dimensionnement automatique. Moteur financier simulant prêts, ROI, VAN et amortissement (ONE/Régies) avec génération PDF.",
+    "detailed_summary_en": "Integrates a real equipment database, shading analysis, and auto-sizing. Financial engine simulates loans, ROI, NPV, and payback periods (ONE/Régies tariffs) with automatic PDF generation.",
+    "my_role_fr": "Développeur full-stack et concepteur du moteur financier",
+    "my_role_en": "Full-stack developer and financial engine architect",
+    "project_type": "Software Engineering",
+    "organization": null,
+    "location": "Maroc",
+    "start_date": null,
+    "end_date": null,
+    "tools": [
+      "Python",
+      "Streamlit",
+      "Pandas",
+      "NumPy",
+      "Matplotlib"
+    ],
+    "skills": [
+      "Développement Web",
+      "Moteur Financier",
+      "LCOE",
+      "ROI",
+      "VAN"
+    ],
+    "key_results": [
+      {
+        "metric": "Fonctionnalité",
+        "value": "Base de données d'équipements locaux"
+      }
+    ],
+    "page_url": "ibwatts.html",
+    "github_url": null,
+    "featured": true,
+    "display_order": 3,
+    "verified": true,
+    "source_file": "me.md"
+  },
+  {
+    "slug": "smart-house",
+    "name_fr": "Maison Bioclimatique Intelligente & Stockage Thermique",
+    "name_en": "Smart Bioclimatic House & Thermal Storage",
+    "short_summary_fr": "Modélisation d'une maison à haute efficacité et stockage thermique intersaisonnier.",
+    "short_summary_en": "Modeling a high-efficiency house with interseasonal thermal storage.",
+    "detailed_summary_fr": "Conception d'un système de stockage thermique à base de sable. Prototype matériel d'un système de contrôle climatique automatisé (Arduino R4, capteurs DHT22, logique PID) pour optimiser le confort thermique.",
+    "detailed_summary_en": "Design of a sand-based thermal storage system. Hardware prototyping of an automated climate control system (Arduino R4, DHT22 sensors, PID logic) for optimal thermal comfort.",
+    "my_role_fr": "Conception thermique et réalisation du prototype IoT",
+    "my_role_en": "Thermal design and IoT prototype development",
+    "project_type": "Thermal Engineering & IoT",
+    "organization": null,
+    "location": "Rabat/Casablanca, Maroc",
+    "start_date": null,
+    "end_date": null,
+    "tools": [
+      "DesignBuilder",
+      "Arduino",
+      "Python"
+    ],
+    "skills": [
+      "Stockage Thermique",
+      "Logique PID",
+      "Réglementation Thermique (RTCM)",
+      "IoT"
+    ],
+    "key_results": [],
+    "page_url": "smart_house.html",
+    "featured": true,
+    "display_order": 4,
+    "verified": true,
+    "source_file": "me.md"
+  },
+  {
+    "slug": "hydrotwin",
+    "name_fr": "Jumeau Numérique Hydrogène Vert (Power-to-X)",
+    "name_en": "Green Hydrogen Digital Twin (Power-to-X)",
+    "short_summary_fr": "Modélisation Python de la chaîne PV → Électrolyseur PEM → LOHC.",
+    "short_summary_en": "Python modeling of the PV → PEM Electrolyzer → LOHC chain.",
+    "detailed_summary_fr": "Développement d'un moteur physique sur mesure en Python pour optimiser le LCOH (coût actualisé de l'hydrogène) sous des contraintes de réseau et d'irradiation marocaines.",
+    "detailed_summary_en": "Development of a custom physical engine in Python to optimize LCOH (Levelized Cost of Hydrogen) under Moroccan grid and irradiation constraints.",
+    "my_role_fr": "Conception du modèle physique et optimisation algorithmique",
+    "my_role_en": "Physical model design and algorithmic optimization",
+    "project_type": "Energy Modeling",
+    "organization": null,
+    "location": "Maroc",
+    "start_date": null,
+    "end_date": null,
+    "tools": [
+      "Python",
+      "NumPy",
+      "Pandas"
+    ],
+    "skills": [
+      "Power-to-X",
+      "Hydrogène Vert",
+      "LCOH",
+      "LOHC",
+      "Électrolyseur PEM"
+    ],
+    "key_results": [],
+    "page_url": "hydrotwin.html",
+    "featured": true,
+    "display_order": 5,
+    "verified": true,
+    "source_file": "me.md"
+  },
+  {
+    "slug": "hospital-audit",
+    "name_fr": "Audit Énergétique Hybride — Hôpital",
+    "name_en": "Hybrid Energy Audit — Hospital",
+    "short_summary_fr": "Audit d'un hôpital et conception d'un système hybride (Solaire + Éolien + Réseau).",
+    "short_summary_en": "Hospital audit and hybrid system design (Solar + Wind + Grid).",
+    "detailed_summary_fr": "Réduction des coûts énergétiques annuels de 18 % tout en maintenant la fiabilité critique.",
+    "detailed_summary_en": "Reduction of annual energy costs by 18% while maintaining critical reliability.",
+    "my_role_fr": "Auditeur énergétique",
+    "my_role_en": "Energy Auditor",
+    "project_type": "Energy Audit",
+    "organization": null,
+    "location": "Maroc",
+    "start_date": null,
+    "end_date": null,
+    "tools": [
+      "HOMER Pro"
+    ],
+    "skills": [
+      "Audit Énergétique",
+      "Systèmes Hybrides"
+    ],
+    "key_results": [
+      {
+        "metric": "Réduction des coûts",
+        "value": "18 %"
+      }
+    ],
+    "page_url": "index.html",
+    "featured": false,
+    "display_order": 6,
+    "verified": true,
+    "source_file": "me.md"
+  },
+  {
+    "slug": "ai-prediction",
+    "name_fr": "Système de Prédiction Énergétique par IA",
+    "name_en": "AI Energy Prediction System",
+    "short_summary_fr": "Prédicteur de consommation basé sur le Machine Learning.",
+    "short_summary_en": "Consumption predictor based on Machine Learning.",
+    "detailed_summary_fr": "Utilise la température, l'humidité et la date pour prévoir la consommation avec une précision de 92 %.",
+    "detailed_summary_en": "Uses temperature, humidity, and date to forecast consumption with 92% accuracy.",
+    "my_role_fr": "Développeur Machine Learning",
+    "my_role_en": "Machine Learning Developer",
+    "project_type": "Artificial Intelligence",
+    "organization": null,
+    "location": "Maroc",
+    "start_date": null,
+    "end_date": null,
+    "tools": [
+      "Python"
+    ],
+    "skills": [
+      "Machine Learning",
+      "Prédiction"
+    ],
+    "key_results": [
+      {
+        "metric": "Précision",
+        "value": "92 %"
+      }
+    ],
+    "page_url": "ai-prediction.html",
+    "featured": false,
+    "display_order": 7,
+    "verified": true,
+    "source_file": "me.md"
+  }
+]

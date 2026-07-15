@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ibrahim Khallouq | Portfolio Ingénieur en Énergétique et Énergies Renouvelables</title>
-    <meta name="description" content="Portfolio d'ingénierie énergétique — conception, dimensionnement et optimisation de systèmes solaires, BESS, hydrogène vert et smart grids.">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="description"
+        content="Portfolio d'ingénierie énergétique — conception, dimensionnement et optimisation de systèmes solaires, BESS, hydrogène vert et smart grids.">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
@@ -25,9 +29,11 @@
             --text-muted: #7a7a99;
             --text-dim: #4a4a66;
 
-            --accent: #6366f1;       /* Indigo */
+            --accent: #6366f1;
+            /* Indigo */
             --accent-glow: rgba(99, 102, 241, 0.3);
-            --green: #34d399;        /* Emerald */
+            --green: #34d399;
+            /* Emerald */
             --green-glow: rgba(52, 211, 153, 0.3);
             --cyan: #22d3ee;
             --purple: #a855f7;
@@ -44,8 +50,18 @@
         /* ============================================================
            RESET & BASE
            ============================================================ */
-        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: var(--font);
             background: var(--bg);
@@ -56,156 +72,285 @@
         }
 
         /* Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: var(--bg); }
-        ::-webkit-scrollbar-thumb { background: #222; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
-        ::selection { background: var(--accent); color: #fff; }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #222;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
+        }
+
+        ::selection {
+            background: var(--accent);
+            color: #fff;
+        }
 
         /* ============================================================
            UTILITIES
            ============================================================ */
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 10; }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
         .section-label {
-            display: inline-flex; align-items: center; gap: 8px;
-            padding: 6px 16px; border-radius: 9999px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            border-radius: 9999px;
             background: rgba(99, 102, 241, 0.08);
             border: 1px solid rgba(99, 102, 241, 0.18);
-            color: var(--accent); font-size: 0.72rem;
-            font-weight: 700; text-transform: uppercase;
-            letter-spacing: 2.5px; margin-bottom: 1.2rem;
+            color: var(--accent);
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            margin-bottom: 1.2rem;
         }
+
         .section-title {
             font-family: var(--font-display);
             font-size: clamp(2rem, 4.5vw, 3rem);
-            font-weight: 700; line-height: 1.15;
+            font-weight: 700;
+            line-height: 1.15;
             margin-bottom: 1rem;
         }
+
         .section-subtitle {
             color: var(--text-muted);
-            font-size: 1.05rem; max-width: 550px;
+            font-size: 1.05rem;
+            max-width: 550px;
             margin-bottom: 3.5rem;
         }
+
         .gradient-text {
             background: linear-gradient(135deg, var(--accent), var(--purple), var(--green));
-            -webkit-background-clip: text; background-clip: text;
-            color: transparent; -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            -webkit-text-fill-color: transparent;
         }
+
         .tag {
             display: inline-block;
-            padding: 4px 12px; border-radius: 6px;
+            padding: 4px 12px;
+            border-radius: 6px;
             background: rgba(99, 102, 241, 0.08);
             border: 1px solid rgba(99, 102, 241, 0.15);
             color: var(--accent);
-            font-size: 0.78rem; font-weight: 600;
+            font-size: 0.78rem;
+            font-weight: 600;
             margin: 3px;
             transition: all 0.3s;
         }
-        .tag:hover { background: rgba(99, 102, 241, 0.15); border-color: rgba(99, 102, 241, 0.3); }
+
+        .tag:hover {
+            background: rgba(99, 102, 241, 0.15);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
 
         /* ============================================================
            NAVBAR
            ============================================================ */
         nav {
-            position: fixed; top: 0; width: 100%; z-index: 1000;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
             padding: 0 0;
             background: hsla(240, 60%, 3%, 0.6);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
             border-bottom: 1px solid var(--border);
         }
+
         .nav-inner {
-            max-width: 1200px; margin: 0 auto;
-            display: flex; align-items: center; justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             padding: 1rem 2rem;
         }
+
         .logo {
             font-family: var(--font-display);
-            font-size: 1.2rem; font-weight: 700;
-            color: var(--text); text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text);
+            text-decoration: none;
             letter-spacing: 0.5px;
         }
-        .logo .dot { color: var(--accent); }
-        .nav-links { display: flex; gap: 0.3rem; }
+
+        .logo .dot {
+            color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.3rem;
+        }
+
         .nav-links a {
-            padding: 7px 14px; border-radius: 8px;
-            color: var(--text-muted); text-decoration: none;
-            font-size: 0.82rem; font-weight: 500;
+            padding: 7px 14px;
+            border-radius: 8px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.82rem;
+            font-weight: 500;
             transition: all 0.3s ease;
         }
-        .nav-links a:hover { color: var(--text); background: var(--surface); }
+
+        .nav-links a:hover {
+            color: var(--text);
+            background: var(--surface);
+        }
+
         .nav-cta {
-            padding: 8px 20px !important; border-radius: 9999px !important;
-            background: var(--accent) !important; color: #fff !important;
+            padding: 8px 20px !important;
+            border-radius: 9999px !important;
+            background: var(--accent) !important;
+            color: #fff !important;
             font-weight: 600 !important;
             transition: all 0.3s !important;
         }
-        .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 20px var(--accent-glow); background: #5558e6 !important; }
+
+        .nav-cta:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px var(--accent-glow);
+            background: #5558e6 !important;
+        }
 
         /* ============================================================
            HERO SECTION
            ============================================================ */
         #hero {
-            position: relative; min-height: 100vh;
-            display: flex; align-items: center;
-            overflow: hidden; padding: 0;
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            padding: 0;
         }
+
         #shader-canvas {
-            position: absolute; inset: 0;
-            z-index: 1; pointer-events: none;
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
         }
+
         .hero-gradient {
-            position: absolute; inset: 0; z-index: 2;
+            position: absolute;
+            inset: 0;
+            z-index: 2;
             background:
                 radial-gradient(ellipse 80% 60% at 20% 50%, rgba(99, 102, 241, 0.12), transparent),
                 radial-gradient(ellipse 60% 50% at 80% 30%, rgba(168, 85, 247, 0.08), transparent),
                 radial-gradient(ellipse 50% 40% at 50% 90%, rgba(52, 211, 153, 0.06), transparent);
             pointer-events: none;
         }
+
         .hero-content {
-            position: relative; z-index: 10;
-            max-width: 700px; text-align: left;
+            position: relative;
+            z-index: 10;
+            max-width: 700px;
+            text-align: left;
         }
 
         .hero-title {
             font-family: var(--font-display);
             font-size: clamp(3rem, 8vw, 5rem);
-            font-weight: 800; line-height: 1.05;
+            font-weight: 800;
+            line-height: 1.05;
             letter-spacing: -0.03em;
             margin-bottom: 1.5rem;
         }
-        .hero-title .line-2 { color: var(--text-muted); font-weight: 400; }
-        .hero-description {
-            color: var(--text-muted); font-size: 1.1rem;
-            max-width: 520px; margin-bottom: 2.5rem; line-height: 1.8;
+
+        .hero-title .line-2 {
+            color: var(--text-muted);
+            font-weight: 400;
         }
-        .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+        .hero-description {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 520px;
+            margin-bottom: 2.5rem;
+            line-height: 1.8;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
         .btn-primary {
-            display: inline-flex; align-items: center; gap: 10px;
-            padding: 14px 28px; border-radius: 12px;
-            background: var(--accent); color: #fff;
-            text-decoration: none; font-weight: 600; font-size: 0.95rem;
-            border: none; cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 28px;
+            border-radius: 12px;
+            background: var(--accent);
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border: none;
+            cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 4px 20px var(--accent-glow);
         }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4); background: #5558e6; }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4);
+            background: #5558e6;
+        }
+
         .btn-secondary {
-            display: inline-flex; align-items: center; gap: 10px;
-            padding: 14px 28px; border-radius: 12px;
-            background: transparent; color: var(--text);
-            text-decoration: none; font-weight: 600; font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 28px;
+            border-radius: 12px;
+            background: transparent;
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
             border: 1px solid var(--border);
             transition: all 0.3s ease;
         }
-        .btn-secondary:hover { border-color: var(--border-hover); background: var(--surface); transform: translateY(-2px); }
+
+        .btn-secondary:hover {
+            border-color: var(--border-hover);
+            background: var(--surface);
+            transform: translateY(-2px);
+        }
 
 
 
         /* ============================================================
            PROJECTS SECTION — SHOWCASE
            ============================================================ */
-        #projects { padding: 7rem 0 5rem; }
+        #projects {
+            padding: 7rem 0 5rem;
+        }
 
         .projects-grid {
             display: grid;
@@ -216,34 +361,54 @@
 
         /* === PROJECT CARD === */
         /* Base Color Variable for Cards */
-        .project-card[data-color="indigo"] { --card: #6366f1; }
-        .project-card[data-color="green"] { --card: #34d399; }
-        .project-card[data-color="purple"] { --card: #a855f7; }
-        .project-card[data-color="cyan"] { --card: #22d3ee; }
-        .project-card[data-color="amber"] { --card: #f59e0b; }
+        .project-card[data-color="indigo"] {
+            --card: #6366f1;
+        }
+
+        .project-card[data-color="green"] {
+            --card: #34d399;
+        }
+
+        .project-card[data-color="purple"] {
+            --card: #a855f7;
+        }
+
+        .project-card[data-color="cyan"] {
+            --card: #22d3ee;
+        }
+
+        .project-card[data-color="amber"] {
+            --card: #f59e0b;
+        }
 
         .project-card {
-            position: relative; overflow: hidden;
+            position: relative;
+            overflow: hidden;
             background: linear-gradient(150deg, rgba(255, 255, 255, 0.057), rgba(255, 255, 255, 0.014));
             border: 1px solid var(--border);
             border-radius: var(--radius);
             padding: 2.5rem;
-            display: flex; flex-direction: column;
+            display: flex;
+            flex-direction: column;
             transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            text-decoration: none; color: inherit;
+            text-decoration: none;
+            color: inherit;
             cursor: pointer;
             min-height: 280px;
         }
-        
+
         .project-card:hover {
             border-color: var(--card);
             transform: translateY(-8px);
             box-shadow: 0 28px 75px -35px var(--card);
         }
-        
+
         .project-card .card-bg-glow {
-            position: absolute; top: -80px; right: -80px;
-            width: 250px; height: 250px;
+            position: absolute;
+            top: -80px;
+            right: -80px;
+            width: 250px;
+            height: 250px;
             border-radius: 50%;
             filter: blur(100px);
             background: var(--card);
@@ -253,87 +418,149 @@
 
         .card-num {
             font-family: var(--font-display);
-            font-size: 3.5rem; font-weight: 800;
+            font-size: 3.5rem;
+            font-weight: 800;
             color: rgba(255, 255, 255, 0.03);
-            position: absolute; top: 1rem; right: 1.5rem;
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
             line-height: 1;
         }
+
         .card-category {
-            font-size: 0.72rem; font-weight: 700;
-            text-transform: uppercase; letter-spacing: 2px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
             margin-bottom: 1rem;
             color: var(--card);
         }
 
         .card-title {
             font-family: var(--font-display);
-            font-size: 1.35rem; font-weight: 700;
-            color: var(--text); margin-bottom: 0.8rem;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.8rem;
             line-height: 1.3;
         }
+
         .card-desc {
-            color: var(--text-muted); font-size: 0.9rem;
-            line-height: 1.7; flex: 1;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.7;
+            flex: 1;
             margin-bottom: 1.5rem;
         }
+
         .card-footer {
-            display: flex; align-items: center; justify-content: space-between;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             margin-top: auto;
         }
-        .card-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
         .card-explore {
-            display: inline-flex; align-items: center; gap: 6px;
-            color: var(--text-muted); font-size: 0.85rem; font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 600;
             transition: all 0.3s;
             white-space: nowrap;
         }
+
         .card-explore .arrow-icon {
-            width: 20px; height: 20px;
-            display: flex; align-items: center; justify-content: center;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             border-radius: 50%;
             background: var(--surface);
             border: 1px solid var(--border);
             transition: all 0.3s;
             font-size: 0.7rem;
         }
-        .project-card:hover .card-explore { color: var(--card); }
-        .project-card:hover .card-explore .arrow-icon { 
-            background: color-mix(in srgb, var(--card) 15%, transparent); 
-            border-color: color-mix(in srgb, var(--card) 30%, transparent); 
+
+        .project-card:hover .card-explore {
+            color: var(--card);
+        }
+
+        .project-card:hover .card-explore .arrow-icon {
+            background: color-mix(in srgb, var(--card) 15%, transparent);
+            border-color: color-mix(in srgb, var(--card) 30%, transparent);
             color: var(--card);
         }
 
         /* Big featured card */
-        .project-card.featured { grid-column: 1 / -1; }
+        .project-card.featured {
+            grid-column: 1 / -1;
+        }
 
         /* ============================================================
            ABOUT SECTION
            ============================================================ */
-        #about { padding: 7rem 0; }
+        #about {
+            padding: 7rem 0;
+        }
+
         .about-grid {
             display: grid;
             grid-template-columns: 1.2fr 1fr;
-            gap: 4rem; align-items: start;
+            gap: 4rem;
+            align-items: start;
         }
-        .about-text p { color: var(--text-muted); margin-bottom: 1.2rem; font-size: 1rem; }
-        .about-text strong { color: var(--text); }
+
+        .about-text p {
+            color: var(--text-muted);
+            margin-bottom: 1.2rem;
+            font-size: 1rem;
+        }
+
+        .about-text strong {
+            color: var(--text);
+        }
+
         .stats-row {
-            display: flex; gap: 1.5rem; margin-top: 2rem;
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 2rem;
         }
+
         .stat-card {
-            flex: 1; padding: 1.5rem;
+            flex: 1;
+            padding: 1.5rem;
             background: var(--surface);
             border: 1px solid var(--border);
             border-radius: var(--radius-sm);
             transition: all 0.3s;
         }
-        .stat-card:hover { border-color: var(--border-hover); transform: translateY(-3px); }
+
+        .stat-card:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-3px);
+        }
+
         .stat-card .stat-val {
             font-family: var(--font-display);
-            font-size: 2rem; font-weight: 700;
+            font-size: 2rem;
+            font-weight: 700;
             color: var(--accent);
         }
-        .stat-card .stat-label { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.3rem; }
+
+        .stat-card .stat-label {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 0.3rem;
+        }
 
         .competences-card {
             background: var(--surface);
@@ -341,70 +568,127 @@
             border-radius: var(--radius);
             padding: 2.5rem;
         }
+
         .competences-card h3 {
             font-family: var(--font-display);
-            font-size: 1.15rem; font-weight: 700;
+            font-size: 1.15rem;
+            font-weight: 700;
             margin-bottom: 1.5rem;
         }
+
         .competence-item {
-            display: flex; align-items: center; gap: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
             padding: 0.7rem 0;
             border-bottom: 1px solid var(--border);
-            color: var(--text-muted); font-size: 0.92rem;
+            color: var(--text-muted);
+            font-size: 0.92rem;
         }
-        .competence-item:last-child { border-bottom: none; }
+
+        .competence-item:last-child {
+            border-bottom: none;
+        }
+
         .competence-dot {
-            width: 6px; height: 6px; border-radius: 50%;
-            background: var(--accent); flex-shrink: 0;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
+            flex-shrink: 0;
         }
 
         /* ============================================================
            FORMATION & EXPERIENCE
            ============================================================ */
-        .timeline-section { padding: 7rem 0; }
-        .dual-timeline {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;
+        .timeline-section {
+            padding: 7rem 0;
         }
+
+        .dual-timeline {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+        }
+
         .timeline-col h3 {
             font-family: var(--font-display);
-            font-size: 1.3rem; font-weight: 700;
+            font-size: 1.3rem;
+            font-weight: 700;
             margin-bottom: 2rem;
-            display: flex; align-items: center; gap: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        .timeline-col h3 i { color: var(--accent); }
+
+        .timeline-col h3 i {
+            color: var(--accent);
+        }
+
         .tl-item {
             position: relative;
             padding: 0 0 2rem 2rem;
             border-left: 2px solid var(--border);
         }
-        .tl-item:last-child { padding-bottom: 0; }
+
+        .tl-item:last-child {
+            padding-bottom: 0;
+        }
+
         .tl-dot {
-            position: absolute; left: -7px; top: 4px;
-            width: 12px; height: 12px;
-            border-radius: 50%; background: var(--accent);
+            position: absolute;
+            left: -7px;
+            top: 4px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--accent);
             box-shadow: 0 0 10px var(--accent-glow);
         }
+
         .tl-date {
-            font-size: 0.78rem; font-weight: 700;
-            color: var(--green); text-transform: uppercase;
-            letter-spacing: 1.5px; margin-bottom: 0.4rem;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--green);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 0.4rem;
         }
+
         .tl-title {
             font-family: var(--font-display);
-            font-size: 1.05rem; font-weight: 700;
-            color: var(--text); margin-bottom: 0.3rem;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.3rem;
         }
-        .tl-org { color: var(--accent); font-size: 0.88rem; font-weight: 600; margin-bottom: 0.5rem; }
-        .tl-desc { color: var(--text-muted); font-size: 0.88rem; line-height: 1.7; }
+
+        .tl-org {
+            color: var(--accent);
+            font-size: 0.88rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .tl-desc {
+            color: var(--text-muted);
+            font-size: 0.88rem;
+            line-height: 1.7;
+        }
 
         /* ============================================================
            SKILLS SECTION
            ============================================================ */
-        #skills { padding: 7rem 0; }
+        #skills {
+            padding: 7rem 0;
+        }
+
         .skills-grid {
-            display: grid; grid-template-columns: repeat(3, 1fr);
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
             gap: 1.5rem;
         }
+
         .skill-card {
             background: var(--surface);
             border: 1px solid var(--border);
@@ -412,45 +696,83 @@
             padding: 2rem;
             transition: all 0.4s;
         }
+
         .skill-card:hover {
             border-color: var(--border-hover);
             transform: translateY(-4px);
             box-shadow: 0 20px 50px -15px rgba(99, 102, 241, 0.1);
         }
+
         .skill-card h3 {
             font-family: var(--font-display);
-            font-size: 1.1rem; font-weight: 700;
+            font-size: 1.1rem;
+            font-weight: 700;
             margin-bottom: 0.8rem;
-            display: flex; align-items: center; gap: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        .skill-card h3 i { color: var(--accent); font-size: 1.2rem; }
-        .skill-card p { color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1rem; }
-        .skill-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+
+        .skill-card h3 i {
+            color: var(--accent);
+            font-size: 1.2rem;
+        }
+
+        .skill-card p {
+            color: var(--text-muted);
+            font-size: 0.88rem;
+            margin-bottom: 1rem;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
 
         /* ============================================================
            CONTACT SECTION
            ============================================================ */
-        #contact { padding: 7rem 0 5rem; text-align: center; }
+        #contact {
+            padding: 7rem 0 5rem;
+            text-align: center;
+        }
+
         .contact-inner {
-            max-width: 600px; margin: 0 auto;
+            max-width: 600px;
+            margin: 0 auto;
             background: var(--surface);
             border: 1px solid var(--border);
             border-radius: var(--radius);
             padding: 4rem 3rem;
         }
+
         .contact-inner h2 {
             font-family: var(--font-display);
-            font-size: 2rem; font-weight: 700;
+            font-size: 2rem;
+            font-weight: 700;
             margin-bottom: 1rem;
         }
-        .contact-inner p { color: var(--text-muted); margin-bottom: 2.5rem; font-size: 1rem; }
-        .contact-grid {
-            display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;
+
+        .contact-inner p {
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            font-size: 1rem;
         }
+
+        .contact-grid {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
         .contact-link {
             position: relative;
-            display: flex; align-items: center;
-            height: 60px; max-width: 60px;
+            display: flex;
+            align-items: center;
+            height: 60px;
+            max-width: 60px;
             border-radius: 30px;
             background: var(--surface);
             border: 1px solid var(--border);
@@ -458,28 +780,41 @@
             overflow: hidden;
             transition: max-width 0.5s cubic-bezier(0.22, 1, 0.36, 1), background 0.3s, border-color 0.3s;
         }
+
         .contact-link-icon {
-            min-width: 60px; height: 60px;
-            display: flex; align-items: center; justify-content: center;
-            color: var(--text); font-size: 1.3rem;
+            min-width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text);
+            font-size: 1.3rem;
             transition: color 0.3s;
         }
+
         .contact-link-text {
-            font-weight: 600; white-space: nowrap; color: #fff;
-            opacity: 0; transform: translateX(-15px);
+            font-weight: 600;
+            white-space: nowrap;
+            color: #fff;
+            opacity: 0;
+            transform: translateX(-15px);
             transition: opacity 0.3s ease 0.1s, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.05s;
             padding-right: 25px;
         }
+
         .contact-link:hover {
             max-width: 250px;
             background: linear-gradient(135deg, #6366f1, #a855f7);
             border-color: transparent;
         }
+
         .contact-link:hover .contact-link-icon {
             color: #fff;
         }
+
         .contact-link:hover .contact-link-text {
-            opacity: 1; transform: translateX(0);
+            opacity: 1;
+            transform: translateX(0);
         }
 
         /* ============================================================
@@ -497,30 +832,68 @@
            RESPONSIVE
            ============================================================ */
         @media (max-width: 1024px) {
-            .projects-grid { grid-template-columns: 1fr 1fr; }
-            .dual-timeline { grid-template-columns: 1fr; gap: 3rem; }
-            .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+            .projects-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .dual-timeline {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+            }
         }
+
         @media (max-width: 768px) {
-            .projects-grid { grid-template-columns: 1fr; }
-            .project-card.featured { grid-column: 1; }
-            .skills-grid { grid-template-columns: 1fr; }
-            .nav-links { display: none; }
-            .hero-title { font-size: clamp(2.2rem, 7vw, 3.5rem); }
-            .hero-ctas { flex-direction: column; }
-            .btn-primary, .btn-secondary { width: 100%; justify-content: center; }
-            .stats-row { flex-direction: column; }
-            .container { padding: 0 1.2rem; }
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .project-card.featured {
+                grid-column: 1;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero-title {
+                font-size: clamp(2.2rem, 7vw, 3.5rem);
+            }
+
+            .hero-ctas {
+                flex-direction: column;
+            }
+
+            .btn-primary,
+            .btn-secondary {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .stats-row {
+                flex-direction: column;
+            }
+
+            .container {
+                padding: 0 1.2rem;
+            }
         }
+
         .shiny {
-            background: linear-gradient(
-                100deg,
-                #FFB648 0%,
-                #FFB648 35%,
-                #ffffff 50%,
-                #5EC8FF 65%,
-                #5EC8FF 100%
-            );
+            background: linear-gradient(100deg,
+                    #FFB648 0%,
+                    #FFB648 35%,
+                    #ffffff 50%,
+                    #5EC8FF 65%,
+                    #5EC8FF 100%);
             background-size: 220% 100%;
             -webkit-background-clip: text;
             background-clip: text;
@@ -531,44 +904,90 @@
         }
 
         @keyframes shine {
-            0%   { background-position: 220% 0; }
-            100% { background-position: -220% 0; }
+            0% {
+                background-position: 220% 0;
+            }
+
+            100% {
+                background-position: -220% 0;
+            }
         }
 
         @media (prefers-reduced-motion: reduce) {
-            .shiny { animation: none; }
+            .shiny {
+                animation: none;
+            }
         }
 
         /* Mobile performance profile: preserves the existing design */
-        #shader-canvas { width: 100%; height: 100%; }
-        @media (hover: none), (pointer: coarse) {
+        #shader-canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        @media (hover: none),
+        (pointer: coarse) {
             nav {
                 backdrop-filter: blur(10px);
                 -webkit-backdrop-filter: blur(10px);
             }
+
             .project-card .card-bg-glow {
                 width: 190px;
                 height: 190px;
                 filter: blur(65px);
             }
-            .project-card:hover, .skill-card:hover, .stat-card:hover,
-            .btn-primary:hover, .btn-secondary:hover, .nav-cta:hover {
+
+            .project-card:hover,
+            .skill-card:hover,
+            .stat-card:hover,
+            .btn-primary:hover,
+            .btn-secondary:hover,
+            .nav-cta:hover {
                 transform: none;
             }
-            .contact-link { transition-duration: .25s; }
+
+            .contact-link {
+                transition-duration: .25s;
+            }
         }
+
         @media (max-width: 480px) {
-            .nav-inner { padding: .9rem 1.2rem; }
-            .project-card { padding: 1.6rem; min-height: 0; }
-            .card-footer { align-items: flex-start; gap: 1rem; flex-direction: column; }
-            .competences-card, .skill-card { padding: 1.6rem; }
-            .contact-inner { padding: 3rem 1.25rem; }
+            .nav-inner {
+                padding: .9rem 1.2rem;
+            }
+
+            .project-card {
+                padding: 1.6rem;
+                min-height: 0;
+            }
+
+            .card-footer {
+                align-items: flex-start;
+                gap: 1rem;
+                flex-direction: column;
+            }
+
+            .competences-card,
+            .skill-card {
+                padding: 1.6rem;
+            }
+
+            .contact-inner {
+                padding: 3rem 1.25rem;
+            }
         }
+
         @media (prefers-reduced-motion: reduce) {
-            html { scroll-behavior: auto; }
-            .shiny { animation: none; }
+            html {
+                scroll-behavior: auto;
+            }
+
+            .shiny {
+                animation: none;
+            }
         }
-    
+
         /* ============================================================
            IK AURA — isolated AI assistant UI (portfolio untouched)
            ============================================================ */
@@ -586,6 +1005,7 @@
             line-height: 1.5;
             isolation: isolate;
         }
+
         .ik-chat-launcher {
             position: relative;
             width: 76px;
@@ -596,47 +1016,164 @@
             color: #fff;
             cursor: pointer;
             background: transparent;
-            filter: drop-shadow(0 18px 30px rgba(40,34,120,.42));
-            transition: transform .3s cubic-bezier(.22,1,.36,1), opacity .2s;
+            filter: drop-shadow(0 18px 30px rgba(40, 34, 120, .42));
+            transition: transform .3s cubic-bezier(.22, 1, .36, 1), opacity .2s;
         }
-        .ik-chat-launcher:hover { transform: translateY(-5px) scale(1.025); }
-        .ik-chat-launcher:focus-visible, .ik-chat-icon-btn:focus-visible, .ik-chat-chip:focus-visible,
-        .ik-chat-send:focus-visible, .ik-chat-action:focus-visible, .ik-chat-textarea:focus-visible {
-            outline: 2px solid var(--aura-cyan); outline-offset: 4px;
+
+        .ik-chat-launcher:hover {
+            transform: translateY(-5px) scale(1.025);
         }
+
+        .ik-chat-launcher:focus-visible,
+        .ik-chat-icon-btn:focus-visible,
+        .ik-chat-chip:focus-visible,
+        .ik-chat-send:focus-visible,
+        .ik-chat-action:focus-visible,
+        .ik-chat-textarea:focus-visible {
+            outline: 2px solid var(--aura-cyan);
+            outline-offset: 4px;
+        }
+
         .ik-aura-orbit {
-            position: absolute; inset: 2px; border-radius: 25px;
+            position: absolute;
+            inset: 2px;
+            border-radius: 25px;
             background: conic-gradient(from 0deg, var(--aura-cyan), var(--aura-indigo), var(--aura-violet), var(--aura-cyan));
             animation: ikAuraSpin 5s linear infinite;
         }
+
         .ik-aura-launch-core {
-            position: absolute; inset: 4px; border-radius: 23px;
+            position: absolute;
+            inset: 4px;
+            border-radius: 23px;
             overflow: hidden;
-            display: grid; place-items: center;
+            display: grid;
+            place-items: center;
             background:
-                radial-gradient(circle at 50% 10%, rgba(255,255,255,.24), transparent 30%),
+                radial-gradient(circle at 50% 10%, rgba(255, 255, 255, .24), transparent 30%),
                 linear-gradient(145deg, #282765, #100f32 68%);
-            border: 1px solid rgba(255,255,255,.17);
-            box-shadow: inset 0 1px 0 rgba(255,255,255,.18);
+            border: 1px solid rgba(255, 255, 255, .17);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, .18);
         }
+
         .ik-aura-launch-core::after {
-            content: ''; position: absolute; inset: 0;
-            background: linear-gradient(110deg, transparent 25%, rgba(255,255,255,.11) 45%, transparent 65%);
-            transform: translateX(-130%); animation: ikAuraSweep 4s ease-in-out infinite;
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(110deg, transparent 25%, rgba(255, 255, 255, .11) 45%, transparent 65%);
+            transform: translateX(-130%);
+            animation: ikAuraSweep 4s ease-in-out infinite;
         }
-        @keyframes ikAuraSpin { to { transform: rotate(360deg); } }
-        @keyframes ikAuraSweep { 0%,55% { transform: translateX(-130%); } 82%,100% { transform: translateX(130%); } }
+
+        @keyframes ikAuraSpin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes ikAuraSweep {
+
+            0%,
+            55% {
+                transform: translateX(-130%);
+            }
+
+            82%,
+            100% {
+                transform: translateX(130%);
+            }
+        }
 
         /* CSS-only AI mascot */
-        .ik-mascot { position: relative; width: 49px; height: 49px; z-index: 2; }
-        .ik-mascot-antenna { position: absolute; left: 23px; top: 0; width: 3px; height: 9px; border-radius: 5px; background: #c9ccff; transform-origin: bottom; animation: ikAntenna 2.2s ease-in-out infinite; }
-        .ik-mascot-antenna::before { content: ''; position: absolute; width: 7px; height: 7px; left: -2px; top: -4px; border-radius: 50%; background: var(--aura-cyan); box-shadow: 0 0 12px var(--aura-cyan); }
-        .ik-mascot-head { position: absolute; left: 5px; top: 9px; width: 39px; height: 29px; border-radius: 13px 13px 15px 15px; background: linear-gradient(155deg,#fbfbff,#bfc4ff); box-shadow: inset 0 -4px 9px rgba(49,43,140,.2), 0 4px 13px rgba(0,0,0,.25); }
-        .ik-mascot-face { position: absolute; inset: 5px 5px 6px; border-radius: 9px; background: #17163c; box-shadow: inset 0 1px 5px rgba(0,0,0,.7); }
-        .ik-mascot-eye { position: absolute; top: 8px; width: 6px; height: 6px; border-radius: 50%; background: #78f1ff; box-shadow: 0 0 8px #22d3ee; animation: ikBlink 4.2s infinite; }
-        .ik-mascot-eye.left { left: 7px; } .ik-mascot-eye.right { right: 7px; }
-        .ik-mascot-smile { position: absolute; left: 12px; top: 16px; width: 7px; height: 3px; border-bottom: 2px solid #9af8ff; border-radius: 0 0 8px 8px; }
-        .ik-mascot-body { position: absolute; left: 14px; top: 36px; width: 22px; height: 12px; border-radius: 8px 8px 5px 5px; background: linear-gradient(150deg,#a9afff,#686be8); }
+        .ik-mascot {
+            position: relative;
+            width: 49px;
+            height: 49px;
+            z-index: 2;
+        }
+
+        .ik-mascot-antenna {
+            position: absolute;
+            left: 23px;
+            top: 0;
+            width: 3px;
+            height: 9px;
+            border-radius: 5px;
+            background: #c9ccff;
+            transform-origin: bottom;
+            animation: ikAntenna 2.2s ease-in-out infinite;
+        }
+
+        .ik-mascot-antenna::before {
+            content: '';
+            position: absolute;
+            width: 7px;
+            height: 7px;
+            left: -2px;
+            top: -4px;
+            border-radius: 50%;
+            background: var(--aura-cyan);
+            box-shadow: 0 0 12px var(--aura-cyan);
+        }
+
+        .ik-mascot-head {
+            position: absolute;
+            left: 5px;
+            top: 9px;
+            width: 39px;
+            height: 29px;
+            border-radius: 13px 13px 15px 15px;
+            background: linear-gradient(155deg, #fbfbff, #bfc4ff);
+            box-shadow: inset 0 -4px 9px rgba(49, 43, 140, .2), 0 4px 13px rgba(0, 0, 0, .25);
+        }
+
+        .ik-mascot-face {
+            position: absolute;
+            inset: 5px 5px 6px;
+            border-radius: 9px;
+            background: #17163c;
+            box-shadow: inset 0 1px 5px rgba(0, 0, 0, .7);
+        }
+
+        .ik-mascot-eye {
+            position: absolute;
+            top: 8px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #78f1ff;
+            box-shadow: 0 0 8px #22d3ee;
+            animation: ikBlink 4.2s infinite;
+        }
+
+        .ik-mascot-eye.left {
+            left: 7px;
+        }
+
+        .ik-mascot-eye.right {
+            right: 7px;
+        }
+
+        .ik-mascot-smile {
+            position: absolute;
+            left: 12px;
+            top: 16px;
+            width: 7px;
+            height: 3px;
+            border-bottom: 2px solid #9af8ff;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .ik-mascot-body {
+            position: absolute;
+            left: 14px;
+            top: 36px;
+            width: 22px;
+            height: 12px;
+            border-radius: 8px 8px 5px 5px;
+            background: linear-gradient(150deg, #a9afff, #686be8);
+        }
+
         /* Articulated waving arm: shoulder -> upper arm -> rounded hand */
         .ik-mascot-hand {
             position: absolute;
@@ -646,11 +1183,12 @@
             height: 7px;
             border-radius: 7px;
             background: linear-gradient(180deg, #b7bcff, #858ce9);
-            box-shadow: inset 0 1px 0 rgba(255,255,255,.55), 0 2px 5px rgba(35,31,104,.28);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, .55), 0 2px 5px rgba(35, 31, 104, .28);
             transform-origin: 2px 50%;
-            animation: ikWave 2.15s cubic-bezier(.45,0,.25,1) infinite;
+            animation: ikWave 2.15s cubic-bezier(.45, 0, .25, 1) infinite;
             z-index: -1;
         }
+
         .ik-mascot-hand::before {
             content: '';
             position: absolute;
@@ -660,9 +1198,10 @@
             height: 8px;
             border-radius: 50%;
             background: #8f96ed;
-            border: 1px solid rgba(255,255,255,.3);
-            box-shadow: 0 1px 4px rgba(28,25,84,.35);
+            border: 1px solid rgba(255, 255, 255, .3);
+            box-shadow: 0 1px 4px rgba(28, 25, 84, .35);
         }
+
         .ik-mascot-hand::after {
             content: '';
             position: absolute;
@@ -672,179 +1211,1017 @@
             height: 13px;
             border-radius: 7px 7px 6px 6px;
             background: linear-gradient(150deg, #ffffff, #cfd3ff 72%);
-            border: 1px solid rgba(113,119,208,.28);
-            box-shadow: inset 0 1px 0 #fff, 0 3px 7px rgba(28,25,84,.28);
+            border: 1px solid rgba(113, 119, 208, .28);
+            box-shadow: inset 0 1px 0 #fff, 0 3px 7px rgba(28, 25, 84, .28);
             transform: rotate(8deg);
         }
+
         @keyframes ikWave {
-            0%, 48%, 100% { transform: rotate(-17deg); }
-            10% { transform: rotate(-72deg); }
-            20% { transform: rotate(-39deg); }
-            30% { transform: rotate(-76deg); }
-            40% { transform: rotate(-31deg); }
+
+            0%,
+            48%,
+            100% {
+                transform: rotate(-17deg);
+            }
+
+            10% {
+                transform: rotate(-72deg);
+            }
+
+            20% {
+                transform: rotate(-39deg);
+            }
+
+            30% {
+                transform: rotate(-76deg);
+            }
+
+            40% {
+                transform: rotate(-31deg);
+            }
         }
-        @keyframes ikBlink { 0%,45%,49%,100% { transform: scaleY(1); } 47% { transform: scaleY(.15); } }
-        @keyframes ikAntenna { 0%,100% { transform: rotate(-5deg); } 50% { transform: rotate(7deg); } }
-        .ik-chat-status-dot { position: absolute; right: 3px; top: 4px; z-index: 5; width: 12px; height: 12px; border-radius: 50%; background: var(--aura-green); border: 3px solid #10102f; box-shadow: 0 0 14px rgba(52,211,153,.8); }
-        .ik-chat-unread { position: absolute; left: -4px; top: -5px; z-index: 8; min-width: 22px; height: 22px; display: none; place-items: center; padding: 0 5px; border-radius: 12px; background: #ef4444; border: 2px solid var(--bg); color: #fff; font-size: .63rem; font-weight: 800; }
-        .ik-chat-unread.is-visible { display: grid; }
+
+        @keyframes ikBlink {
+
+            0%,
+            45%,
+            49%,
+            100% {
+                transform: scaleY(1);
+            }
+
+            47% {
+                transform: scaleY(.15);
+            }
+        }
+
+        @keyframes ikAntenna {
+
+            0%,
+            100% {
+                transform: rotate(-5deg);
+            }
+
+            50% {
+                transform: rotate(7deg);
+            }
+        }
+
+        .ik-chat-status-dot {
+            position: absolute;
+            right: 3px;
+            top: 4px;
+            z-index: 5;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--aura-green);
+            border: 3px solid #10102f;
+            box-shadow: 0 0 14px rgba(52, 211, 153, .8);
+        }
+
+        .ik-chat-unread {
+            position: absolute;
+            left: -4px;
+            top: -5px;
+            z-index: 8;
+            min-width: 22px;
+            height: 22px;
+            display: none;
+            place-items: center;
+            padding: 0 5px;
+            border-radius: 12px;
+            background: #ef4444;
+            border: 2px solid var(--bg);
+            color: #fff;
+            font-size: .63rem;
+            font-weight: 800;
+        }
+
+        .ik-chat-unread.is-visible {
+            display: grid;
+        }
 
         .ik-chat-window {
-            position: absolute; right: 0; bottom: 92px;
+            position: absolute;
+            right: 0;
+            bottom: 92px;
             width: min(440px, calc(100vw - 30px));
-            height: min(700px, calc(100vh - 126px)); min-height: 520px;
+            height: min(700px, calc(100vh - 126px));
+            min-height: 520px;
             overflow: hidden;
-            display: grid; grid-template-rows: auto auto 1fr auto;
-            border: 1px solid rgba(159,163,255,.2); border-radius: 30px;
+            display: grid;
+            grid-template-rows: auto auto 1fr auto;
+            border: 1px solid rgba(159, 163, 255, .2);
+            border-radius: 30px;
             background:
-                radial-gradient(circle at 88% -5%, rgba(99,102,241,.28), transparent 31%),
-                radial-gradient(circle at -8% 70%, rgba(168,85,247,.15), transparent 37%),
+                radial-gradient(circle at 88% -5%, rgba(99, 102, 241, .28), transparent 31%),
+                radial-gradient(circle at -8% 70%, rgba(168, 85, 247, .15), transparent 37%),
                 var(--aura-ink);
-            -webkit-backdrop-filter: blur(28px) saturate(145%); backdrop-filter: blur(28px) saturate(145%);
-            box-shadow: 0 34px 110px rgba(0,0,0,.66), 0 0 0 1px rgba(255,255,255,.035) inset;
-            opacity: 0; visibility: hidden; pointer-events: none;
-            transform: translateY(22px) scale(.94); transform-origin: bottom right;
-            transition: opacity .28s, transform .38s cubic-bezier(.16,1,.3,1), visibility .28s;
+            -webkit-backdrop-filter: blur(28px) saturate(145%);
+            backdrop-filter: blur(28px) saturate(145%);
+            box-shadow: 0 34px 110px rgba(0, 0, 0, .66), 0 0 0 1px rgba(255, 255, 255, .035) inset;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transform: translateY(22px) scale(.94);
+            transform-origin: bottom right;
+            transition: opacity .28s, transform .38s cubic-bezier(.16, 1, .3, 1), visibility .28s;
         }
-        .ik-chat-window::before { content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 0; opacity: .24; background-image: radial-gradient(rgba(255,255,255,.38) .6px, transparent .75px); background-size: 18px 18px; mask-image: linear-gradient(to bottom,#000,transparent 44%); }
-        .ik-chat-window.is-open { opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0) scale(1); }
-        .ik-chat-header { position: relative; z-index: 2; display: flex; align-items: center; gap: 12px; padding: 17px 18px 13px; border-bottom: 1px solid rgba(255,255,255,.065); }
-        .ik-chat-avatar { width: 44px; height: 44px; border-radius: 15px; display: grid; place-items: center; background: linear-gradient(145deg,rgba(99,102,241,.95),rgba(168,85,247,.85)); box-shadow: 0 9px 28px rgba(99,102,241,.28), inset 0 1px 0 rgba(255,255,255,.25); color:#fff; font-family:var(--font-display); font-size:.86rem; font-weight:800; }
-        .ik-chat-heading { min-width: 0; flex: 1; }
-        .ik-chat-heading strong { display:block; color:#f6f6ff; font-family:var(--font-display); font-size:1rem; }
-        .ik-chat-heading span { display:flex; align-items:center; gap:6px; color:#9494af; font-size:.71rem; }
-        .ik-chat-heading span::before { content:''; width:6px; height:6px; border-radius:50%; background:var(--aura-green); box-shadow:0 0 9px rgba(52,211,153,.8); }
-        .ik-chat-controls { display:flex; gap:4px; }
-        .ik-chat-icon-btn { width:35px; height:35px; border:0; border-radius:11px; display:grid; place-items:center; color:#a0a0b8; background:transparent; cursor:pointer; transition:.2s; }
-        .ik-chat-icon-btn:hover { color:#fff; background:rgba(255,255,255,.075); }
 
-        .ik-aura-intro { position:relative; z-index:1; margin: 12px 14px 0; padding: 16px 16px 14px 82px; min-height:87px; overflow:hidden; border:1px solid rgba(120,124,255,.18); border-radius:20px; background:linear-gradient(120deg,rgba(99,102,241,.13),rgba(168,85,247,.055)); }
-        .ik-aura-intro::after { content:''; position:absolute; inset:auto -34px -52px auto; width:130px; height:130px; border-radius:50%; border:1px solid rgba(34,211,238,.13); box-shadow:0 0 0 20px rgba(99,102,241,.035),0 0 0 42px rgba(168,85,247,.025); }
-        .ik-aura-intro-mascot { position:absolute; left:18px; top:17px; transform:scale(1.1); }
-        .ik-aura-intro h3 { position:relative; z-index:1; color:#fff; font-family:var(--font-display); font-size:.93rem; line-height:1.3; margin:0 0 3px; }
-        .ik-aura-intro p { position:relative; z-index:1; color:#aaaac0; font-size:.69rem; line-height:1.45; margin:0; }
-        .ik-aura-badge { position:relative; z-index:1; display:inline-flex; align-items:center; gap:5px; margin-top:7px; padding:3px 8px; border:1px solid rgba(34,211,238,.18); border-radius:99px; color:#83eefa; background:rgba(34,211,238,.055); font-size:.59rem; font-weight:700; letter-spacing:.04em; text-transform:uppercase; }
-        .ik-aura-badge::before { content:''; width:5px; height:5px; border-radius:50%; background:#22d3ee; box-shadow:0 0 8px #22d3ee; }
+        .ik-chat-window::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            opacity: .24;
+            background-image: radial-gradient(rgba(255, 255, 255, .38) .6px, transparent .75px);
+            background-size: 18px 18px;
+            mask-image: linear-gradient(to bottom, #000, transparent 44%);
+        }
 
-        .ik-chat-messages { position:relative; z-index:1; overflow-y:auto; overscroll-behavior:contain; padding:15px 15px 8px; scroll-behavior:smooth; }
-        .ik-chat-messages::-webkit-scrollbar { width:4px; } .ik-chat-messages::-webkit-scrollbar-thumb { background:rgba(255,255,255,.13); border-radius:5px; }
-        .ik-chat-message { display:flex; gap:9px; margin-bottom:15px; animation:ikMessageIn .3s ease both; }
-        .ik-chat-message.user { justify-content:flex-end; }
-        @keyframes ikMessageIn { from { opacity:0; transform:translateY(8px) scale(.98); } }
-        .ik-chat-mini-avatar { width:29px; height:29px; margin-top:3px; flex:0 0 auto; display:grid; place-items:center; border-radius:10px; color:#d2d4ff; background:linear-gradient(145deg,rgba(99,102,241,.25),rgba(168,85,247,.15)); border:1px solid rgba(120,124,255,.25); font-size:.76rem; box-shadow:0 5px 16px rgba(0,0,0,.18); }
-        .ik-chat-message-body { max-width:86%; min-width:0; }
-        .ik-chat-bubble { padding:11px 13px; border:1px solid rgba(255,255,255,.075); border-radius:7px 18px 18px 18px; color:#ddddeb; background:rgba(255,255,255,.046); font-size:.84rem; white-space:pre-wrap; overflow-wrap:anywhere; box-shadow:0 8px 24px rgba(0,0,0,.12); }
-        .ik-chat-message.user .ik-chat-bubble { border-radius:18px 18px 7px 18px; border-color:rgba(124,127,245,.42); color:#fff; background:linear-gradient(145deg,rgba(99,102,241,.95),rgba(116,70,205,.92)); box-shadow:0 9px 25px rgba(67,54,180,.22); }
-        .ik-chat-meta { margin-top:5px; color:#64647d; font-size:.61rem; } .ik-chat-message.user .ik-chat-meta { text-align:right; }
-        .ik-chat-sources { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
-        .ik-chat-action { max-width:100%; padding:6px 10px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; border:1px solid rgba(99,102,241,.28); border-radius:999px; color:#c9caff; background:rgba(99,102,241,.09); text-decoration:none; font-size:.67rem; transition:.2s; }
-        .ik-chat-action:hover { color:#fff; border-color:rgba(124,127,245,.58); background:rgba(99,102,241,.17); }
-        .ik-chat-thinking { display:inline-flex; align-items:center; gap:4px; min-width:52px; }
-        .ik-chat-thinking span { width:5px; height:5px; border-radius:50%; background:#a9aafe; animation:ikTyping 1.15s infinite ease-in-out; }
-        .ik-chat-thinking span:nth-child(2){animation-delay:.13s}.ik-chat-thinking span:nth-child(3){animation-delay:.26s}
-        @keyframes ikTyping { 0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-4px);opacity:1} }
-        .ik-chat-composer-wrap { position:relative; z-index:2; padding:10px 12px 12px; border-top:1px solid rgba(255,255,255,.065); background:rgba(4,4,15,.62); }
-        .ik-chat-suggestions { display:flex; gap:7px; overflow-x:auto; padding:2px 1px 7px; scrollbar-width:none; } .ik-chat-suggestions::-webkit-scrollbar{display:none}
-        .ik-chat-chip { flex:0 0 auto; max-width:260px; padding:7px 11px; border:1px solid rgba(255,255,255,.09); border-radius:999px; color:#b3b3c8; background:rgba(255,255,255,.035); font:inherit; font-size:.68rem; cursor:pointer; transition:.2s; }
-        .ik-chat-chip:hover { color:#fff; border-color:rgba(99,102,241,.5); background:rgba(99,102,241,.11); }
-        .ik-chat-composer { display:flex; align-items:flex-end; gap:8px; padding:7px 7px 7px 12px; border:1px solid rgba(255,255,255,.11); border-radius:17px; background:rgba(255,255,255,.045); transition:.2s; }
-        .ik-chat-composer:focus-within { border-color:rgba(99,102,241,.55); box-shadow:0 0 0 3px rgba(99,102,241,.09),0 10px 30px rgba(0,0,0,.14); }
-        .ik-chat-textarea { width:100%; min-height:36px; max-height:96px; resize:none; overflow-y:auto; border:0; outline:0; color:#f4f4f8; background:transparent; font:inherit; font-size:.82rem; line-height:1.45; padding:8px 0 5px; }
-        .ik-chat-textarea::placeholder { color:#686880; }
-        .ik-chat-send { width:39px; height:39px; flex:0 0 auto; border:0; border-radius:13px; display:grid; place-items:center; cursor:pointer; color:#fff; background:linear-gradient(145deg,var(--aura-indigo),#8a4bd7); box-shadow:0 8px 22px rgba(99,102,241,.29); transition:.2s; }
-        .ik-chat-send:hover { transform:translateY(-2px); box-shadow:0 11px 27px rgba(99,102,241,.36); } .ik-chat-send:disabled{cursor:not-allowed;opacity:.4;transform:none}
-        .ik-chat-footnote { margin-top:6px; color:#55556d; text-align:center; font-size:.58rem; }
+        .ik-chat-window.is-open {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+            transform: translateY(0) scale(1);
+        }
+
+        .ik-chat-header {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 17px 18px 13px;
+            border-bottom: 1px solid rgba(255, 255, 255, .065);
+        }
+
+        .ik-chat-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 15px;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(145deg, rgba(99, 102, 241, .95), rgba(168, 85, 247, .85));
+            box-shadow: 0 9px 28px rgba(99, 102, 241, .28), inset 0 1px 0 rgba(255, 255, 255, .25);
+            color: #fff;
+            font-family: var(--font-display);
+            font-size: .86rem;
+            font-weight: 800;
+        }
+
+        .ik-chat-heading {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .ik-chat-heading strong {
+            display: block;
+            color: #f6f6ff;
+            font-family: var(--font-display);
+            font-size: 1rem;
+        }
+
+        .ik-chat-heading span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #9494af;
+            font-size: .71rem;
+        }
+
+        .ik-chat-heading span::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--aura-green);
+            box-shadow: 0 0 9px rgba(52, 211, 153, .8);
+        }
+
+        .ik-chat-controls {
+            display: flex;
+            gap: 4px;
+        }
+
+        .ik-chat-icon-btn {
+            width: 35px;
+            height: 35px;
+            border: 0;
+            border-radius: 11px;
+            display: grid;
+            place-items: center;
+            color: #a0a0b8;
+            background: transparent;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .ik-chat-icon-btn:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, .075);
+        }
+
+        .ik-aura-intro {
+            position: relative;
+            z-index: 1;
+            margin: 12px 14px 0;
+            padding: 16px 16px 14px 82px;
+            min-height: 87px;
+            overflow: hidden;
+            border: 1px solid rgba(120, 124, 255, .18);
+            border-radius: 20px;
+            background: linear-gradient(120deg, rgba(99, 102, 241, .13), rgba(168, 85, 247, .055));
+        }
+
+        .ik-aura-intro::after {
+            content: '';
+            position: absolute;
+            inset: auto -34px -52px auto;
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            border: 1px solid rgba(34, 211, 238, .13);
+            box-shadow: 0 0 0 20px rgba(99, 102, 241, .035), 0 0 0 42px rgba(168, 85, 247, .025);
+        }
+
+        .ik-aura-intro-mascot {
+            position: absolute;
+            left: 18px;
+            top: 17px;
+            transform: scale(1.1);
+        }
+
+        .ik-aura-intro h3 {
+            position: relative;
+            z-index: 1;
+            color: #fff;
+            font-family: var(--font-display);
+            font-size: .93rem;
+            line-height: 1.3;
+            margin: 0 0 3px;
+        }
+
+        .ik-aura-intro p {
+            position: relative;
+            z-index: 1;
+            color: #aaaac0;
+            font-size: .69rem;
+            line-height: 1.45;
+            margin: 0;
+        }
+
+        .ik-aura-badge {
+            position: relative;
+            z-index: 1;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 7px;
+            padding: 3px 8px;
+            border: 1px solid rgba(34, 211, 238, .18);
+            border-radius: 99px;
+            color: #83eefa;
+            background: rgba(34, 211, 238, .055);
+            font-size: .59rem;
+            font-weight: 700;
+            letter-spacing: .04em;
+            text-transform: uppercase;
+        }
+
+        .ik-aura-badge::before {
+            content: '';
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: #22d3ee;
+            box-shadow: 0 0 8px #22d3ee;
+        }
+
+        .ik-chat-messages {
+            position: relative;
+            z-index: 1;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            padding: 15px 15px 8px;
+            scroll-behavior: smooth;
+        }
+
+        .ik-chat-messages::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .ik-chat-messages::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, .13);
+            border-radius: 5px;
+        }
+
+        .ik-chat-message {
+            display: flex;
+            gap: 9px;
+            margin-bottom: 15px;
+            animation: ikMessageIn .3s ease both;
+        }
+
+        .ik-chat-message.user {
+            justify-content: flex-end;
+        }
+
+        @keyframes ikMessageIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px) scale(.98);
+            }
+        }
+
+        .ik-chat-mini-avatar {
+            width: 29px;
+            height: 29px;
+            margin-top: 3px;
+            flex: 0 0 auto;
+            display: grid;
+            place-items: center;
+            border-radius: 10px;
+            color: #d2d4ff;
+            background: linear-gradient(145deg, rgba(99, 102, 241, .25), rgba(168, 85, 247, .15));
+            border: 1px solid rgba(120, 124, 255, .25);
+            font-size: .76rem;
+            box-shadow: 0 5px 16px rgba(0, 0, 0, .18);
+        }
+
+        .ik-chat-message-body {
+            max-width: 86%;
+            min-width: 0;
+        }
+
+        .ik-chat-bubble {
+            padding: 11px 13px;
+            border: 1px solid rgba(255, 255, 255, .075);
+            border-radius: 7px 18px 18px 18px;
+            color: #ddddeb;
+            background: rgba(255, 255, 255, .046);
+            font-size: .84rem;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, .12);
+        }
+
+        .ik-chat-message.user .ik-chat-bubble {
+            border-radius: 18px 18px 7px 18px;
+            border-color: rgba(124, 127, 245, .42);
+            color: #fff;
+            background: linear-gradient(145deg, rgba(99, 102, 241, .95), rgba(116, 70, 205, .92));
+            box-shadow: 0 9px 25px rgba(67, 54, 180, .22);
+        }
+
+        .ik-chat-meta {
+            margin-top: 5px;
+            color: #64647d;
+            font-size: .61rem;
+        }
+
+        .ik-chat-message.user .ik-chat-meta {
+            text-align: right;
+        }
+
+        .ik-chat-sources {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        .ik-chat-action {
+            max-width: 100%;
+            padding: 6px 10px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            border: 1px solid rgba(99, 102, 241, .28);
+            border-radius: 999px;
+            color: #c9caff;
+            background: rgba(99, 102, 241, .09);
+            text-decoration: none;
+            font-size: .67rem;
+            transition: .2s;
+        }
+
+        .ik-chat-action:hover {
+            color: #fff;
+            border-color: rgba(124, 127, 245, .58);
+            background: rgba(99, 102, 241, .17);
+        }
+
+        .ik-chat-thinking {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            min-width: 52px;
+        }
+
+        .ik-chat-thinking span {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: #a9aafe;
+            animation: ikTyping 1.15s infinite ease-in-out;
+        }
+
+        .ik-chat-thinking span:nth-child(2) {
+            animation-delay: .13s
+        }
+
+        .ik-chat-thinking span:nth-child(3) {
+            animation-delay: .26s
+        }
+
+        @keyframes ikTyping {
+
+            0%,
+            60%,
+            100% {
+                transform: translateY(0);
+                opacity: .4
+            }
+
+            30% {
+                transform: translateY(-4px);
+                opacity: 1
+            }
+        }
+
+        .ik-chat-composer-wrap {
+            position: relative;
+            z-index: 2;
+            padding: 10px 12px 12px;
+            border-top: 1px solid rgba(255, 255, 255, .065);
+            background: rgba(4, 4, 15, .62);
+        }
+
+        .ik-chat-suggestions {
+            display: flex;
+            gap: 7px;
+            overflow-x: auto;
+            padding: 2px 1px 7px;
+            scrollbar-width: none;
+        }
+
+        .ik-chat-suggestions::-webkit-scrollbar {
+            display: none
+        }
+
+        .ik-chat-chip {
+            flex: 0 0 auto;
+            max-width: 260px;
+            padding: 7px 11px;
+            border: 1px solid rgba(255, 255, 255, .09);
+            border-radius: 999px;
+            color: #b3b3c8;
+            background: rgba(255, 255, 255, .035);
+            font: inherit;
+            font-size: .68rem;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .ik-chat-chip:hover {
+            color: #fff;
+            border-color: rgba(99, 102, 241, .5);
+            background: rgba(99, 102, 241, .11);
+        }
+
+        .ik-chat-composer {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+            padding: 7px 7px 7px 12px;
+            border: 1px solid rgba(255, 255, 255, .11);
+            border-radius: 17px;
+            background: rgba(255, 255, 255, .045);
+            transition: .2s;
+        }
+
+        .ik-chat-composer:focus-within {
+            border-color: rgba(99, 102, 241, .55);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, .09), 0 10px 30px rgba(0, 0, 0, .14);
+        }
+
+        .ik-chat-textarea {
+            width: 100%;
+            min-height: 36px;
+            max-height: 96px;
+            resize: none;
+            overflow-y: auto;
+            border: 0;
+            outline: 0;
+            color: #f4f4f8;
+            background: transparent;
+            font: inherit;
+            font-size: .82rem;
+            line-height: 1.45;
+            padding: 8px 0 5px;
+        }
+
+        .ik-chat-textarea::placeholder {
+            color: #686880;
+        }
+
+        .ik-chat-send {
+            width: 39px;
+            height: 39px;
+            flex: 0 0 auto;
+            border: 0;
+            border-radius: 13px;
+            display: grid;
+            place-items: center;
+            cursor: pointer;
+            color: #fff;
+            background: linear-gradient(145deg, var(--aura-indigo), #8a4bd7);
+            box-shadow: 0 8px 22px rgba(99, 102, 241, .29);
+            transition: .2s;
+        }
+
+        .ik-chat-send:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 11px 27px rgba(99, 102, 241, .36);
+        }
+
+        .ik-chat-send:disabled {
+            cursor: not-allowed;
+            opacity: .4;
+            transform: none
+        }
+
+        .ik-chat-footnote {
+            margin-top: 6px;
+            color: #55556d;
+            text-align: center;
+            font-size: .58rem;
+        }
 
 
         /* Aura bilingual arrival teaser — chatbot only */
-        .ik-aura-teaser { position:absolute; right:88px; bottom:8px; width:max-content; max-width:min(310px,calc(100vw - 116px)); display:flex; align-items:center; gap:10px; padding:11px 15px 11px 12px; border:1px solid rgba(124,127,245,.30); border-radius:18px 18px 5px 18px; color:#f4f4ff; background:linear-gradient(135deg,rgba(99,102,241,.16),rgba(168,85,247,.08)),rgba(10,10,29,.95); backdrop-filter:blur(20px) saturate(145%); box-shadow:0 16px 45px rgba(0,0,0,.42),inset 0 1px 0 rgba(255,255,255,.08); font:600 .78rem/1.4 var(--font); cursor:pointer; opacity:0; visibility:hidden; pointer-events:none; transform:translate(12px,6px) scale(.96); transition:opacity .32s,transform .4s cubic-bezier(.16,1,.3,1),visibility .32s; }
-        .ik-aura-teaser::after { content:''; position:absolute; right:-7px; bottom:12px; width:13px; height:13px; border-top:1px solid rgba(124,127,245,.25); border-right:1px solid rgba(124,127,245,.25); background:#11102d; transform:rotate(45deg); }
-        .ik-aura-teaser.is-visible { opacity:1; visibility:visible; pointer-events:auto; transform:translate(0,0) scale(1); }
-        .ik-aura-teaser-icon { position:relative; z-index:1; width:28px; height:28px; flex:0 0 auto; display:grid; place-items:center; border-radius:9px; color:#fff; background:linear-gradient(145deg,var(--aura-indigo),var(--aura-violet)); box-shadow:0 6px 18px rgba(99,102,241,.3); }
-        .ik-aura-teaser-text { position:relative; z-index:1; }
-        /* Suggested questions: touch swipe, mouse wheel, drag and visible scrollbar */
-        .ik-chat-suggestions { position:relative; overflow-x:auto!important; overflow-y:hidden; overscroll-behavior-x:contain; scroll-behavior:smooth; scrollbar-width:thin!important; scrollbar-color:rgba(124,127,245,.55) rgba(255,255,255,.04); cursor:grab; touch-action:pan-x; -webkit-overflow-scrolling:touch; padding-bottom:9px!important; }
-        .ik-chat-suggestions:active { cursor:grabbing; }
-        .ik-chat-suggestions::-webkit-scrollbar { display:block!important; height:4px; }
-        .ik-chat-suggestions::-webkit-scrollbar-track { background:rgba(255,255,255,.035); border-radius:9px; }
-        .ik-chat-suggestions::-webkit-scrollbar-thumb { background:linear-gradient(90deg,var(--aura-indigo),var(--aura-violet)); border-radius:9px; }
-        .ik-chat-suggestions::after { content:''; flex:0 0 7px; }
-        @media (max-width:600px) { .ik-aura-teaser { position:fixed; right:84px; bottom:max(18px,env(safe-area-inset-bottom)); max-width:calc(100vw - 106px); font-size:.72rem; padding:10px 12px 10px 10px; } }
-        @media (max-width:600px) {
-            #ik-assistant-root { right:12px; bottom:max(12px,env(safe-area-inset-bottom)); }
-            .ik-chat-launcher { width:68px; height:68px; }
-            .ik-chat-window { position:fixed; inset:8px 8px max(8px,env(safe-area-inset-bottom)); width:auto; height:auto; min-height:0; border-radius:25px; transform-origin:bottom center; }
-            .ik-chat-window.is-open + .ik-chat-launcher { opacity:0; pointer-events:none; }
-            .ik-chat-header { padding-top:max(15px,env(safe-area-inset-top)); }
-            .ik-aura-intro { margin:10px 10px 0; }
-            .ik-chat-message-body { max-width:89%; }
+        .ik-aura-teaser {
+            position: absolute;
+            right: 88px;
+            bottom: 8px;
+            width: max-content;
+            max-width: min(310px, calc(100vw - 116px));
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 15px 11px 12px;
+            border: 1px solid rgba(124, 127, 245, .30);
+            border-radius: 18px 18px 5px 18px;
+            color: #f4f4ff;
+            background: linear-gradient(135deg, rgba(99, 102, 241, .16), rgba(168, 85, 247, .08)), rgba(10, 10, 29, .95);
+            backdrop-filter: blur(20px) saturate(145%);
+            box-shadow: 0 16px 45px rgba(0, 0, 0, .42), inset 0 1px 0 rgba(255, 255, 255, .08);
+            font: 600 .78rem/1.4 var(--font);
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transform: translate(12px, 6px) scale(.96);
+            transition: opacity .32s, transform .4s cubic-bezier(.16, 1, .3, 1), visibility .32s;
         }
+
+        .ik-aura-teaser::after {
+            content: '';
+            position: absolute;
+            right: -7px;
+            bottom: 12px;
+            width: 13px;
+            height: 13px;
+            border-top: 1px solid rgba(124, 127, 245, .25);
+            border-right: 1px solid rgba(124, 127, 245, .25);
+            background: #11102d;
+            transform: rotate(45deg);
+        }
+
+        .ik-aura-teaser.is-visible {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+            transform: translate(0, 0) scale(1);
+        }
+
+        .ik-aura-teaser-icon {
+            position: relative;
+            z-index: 1;
+            width: 28px;
+            height: 28px;
+            flex: 0 0 auto;
+            display: grid;
+            place-items: center;
+            border-radius: 9px;
+            color: #fff;
+            background: linear-gradient(145deg, var(--aura-indigo), var(--aura-violet));
+            box-shadow: 0 6px 18px rgba(99, 102, 241, .3);
+        }
+
+        .ik-aura-teaser-text {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Suggested questions: touch swipe, mouse wheel, drag and visible scrollbar */
+        .ik-chat-suggestions {
+            position: relative;
+            overflow-x: auto !important;
+            overflow-y: hidden;
+            overscroll-behavior-x: contain;
+            scroll-behavior: smooth;
+            scrollbar-width: thin !important;
+            scrollbar-color: rgba(124, 127, 245, .55) rgba(255, 255, 255, .04);
+            cursor: grab;
+            touch-action: pan-x;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 9px !important;
+        }
+
+        .ik-chat-suggestions:active {
+            cursor: grabbing;
+        }
+
+        .ik-chat-suggestions::-webkit-scrollbar {
+            display: block !important;
+            height: 4px;
+        }
+
+        .ik-chat-suggestions::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, .035);
+            border-radius: 9px;
+        }
+
+        .ik-chat-suggestions::-webkit-scrollbar-thumb {
+            background: linear-gradient(90deg, var(--aura-indigo), var(--aura-violet));
+            border-radius: 9px;
+        }
+
+        .ik-chat-suggestions::after {
+            content: '';
+            flex: 0 0 7px;
+        }
+
+        @media (max-width:600px) {
+            .ik-aura-teaser {
+                position: fixed;
+                right: 84px;
+                bottom: max(18px, env(safe-area-inset-bottom));
+                max-width: calc(100vw - 106px);
+                font-size: .72rem;
+                padding: 10px 12px 10px 10px;
+            }
+        }
+
+        @media (max-width:600px) {
+            #ik-assistant-root {
+                right: 12px;
+                bottom: max(12px, env(safe-area-inset-bottom));
+            }
+
+            .ik-chat-launcher {
+                width: 68px;
+                height: 68px;
+            }
+
+            .ik-chat-window {
+                position: fixed;
+                inset: 8px 8px max(8px, env(safe-area-inset-bottom));
+                width: auto;
+                height: auto;
+                min-height: 0;
+                border-radius: 25px;
+                transform-origin: bottom center;
+            }
+
+            .ik-chat-window.is-open+.ik-chat-launcher {
+                opacity: 0;
+                pointer-events: none;
+            }
+
+            .ik-chat-header {
+                padding-top: max(15px, env(safe-area-inset-top));
+            }
+
+            .ik-aura-intro {
+                margin: 10px 10px 0;
+            }
+
+            .ik-chat-message-body {
+                max-width: 89%;
+            }
+        }
+
         /* IK AURA - phone and tablet layout refinements only */
-        #ik-assistant-root, #ik-assistant-root * { -webkit-tap-highlight-color: transparent; }
-        .ik-chat-window { max-width: calc(100vw - 24px); max-height: calc(100dvh - 24px); }
-        .ik-chat-messages { min-height: 0; -webkit-overflow-scrolling: touch; touch-action: pan-y; }
-        .ik-chat-composer-wrap { min-width: 0; padding-bottom: max(12px, env(safe-area-inset-bottom)); }
-        .ik-chat-textarea { min-width: 0; }
+        #ik-assistant-root,
+        #ik-assistant-root * {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .ik-chat-window {
+            max-width: calc(100vw - 24px);
+            max-height: calc(100dvh - 24px);
+        }
+
+        .ik-chat-messages {
+            min-height: 0;
+            -webkit-overflow-scrolling: touch;
+            touch-action: pan-y;
+        }
+
+        .ik-chat-composer-wrap {
+            min-width: 0;
+            padding-bottom: max(12px, env(safe-area-inset-bottom));
+        }
+
+        .ik-chat-textarea {
+            min-width: 0;
+        }
 
         @media (min-width: 601px) and (max-width: 1024px) {
-            #ik-assistant-root { right: max(18px, env(safe-area-inset-right)); bottom: max(18px, env(safe-area-inset-bottom)); }
-            .ik-chat-window { right: 0; bottom: 88px; width: min(470px, calc(100vw - 36px)); height: min(720px, calc(100dvh - 124px)); min-height: min(520px, calc(100dvh - 124px)); border-radius: 27px; }
-            .ik-chat-launcher { width: 72px; height: 72px; }
+            #ik-assistant-root {
+                right: max(18px, env(safe-area-inset-right));
+                bottom: max(18px, env(safe-area-inset-bottom));
+            }
+
+            .ik-chat-window {
+                right: 0;
+                bottom: 88px;
+                width: min(470px, calc(100vw - 36px));
+                height: min(720px, calc(100dvh - 124px));
+                min-height: min(520px, calc(100dvh - 124px));
+                border-radius: 27px;
+            }
+
+            .ik-chat-launcher {
+                width: 72px;
+                height: 72px;
+            }
         }
 
         @media (max-width: 600px) {
-            #ik-assistant-root { right: max(10px, env(safe-area-inset-right)); bottom: max(10px, env(safe-area-inset-bottom)); }
-            .ik-chat-window {
-                position: fixed; top: max(6px, env(safe-area-inset-top)); right: max(6px, env(safe-area-inset-right));
-                bottom: max(6px, env(safe-area-inset-bottom)); left: max(6px, env(safe-area-inset-left));
-                width: auto; height: auto; min-height: 0; max-width: none; max-height: none;
-                border-radius: 23px; grid-template-rows: auto auto minmax(0, 1fr) auto;
+            #ik-assistant-root {
+                right: max(10px, env(safe-area-inset-right));
+                bottom: max(10px, env(safe-area-inset-bottom));
             }
-            .ik-chat-header { gap: 9px; padding: 12px 12px 10px; }
-            .ik-chat-avatar { width: 40px; height: 40px; border-radius: 13px; flex: 0 0 auto; }
-            .ik-chat-heading strong { font-size: .94rem; }
-            .ik-chat-heading span { font-size: .65rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-            .ik-chat-controls { flex: 0 0 auto; }
-            .ik-chat-icon-btn { width: 38px; height: 38px; border-radius: 12px; }
-            .ik-aura-intro { margin: 8px 9px 0; min-height: 74px; padding: 12px 12px 11px 70px; border-radius: 17px; }
-            .ik-aura-intro-mascot { left: 13px; top: 12px; transform: scale(.92); transform-origin: top left; }
-            .ik-aura-intro h3 { font-size: .86rem; }
-            .ik-aura-intro p { font-size: .65rem; line-height: 1.38; }
-            .ik-aura-badge { margin-top: 5px; font-size: .54rem; }
-            .ik-chat-messages { padding: 11px 10px 5px; }
-            .ik-chat-message { gap: 7px; margin-bottom: 12px; }
-            .ik-chat-mini-avatar { width: 27px; height: 27px; border-radius: 9px; }
-            .ik-chat-message-body { max-width: calc(100% - 34px); }
-            .ik-chat-message.user .ik-chat-message-body { max-width: 88%; }
-            .ik-chat-bubble { padding: 10px 11px; font-size: .81rem; line-height: 1.48; }
-            .ik-chat-composer-wrap { padding: 8px 9px max(9px, env(safe-area-inset-bottom)); }
-            .ik-chat-suggestions { gap: 6px; padding-bottom: 7px!important; }
-            .ik-chat-chip { max-width: min(240px, 78vw); min-height: 36px; padding: 7px 10px; font-size: .66rem; }
-            .ik-chat-composer { gap: 6px; padding: 5px 5px 5px 10px; border-radius: 16px; }
-            .ik-chat-textarea { min-height: 38px; max-height: 82px; padding: 9px 0 6px; font-size: 16px; }
-            .ik-chat-send { width: 42px; height: 42px; border-radius: 13px; }
-            .ik-chat-footnote { display: none; }
-            .ik-chat-launcher { width: 64px; height: 64px; border-radius: 22px; }
-            .ik-aura-orbit { border-radius: 21px; }
-            .ik-aura-launch-core { border-radius: 20px; }
-            .ik-aura-teaser { right: 74px; bottom: max(8px, env(safe-area-inset-bottom)); max-width: calc(100vw - 96px - env(safe-area-inset-left)); }
+
+            .ik-chat-window {
+                position: fixed;
+                top: max(6px, env(safe-area-inset-top));
+                right: max(6px, env(safe-area-inset-right));
+                bottom: max(6px, env(safe-area-inset-bottom));
+                left: max(6px, env(safe-area-inset-left));
+                width: auto;
+                height: auto;
+                min-height: 0;
+                max-width: none;
+                max-height: none;
+                border-radius: 23px;
+                grid-template-rows: auto auto minmax(0, 1fr) auto;
+            }
+
+            .ik-chat-header {
+                gap: 9px;
+                padding: 12px 12px 10px;
+            }
+
+            .ik-chat-avatar {
+                width: 40px;
+                height: 40px;
+                border-radius: 13px;
+                flex: 0 0 auto;
+            }
+
+            .ik-chat-heading strong {
+                font-size: .94rem;
+            }
+
+            .ik-chat-heading span {
+                font-size: .65rem;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .ik-chat-controls {
+                flex: 0 0 auto;
+            }
+
+            .ik-chat-icon-btn {
+                width: 38px;
+                height: 38px;
+                border-radius: 12px;
+            }
+
+            .ik-aura-intro {
+                margin: 8px 9px 0;
+                min-height: 74px;
+                padding: 12px 12px 11px 70px;
+                border-radius: 17px;
+            }
+
+            .ik-aura-intro-mascot {
+                left: 13px;
+                top: 12px;
+                transform: scale(.92);
+                transform-origin: top left;
+            }
+
+            .ik-aura-intro h3 {
+                font-size: .86rem;
+            }
+
+            .ik-aura-intro p {
+                font-size: .65rem;
+                line-height: 1.38;
+            }
+
+            .ik-aura-badge {
+                margin-top: 5px;
+                font-size: .54rem;
+            }
+
+            .ik-chat-messages {
+                padding: 11px 10px 5px;
+            }
+
+            .ik-chat-message {
+                gap: 7px;
+                margin-bottom: 12px;
+            }
+
+            .ik-chat-mini-avatar {
+                width: 27px;
+                height: 27px;
+                border-radius: 9px;
+            }
+
+            .ik-chat-message-body {
+                max-width: calc(100% - 34px);
+            }
+
+            .ik-chat-message.user .ik-chat-message-body {
+                max-width: 88%;
+            }
+
+            .ik-chat-bubble {
+                padding: 10px 11px;
+                font-size: .81rem;
+                line-height: 1.48;
+            }
+
+            .ik-chat-composer-wrap {
+                padding: 8px 9px max(9px, env(safe-area-inset-bottom));
+            }
+
+            .ik-chat-suggestions {
+                gap: 6px;
+                padding-bottom: 7px !important;
+            }
+
+            .ik-chat-chip {
+                max-width: min(240px, 78vw);
+                min-height: 36px;
+                padding: 7px 10px;
+                font-size: .66rem;
+            }
+
+            .ik-chat-composer {
+                gap: 6px;
+                padding: 5px 5px 5px 10px;
+                border-radius: 16px;
+            }
+
+            .ik-chat-textarea {
+                min-height: 38px;
+                max-height: 82px;
+                padding: 9px 0 6px;
+                font-size: 16px;
+            }
+
+            .ik-chat-send {
+                width: 42px;
+                height: 42px;
+                border-radius: 13px;
+            }
+
+            .ik-chat-footnote {
+                display: none;
+            }
+
+            .ik-chat-launcher {
+                width: 64px;
+                height: 64px;
+                border-radius: 22px;
+            }
+
+            .ik-aura-orbit {
+                border-radius: 21px;
+            }
+
+            .ik-aura-launch-core {
+                border-radius: 20px;
+            }
+
+            .ik-aura-teaser {
+                right: 74px;
+                bottom: max(8px, env(safe-area-inset-bottom));
+                max-width: calc(100vw - 96px - env(safe-area-inset-left));
+            }
         }
 
-        @media (max-width: 600px) and (max-height: 680px), (max-height: 500px) and (hover: none) and (pointer: coarse) {
-            .ik-chat-window { top: max(3px, env(safe-area-inset-top)); right: max(3px, env(safe-area-inset-right)); bottom: max(3px, env(safe-area-inset-bottom)); left: max(3px, env(safe-area-inset-left)); border-radius: 18px; grid-template-rows: auto minmax(0, 1fr) auto; }
-            .ik-aura-intro { display: none; }
-            .ik-chat-header { padding-block: 8px; }
-            .ik-chat-messages { padding-top: 8px; }
-            .ik-chat-chip { min-height: 32px; padding-block: 5px; }
+        @media (max-width: 600px) and (max-height: 680px),
+        (max-height: 500px) and (hover: none) and (pointer: coarse) {
+            .ik-chat-window {
+                top: max(3px, env(safe-area-inset-top));
+                right: max(3px, env(safe-area-inset-right));
+                bottom: max(3px, env(safe-area-inset-bottom));
+                left: max(3px, env(safe-area-inset-left));
+                border-radius: 18px;
+                grid-template-rows: auto minmax(0, 1fr) auto;
+            }
+
+            .ik-aura-intro {
+                display: none;
+            }
+
+            .ik-chat-header {
+                padding-block: 8px;
+            }
+
+            .ik-chat-messages {
+                padding-top: 8px;
+            }
+
+            .ik-chat-chip {
+                min-height: 32px;
+                padding-block: 5px;
+            }
         }
 
         @media (prefers-reduced-motion:reduce) {
-            .ik-aura-orbit,.ik-aura-launch-core::after,.ik-mascot-hand,.ik-mascot-eye,.ik-mascot-antenna,.ik-chat-thinking span { animation:none!important; }
-            .ik-chat-window,.ik-chat-message,.ik-chat-launcher { transition:none!important; }
+
+            .ik-aura-orbit,
+            .ik-aura-launch-core::after,
+            .ik-mascot-hand,
+            .ik-mascot-eye,
+            .ik-mascot-antenna,
+            .ik-chat-thinking span {
+                animation: none !important;
+            }
+
+            .ik-chat-window,
+            .ik-chat-message,
+            .ik-chat-launcher {
+                transition: none !important;
+            }
         }
 
+        /* Mobile-only contact buttons: keep circles clickable, disable expansion. */
+        @media (max-width: 768px) {
+
+            .contact-link,
+            .contact-link:hover,
+            .contact-link:focus,
+            .contact-link:active {
+                width: 60px;
+                min-width: 60px;
+                max-width: 60px;
+                height: 60px;
+                background: var(--surface);
+                border-color: var(--border);
+                transform: none;
+                overflow: hidden;
+                transition: none;
+            }
+
+            .contact-link-text,
+            .contact-link:hover .contact-link-text,
+            .contact-link:focus .contact-link-text,
+            .contact-link:active .contact-link-text {
+                display: none;
+                opacity: 0;
+                transform: none;
+                padding-right: 0;
+            }
+
+            .contact-link-icon,
+            .contact-link:hover .contact-link-icon,
+            .contact-link:focus .contact-link-icon,
+            .contact-link:active .contact-link-icon {
+                min-width: 60px;
+                width: 60px;
+                height: 60px;
+                color: var(--text);
+            }
+        }
     </style>
 </head>
+
 <body>
 
     <!-- ═══════════════════ NAVBAR ═══════════════════ -->
@@ -861,7 +2238,7 @@
         </div>
     </nav>
 
-    
+
     <section id="hero">
         <canvas id="shader-canvas"></canvas>
         <div class="hero-gradient"></div>
@@ -872,7 +2249,10 @@
                 <span class="line-2" style="color:var(--text) ;">Ingénieur en Énergétique</span>
             </h1>
             <p class="hero-description gsap-hero">
-                <strong style="color: var(--green);">Expertise en ingénierie énergétique :</strong> <span style="color: white;">études technico-économiques, conception, dimensionnement, mise en œuvre et utilisation d'outils numériques appliqués aux énergies renouvelables, à l'efficacité énergétique ainsi qu'aux systèmes thermiques et électriques.</span>
+                <strong style="color: var(--green);">Expertise en ingénierie énergétique :</strong> <span
+                    style="color: white;">études technico-économiques, conception, dimensionnement, mise en œuvre et
+                    utilisation d'outils numériques appliqués aux énergies renouvelables, à l'efficacité énergétique
+                    ainsi qu'aux systèmes thermiques et électriques.</span>
             </p>
             <div class="hero-ctas gsap-hero">
                 <a href="#projects" class="btn-primary">
@@ -886,7 +2266,7 @@
 
     </section>
 
-    
+
     <section id="about">
         <div class="container">
             <div class="section-label gsap-fade-up"><i class="ph-bold ph-user"></i> À Propos</div>
@@ -894,7 +2274,12 @@
 
             <div class="about-grid">
                 <div class="about-text gsap-fade-up">
-                    <p>Ingénieur en énergie spécialisé dans <strong>la conception, le dimensionnement et l'optimisation des systèmes énergétiques</strong>, avec une expertise en <strong>énergies renouvelables, réseaux électriques, stockage d'énergie et efficacité énergétique</strong>. Maîtrise des <strong>études technico-économiques, de la modélisation, de la simulation et de la validation des performances</strong> pour développer des solutions énergétiques fiables et optimisées.</p>
+                    <p>Ingénieur en énergie spécialisé dans <strong>la conception, le dimensionnement et l'optimisation
+                            des systèmes énergétiques</strong>, avec une expertise en <strong>énergies renouvelables,
+                            réseaux électriques, stockage d'énergie et efficacité énergétique</strong>. Maîtrise des
+                        <strong>études technico-économiques, de la modélisation, de la simulation et de la validation
+                            des performances</strong> pour développer des solutions énergétiques fiables et optimisées.
+                    </p>
 
                     <div class="stats-row">
                         <div class="stat-card">
@@ -910,14 +2295,21 @@
 
                 <div class="competences-card gsap-fade-up">
                     <h3><i class="ph-bold ph-gear-six" style="color: var(--accent);"></i> Compétences Fondamentales</h3>
-                    <div class="competence-item"><span class="competence-dot"></span> Thermodynamique & Transferts Thermiques</div>
-                    <div class="competence-item"><span class="competence-dot"></span> Électrotechnique & Systèmes Électriques (HT/MT/BT)</div>
-                    <div class="competence-item"><span class="competence-dot"></span> Énergies Renouvelables (Solaire, Éolien, CSP, Hybride)</div>
-                    <div class="competence-item"><span class="competence-dot"></span> Efficacité Énergétique & Audit (RTCM)</div>
+                    <div class="competence-item"><span class="competence-dot"></span> Thermodynamique & Transferts
+                        Thermiques</div>
+                    <div class="competence-item"><span class="competence-dot"></span> Électrotechnique & Systèmes
+                        Électriques (HT/MT/BT)</div>
+                    <div class="competence-item"><span class="competence-dot"></span> Énergies Renouvelables (Solaire,
+                        Éolien, CSP, Hybride)</div>
+                    <div class="competence-item"><span class="competence-dot"></span> Efficacité Énergétique & Audit
+                        (RTCM)</div>
                     <div class="competence-item"><span class="competence-dot"></span> Mécanique des Fluides (CFD)</div>
-                    <div class="competence-item"><span class="competence-dot"></span> Stockage d'Énergie (BESS, Thermique, H₂ Vert)</div>
-                    <div class="competence-item"><span class="competence-dot"></span> Smart Grids & Micro-réseaux (EMS/BMS)</div>
-                    <div class="competence-item"><span class="competence-dot"></span> Automatisme & IoT Énergétique</div>
+                    <div class="competence-item"><span class="competence-dot"></span> Stockage d'Énergie (BESS,
+                        Thermique, H₂ Vert)</div>
+                    <div class="competence-item"><span class="competence-dot"></span> Smart Grids & Micro-réseaux
+                        (EMS/BMS)</div>
+                    <div class="competence-item"><span class="competence-dot"></span> Automatisme & IoT Énergétique
+                    </div>
                 </div>
             </div>
         </div>
@@ -928,7 +2320,8 @@
         <div class="container">
             <div class="section-label gsap-fade-up"><i class="ph-bold ph-lightning"></i> Projets Réalisés</div>
             <h2 class="section-title gsap-fade-up"><span class="gradient-text">Projets</span></h2>
-            <p class="section-subtitle gsap-fade-up">Explorez mes projets d'ingénierie énergétique, allant du dimensionnement solaire à grande échelle à la modélisation d'hydrogène vert.</p>
+            <p class="section-subtitle gsap-fade-up">Explorez mes projets d'ingénierie énergétique, allant du
+                dimensionnement solaire à grande échelle à la modélisation d'hydrogène vert.</p>
 
             <div class="projects-grid">
 
@@ -937,8 +2330,13 @@
                     <div class="card-bg-glow"></div>
                     <span class="card-num">01</span>
                     <div class="card-category">Infrastructure à Grande Échelle</div>
-                    <div class="card-title">Étude Des Installations Solaires Avec Stockage D'énergie (Deux Centrales 580 kWc)</div>
-                    <p class="card-desc">Réalisation d'études de faisabilité complètes et technico-économiques pour des projets solaires à grande échelle au niveau national et international (avec Novec). Fourniture de simulations détaillées, de conceptions électriques incluant des schémas unifilaires (SLD) et des plans d'implantation couvrant tout le cycle de vie du projet, du dimensionnement à l'intégration au réseau.</p>
+                    <div class="card-title">Étude Des Installations Solaires Avec Stockage D'énergie (Deux Centrales 580
+                        kWc)</div>
+                    <p class="card-desc">Réalisation d'études de faisabilité complètes et technico-économiques pour des
+                        projets solaires à grande échelle au niveau national et international (avec Novec). Fourniture
+                        de simulations détaillées, de conceptions électriques incluant des schémas unifilaires (SLD) et
+                        des plans d'implantation couvrant tout le cycle de vie du projet, du dimensionnement à
+                        l'intégration au réseau.</p>
                     <div class="card-footer">
                         <div class="card-tags">
                             <span class="tag">PVSyst</span>
@@ -957,7 +2355,10 @@
                     <span class="card-num">02</span>
                     <div class="card-category">Simulation Avancée</div>
                     <div class="card-title">Centrale PV 67 MW + BESS (Modélisation EMS/BMS)</div>
-                    <p class="card-desc">Étude complète de dimensionnement et technico-économique d'une centrale photovoltaïque de 67 MW couplée à un stockage d'énergie par batterie. Conception et modélisation de la logique du système de gestion de l'énergie (EMS) et du système de gestion de la batterie (BMS) pour simuler le contrôle en temps réel et la stabilité du réseau.</p>
+                    <p class="card-desc">Étude complète de dimensionnement et technico-économique d'une centrale
+                        photovoltaïque de 67 MW couplée à un stockage d'énergie par batterie. Conception et modélisation
+                        de la logique du système de gestion de l'énergie (EMS) et du système de gestion de la batterie
+                        (BMS) pour simuler le contrôle en temps réel et la stabilité du réseau.</p>
                     <div class="card-footer">
                         <div class="card-tags">
                             <span class="tag">PVSyst</span>
@@ -975,7 +2376,11 @@
                     <span class="card-num">03</span>
                     <div class="card-category">Outil Numérique</div>
                     <div class="card-title">Application Web Solaire Technico-Économique pour le Marché Marocain</div>
-                    <p class="card-desc">Développement d'une application web avancée (Python/Streamlit) intégrant une base de données d'équipements réels du marché marocain. Elle effectue l'analyse des ombrages, le dimensionnement automatique et intègre un moteur financier simulant les prêts bancaires, le ROI et le délai d'amortissement selon les tarifs locaux, avec génération automatique de rapports PDF.</p>
+                    <p class="card-desc">Développement d'une application web avancée (Python/Streamlit) intégrant une
+                        base de données d'équipements réels du marché marocain. Elle effectue l'analyse des ombrages, le
+                        dimensionnement automatique et intègre un moteur financier simulant les prêts bancaires, le ROI
+                        et le délai d'amortissement selon les tarifs locaux, avec génération automatique de rapports
+                        PDF.</p>
                     <div class="card-footer">
                         <div class="card-tags">
                             <span class="tag">Python</span>
@@ -992,7 +2397,10 @@
                     <span class="card-num">04</span>
                     <div class="card-category">Éco-Conception</div>
                     <div class="card-title">Maison Bioclimatique Intelligente</div>
-                    <p class="card-desc">Modélisation d'une maison à haute efficacité énergétique (DesignBuilder) axée sur l'optimisation du confort thermique. Réalisation d'un prototype matériel d'électronique embarquée (Arduino R4 et logique PID) pour le contrôle climatique automatisé et la gestion intelligente du système.</p>
+                    <p class="card-desc">Modélisation d'une maison à haute efficacité énergétique (DesignBuilder) axée
+                        sur l'optimisation du confort thermique. Réalisation d'un prototype matériel d'électronique
+                        embarquée (Arduino R4 et logique PID) pour le contrôle climatique automatisé et la gestion
+                        intelligente du système.</p>
                     <div class="card-footer">
                         <div class="card-tags">
                             <span class="tag">DesignBuilder</span>
@@ -1009,7 +2417,9 @@
                     <span class="card-num">05</span>
                     <div class="card-category">Power-to-X</div>
                     <div class="card-title">HydroTwin (Power-to-X)</div>
-                    <p class="card-desc">Modélisation de la chaîne Power-to-X (PV → Électrolyseur PEM → Stockage LOHC) à l'aide de modèles numériques développés en Python. Optimisation du LCOH à partir des données d'irradiation solaire marocaines et des contraintes du réseau électrique.</p>
+                    <p class="card-desc">Modélisation de la chaîne Power-to-X (PV → Électrolyseur PEM → Stockage LOHC) à
+                        l'aide de modèles numériques développés en Python. Optimisation du LCOH à partir des données
+                        d'irradiation solaire marocaines et des contraintes du réseau électrique.</p>
                     <div class="card-footer">
                         <div class="card-tags">
                             <span class="tag">Python</span>
@@ -1028,7 +2438,10 @@
                     <span class="card-num">06</span>
                     <div class="card-category">Intelligence Artificielle</div>
                     <div class="card-title">Système de Prédiction Énergétique par IA</div>
-                    <p class="card-desc">Développement d'un prédicteur utilisant la température, l'humidité et la date pour prévoir la consommation énergétique. Ce modèle est intégré à une plateforme permettant d'importer des données, de cibler des périodes spécifiques et d'effectuer des simulations « What-If ». Résultat : Précision de prédiction de <strong>92 %</strong>.</p>
+                    <p class="card-desc">Développement d'un prédicteur utilisant la température, l'humidité et la date
+                        pour prévoir la consommation énergétique. Ce modèle est intégré à une plateforme permettant
+                        d'importer des données, de cibler des périodes spécifiques et d'effectuer des simulations «
+                        What-If ». Résultat : Précision de prédiction de <strong>92 %</strong>.</p>
                     <div class="card-footer">
                         <div class="card-tags">
                             <span class="tag">Python</span>
@@ -1047,7 +2460,8 @@
         <div class="container">
             <div class="section-label gsap-fade-up"><i class="ph-bold ph-path"></i> Parcours</div>
             <h2 class="section-title gsap-fade-up">Formation & <span class="gradient-text">Expérience</span></h2>
-            <p class="section-subtitle gsap-fade-up">Mon parcours académique et mes expériences professionnelles en ingénierie énergétique.</p>
+            <p class="section-subtitle gsap-fade-up">Mon parcours académique et mes expériences professionnelles en
+                ingénierie énergétique.</p>
 
             <div class="dual-timeline">
                 <!-- Formation -->
@@ -1059,7 +2473,8 @@
                         <div class="tl-date">2021 – 2026</div>
                         <div class="tl-title">Diplôme d'Ingénieur en Énergétique & Énergies Renouvelables</div>
                         <div class="tl-org">Université Internationale de Rabat (UIR)</div>
-                        <div class="tl-desc">Thermodynamique, Audit Énergétique, Électronique Embarquée, Smart Grids, CFD, Maintenance Industrielle.</div>
+                        <div class="tl-desc">Thermodynamique, Audit Énergétique, Électronique Embarquée, Smart Grids,
+                            CFD, Maintenance Industrielle.</div>
                     </div>
 
                     <div class="tl-item">
@@ -1067,7 +2482,8 @@
                         <div class="tl-date">Avant 2021</div>
                         <div class="tl-title">Baccalauréat en Sciences & Technologies Électriques (STE)</div>
                         <div class="tl-org">Lycée Technique</div>
-                        <div class="tl-desc">Sciences de l'Ingénieur : Acquisition, Traitement, Communication, Alimentation, Distribution, Conversion.</div>
+                        <div class="tl-desc">Sciences de l'Ingénieur : Acquisition, Traitement, Communication,
+                            Alimentation, Distribution, Conversion.</div>
                     </div>
                 </div>
 
@@ -1080,7 +2496,9 @@
                         <div class="tl-date">2026 (4 mois)</div>
                         <div class="tl-title">Ingénieur Projet PV & BESS</div>
                         <div class="tl-org">Novec — Ingénieurs Conseils</div>
-                        <div class="tl-desc">Réalisation d'études de faisabilité et technico-économiques complètes pour des projets à grande échelle à Djibouti et Dakhla. Gestion de la conception de bout en bout, création et simulations et intégration.</div>
+                        <div class="tl-desc">Réalisation d'études de faisabilité et technico-économiques complètes pour
+                            des projets à grande échelle à Djibouti et Dakhla. Gestion de la conception de bout en bout,
+                            création et simulations et intégration.</div>
                     </div>
 
                     <div class="tl-item">
@@ -1088,7 +2506,9 @@
                         <div class="tl-date">Août 2023</div>
                         <div class="tl-title">Stage : Maintenance & Opérations</div>
                         <div class="tl-org">Centrale CSP Noor I (Ouarzazate)</div>
-                        <div class="tl-desc">Analyse des défaillances des systèmes d'énergie solaire concentrée (CSP), réduisant le temps de diagnostic de 15 %. Interprétation de schémas P&ID et électriques complexes.</div>
+                        <div class="tl-desc">Analyse des défaillances des systèmes d'énergie solaire concentrée (CSP),
+                            réduisant le temps de diagnostic de 15 %. Interprétation de schémas P&ID et électriques
+                            complexes.</div>
                     </div>
 
                     <div class="tl-item">
@@ -1096,7 +2516,8 @@
                         <div class="tl-date">Août 2022</div>
                         <div class="tl-title">Stage : Ingénierie Solaire</div>
                         <div class="tl-org">Bureau d'Études Solaire</div>
-                        <div class="tl-desc">Supervision de l'installation et de la mise en service de systèmes de pompage solaire. Suivi des performances des onduleurs et des panneaux photovoltaïques.</div>
+                        <div class="tl-desc">Supervision de l'installation et de la mise en service de systèmes de
+                            pompage solaire. Suivi des performances des onduleurs et des panneaux photovoltaïques.</div>
                     </div>
 
                     <div class="tl-item">
@@ -1104,7 +2525,9 @@
                         <div class="tl-date">Juillet 2021</div>
                         <div class="tl-title">Stage : Optimisation des Processus</div>
                         <div class="tl-org">Menara Holding (Marrakech)</div>
-                        <div class="tl-desc">Audit des équipements de production thermiques et mécaniques, identifiant un potentiel de gain d'efficacité de 5 % dans le processus thermique par l'analyse de données.</div>
+                        <div class="tl-desc">Audit des équipements de production thermiques et mécaniques, identifiant
+                            un potentiel de gain d'efficacité de 5 % dans le processus thermique par l'analyse de
+                            données.</div>
                     </div>
                 </div>
             </div>
@@ -1116,7 +2539,8 @@
         <div class="container">
             <div class="section-label gsap-fade-up"><i class="ph-bold ph-wrench"></i> Stack Technique</div>
             <h2 class="section-title gsap-fade-up">Maîtrise <span class="gradient-text">Technique</span></h2>
-            <p class="section-subtitle gsap-fade-up">Une pile technique complète reliant l'ingénierie pure et les solutions numériques.</p>
+            <p class="section-subtitle gsap-fade-up">Une pile technique complète reliant l'ingénierie pure et les
+                solutions numériques.</p>
 
             <div class="skills-grid">
                 <div class="skill-card gsap-fade-up">
@@ -1165,22 +2589,21 @@
     <section id="contact">
         <div class="container">
             <div class="contact-inner gsap-fade-up">
-                <div class="section-label" style="justify-content: center;"><i class="ph-bold ph-chat-dots"></i> Contact</div>
+                <div class="section-label" style="justify-content: center;"><i class="ph-bold ph-chat-dots"></i> Contact
+                </div>
                 <h2>Me <span class="shiny">contacter</span></h2>
-                <p>Basé à Rabat, Maroc. Ouvert à des opportunités passionnantes en ingénierie énergétique et optimisation numérique.</p>
+                <p>Basé à Rabat, Maroc. Ouvert à des opportunités passionnantes en ingénierie énergétique et
+                    optimisation numérique.</p>
 
                 <div class="contact-grid">
                     <a href="mailto:khallouk.ibrahim@uir.ac.ma" class="contact-link">
                         <div class="contact-link-icon"><i class="ph-bold ph-envelope-simple"></i></div>
                         <div class="contact-link-text">Email</div>
                     </a>
-                    <a href="https://www.linkedin.com/in/ibrahim-khallouq-aa8aa220a/" target="_blank" class="contact-link">
+                    <a href="https://www.linkedin.com/in/ibrahim-khallouq-aa8aa220a/" target="_blank"
+                        class="contact-link">
                         <div class="contact-link-icon"><i class="ph-bold ph-linkedin-logo"></i></div>
                         <div class="contact-link-text">LinkedIn</div>
-                    </a>
-                    <a href="https://github.com/ibra-create" target="_blank" class="contact-link">
-                        <div class="contact-link-icon"><i class="ph-bold ph-github-logo"></i></div>
-                        <div class="contact-link-text">GitHub</div>
                     </a>
                     <a href="tel:+212650931850" class="contact-link">
                         <div class="contact-link-icon"><i class="ph-bold ph-phone"></i></div>
@@ -1199,37 +2622,57 @@
 
     <!-- IK Aura Assistant — additive interface; portfolio structure unchanged -->
     <div id="ik-assistant-root">
-        <section id="ik-chat-window" class="ik-chat-window" role="dialog" aria-modal="false" aria-labelledby="ik-chat-title" aria-hidden="true">
+        <section id="ik-chat-window" class="ik-chat-window" role="dialog" aria-modal="false"
+            aria-labelledby="ik-chat-title" aria-hidden="true">
             <header class="ik-chat-header">
                 <div class="ik-chat-avatar" aria-hidden="true">IK</div>
-                <div class="ik-chat-heading"><strong id="ik-chat-title">IK Aura</strong><span id="ik-chat-subtitle">Assistant d’ingénierie · FR / EN</span></div>
+                <div class="ik-chat-heading"><strong id="ik-chat-title">IK Aura</strong><span
+                        id="ik-chat-subtitle">Assistant d’ingénierie · FR / EN</span></div>
                 <div class="ik-chat-controls">
-                    <button id="ik-chat-reset" class="ik-chat-icon-btn" type="button" title="Nouvelle conversation" aria-label="Nouvelle conversation"><i class="ph-bold ph-arrow-counter-clockwise"></i></button>
-                    <button id="ik-chat-close" class="ik-chat-icon-btn" type="button" title="Fermer" aria-label="Fermer l’assistant"><i class="ph-bold ph-x"></i></button>
+                    <button id="ik-chat-reset" class="ik-chat-icon-btn" type="button" title="Nouvelle conversation"
+                        aria-label="Nouvelle conversation"><i class="ph-bold ph-arrow-counter-clockwise"></i></button>
+                    <button id="ik-chat-close" class="ik-chat-icon-btn" type="button" title="Fermer"
+                        aria-label="Fermer l’assistant"><i class="ph-bold ph-x"></i></button>
                 </div>
             </header>
             <div class="ik-aura-intro">
-                <div class="ik-aura-intro-mascot"><span class="ik-mascot" aria-hidden="true"><span class="ik-mascot-antenna"></span><span class="ik-mascot-head"><span class="ik-mascot-face"><span class="ik-mascot-eye left"></span><span class="ik-mascot-eye right"></span><span class="ik-mascot-smile"></span></span></span><span class="ik-mascot-body"></span><span class="ik-mascot-hand"></span></span></div>
+                <div class="ik-aura-intro-mascot"><span class="ik-mascot" aria-hidden="true"><span
+                            class="ik-mascot-antenna"></span><span class="ik-mascot-head"><span
+                                class="ik-mascot-face"><span class="ik-mascot-eye left"></span><span
+                                    class="ik-mascot-eye right"></span><span
+                                    class="ik-mascot-smile"></span></span></span><span
+                            class="ik-mascot-body"></span><span class="ik-mascot-hand"></span></span></div>
                 <h3>Bonjour, je suis Aura.</h3>
                 <p>Votre guide intelligent pour explorer les projets, compétences et résultats d’Ibrahim.</p>
                 <span class="ik-aura-badge">Portfolio vérifié</span>
             </div>
-            <div id="ik-chat-messages" class="ik-chat-messages" role="log" aria-live="polite" aria-relevant="additions"></div>
+            <div id="ik-chat-messages" class="ik-chat-messages" role="log" aria-live="polite" aria-relevant="additions">
+            </div>
             <div class="ik-chat-composer-wrap">
                 <div id="ik-chat-suggestions" class="ik-chat-suggestions" aria-label="Questions suggérées"></div>
                 <form id="ik-chat-form" class="ik-chat-composer">
-                    <textarea id="ik-chat-input" class="ik-chat-textarea" rows="1" maxlength="500" placeholder="Posez une question sur mon parcours…" aria-label="Votre question"></textarea>
-                    <button id="ik-chat-send" class="ik-chat-send" type="submit" aria-label="Envoyer" disabled><i class="ph-bold ph-arrow-up"></i></button>
+                    <textarea id="ik-chat-input" class="ik-chat-textarea" rows="1" maxlength="500"
+                        placeholder="Posez une question sur mon parcours…" aria-label="Votre question"></textarea>
+                    <button id="ik-chat-send" class="ik-chat-send" type="submit" aria-label="Envoyer" disabled><i
+                            class="ph-bold ph-arrow-up"></i></button>
                 </form>
                 <div class="ik-chat-footnote">Entrée pour envoyer · Maj + Entrée pour une nouvelle ligne</div>
             </div>
         </section>
-        <button id="ik-aura-teaser" class="ik-aura-teaser" type="button" aria-label="Open IK Aura assistant" aria-live="polite">
+        <button id="ik-aura-teaser" class="ik-aura-teaser" type="button" aria-label="Open IK Aura assistant"
+            aria-live="polite">
             <span class="ik-aura-teaser-icon" aria-hidden="true"><i class="ph-bold ph-sparkle"></i></span>
             <span id="ik-aura-teaser-text" class="ik-aura-teaser-text">I'm Aura — ask me anything about Ibrahim.</span>
         </button>
-        <button id="ik-chat-launcher" class="ik-chat-launcher" type="button" aria-label="Ouvrir IK Aura" aria-expanded="false" aria-controls="ik-chat-window">
-            <span id="ik-chat-unread" class="ik-chat-unread">1</span><span class="ik-aura-orbit"></span><span class="ik-aura-launch-core"><span class="ik-mascot" aria-hidden="true"><span class="ik-mascot-antenna"></span><span class="ik-mascot-head"><span class="ik-mascot-face"><span class="ik-mascot-eye left"></span><span class="ik-mascot-eye right"></span><span class="ik-mascot-smile"></span></span></span><span class="ik-mascot-body"></span><span class="ik-mascot-hand"></span></span></span><span class="ik-chat-status-dot" aria-hidden="true"></span>
+        <button id="ik-chat-launcher" class="ik-chat-launcher" type="button" aria-label="Ouvrir IK Aura"
+            aria-expanded="false" aria-controls="ik-chat-window">
+            <span id="ik-chat-unread" class="ik-chat-unread">1</span><span class="ik-aura-orbit"></span><span
+                class="ik-aura-launch-core"><span class="ik-mascot" aria-hidden="true"><span
+                        class="ik-mascot-antenna"></span><span class="ik-mascot-head"><span class="ik-mascot-face"><span
+                                class="ik-mascot-eye left"></span><span class="ik-mascot-eye right"></span><span
+                                class="ik-mascot-smile"></span></span></span><span class="ik-mascot-body"></span><span
+                        class="ik-mascot-hand"></span></span></span><span class="ik-chat-status-dot"
+                aria-hidden="true"></span>
         </button>
     </div>
     <!-- ═══════════════════ SCRIPTS ═══════════════════ -->
@@ -1792,4 +3235,5 @@
     </script>
 
 </body>
+
 </html>

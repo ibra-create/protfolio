@@ -12,7 +12,7 @@ export const CONFIG = {
   geminiTimeoutMs: 22000,
   requestsPerMinute: 10,
   requestsPerDay: 50,
-  defaultModel: "gemini-3.5-flash",
+  defaultModel: "gemini-2.5-flash-lite",
 };
 
 export const PROJECT_ALIASES: Record<string, string[]> = {
